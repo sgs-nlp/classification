@@ -25,17 +25,6 @@ class StopWord(models.Model):
     )
 
 
-class Symbol(models.Model):
-    word = models.ForeignKey(
-        to=Word,
-        on_delete=models.CASCADE,
-    )
-    reference = models.ForeignKey(
-        to='Reference',
-        on_delete=models.CASCADE,
-    )
-
-
 class Reference(models.Model):
     title = models.CharField(
         max_length=128,
@@ -142,6 +131,18 @@ def add_word(string: str) -> int:
     word.code = code
     word.save()
     return word.pk
+
+
+def add_stopword(string: str, reference_id: int) -> int:
+    stopword = StopWord.objects.filter(reference_id=reference_id).filter(word__string=string).first()
+    if stopword:
+        return stopword.pk
+    word_id = add_word(string)
+    stopword = StopWord()
+    stopword.word_id = word_id
+    stopword.reference_id = reference_id
+    stopword.save()
+    return stopword.pk
 
 
 def word2code(string: str) -> str:
