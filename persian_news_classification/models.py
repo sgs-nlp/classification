@@ -1,6 +1,14 @@
 from django.db import models
 
 
+class Reference(models.Model):
+    title = models.CharField(
+        max_length=128,
+        blank=False,
+        null=False,
+    )
+
+
 class Category(models.Model):
     title = models.CharField(
         max_length=128,
