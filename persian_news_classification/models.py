@@ -1,6 +1,14 @@
 from django.db import models
 
 
+class Word(models.Model):
+    string = models.CharField(
+        max_length=64,
+        null=False,
+        blank=False,
+    )
+
+
 class Reference(models.Model):
     title = models.CharField(
         max_length=128,
