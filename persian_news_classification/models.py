@@ -7,6 +7,33 @@ class Word(models.Model):
         null=False,
         blank=False,
     )
+    code = models.CharField(
+        max_length=32,
+        null=False,
+        blank=False,
+    )
+
+
+class StopWord(models.Model):
+    word = models.ForeignKey(
+        to=Word,
+        on_delete=models.CASCADE,
+    )
+    reference = models.ForeignKey(
+        to='Reference',
+        on_delete=models.CASCADE,
+    )
+
+
+class Symbol(models.Model):
+    word = models.ForeignKey(
+        to=Word,
+        on_delete=models.CASCADE,
+    )
+    reference = models.ForeignKey(
+        to='Reference',
+        on_delete=models.CASCADE,
+    )
 
 
 class Reference(models.Model):
@@ -107,8 +134,12 @@ def add_word(string: str) -> int:
     word = Word.objects.filter(string=string).first()
     if word:
         return word.pk
+    from datetime import datetime
+    now = datetime.utcnow()
+    code = f'persian_word_{now.year}{now.month}{now.day}{now.hour}{now.minute}{now.second}{now.microsecond}'
     word = Word()
     word.string = string
+    word.code = code
     word.save()
     return word.pk
 
@@ -118,12 +149,12 @@ def word2code(string: str) -> str:
     if word is None:
         word_id = add_word(string)
         word = Word.objects.get(pk=word_id)
-    return f'persian_word_{word.pk}'
+    return word.code
 
 
 def code2word(code: str) -> str:
     code = int(code.rsplit('_', 1)[1])
-    word = Word.objects.filter(pk=code).first()
+    word = Word.objects.filter(code=code).first()
     if word:
         return word.string
     return None
