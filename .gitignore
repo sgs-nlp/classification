@@ -1,2 +1,4 @@
 .idea
 /.idea
+/db.sqlite3
+/.test.py
