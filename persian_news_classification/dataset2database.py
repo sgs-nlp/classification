@@ -1,12 +1,27 @@
-from .models import Reference, add_reference, add_category, add_news
+from .models import Reference, add_reference, add_category, add_news, add_stopword, add_word
 from nvd.loader import xlsx2dict
 from nvd.pre_processing import normilizer, tokenizer, without_stopword
+import json
 
 
-def add2database(file_name):
+def symbols2database():
+    from nvd.symbols import LIST as PERSIAN_SYMBOLS
+    for word in PERSIAN_SYMBOLS:
+        add_word(word)
+
+
+def add2database(file_name: str):
     if Reference.objects.filter(title=file_name).first():
         return
+    # todo
+    symbols2database()
     reference_id = add_reference(file_name)
+    stop_word_list_name = f'{file_name}.persian.stopword.json'
+    with open(stop_word_list_name, 'r', encoding='utf-8') as file:
+        stopwords_list = file.read()
+        stopwords_list = json.loads(stopwords_list)
+    for word in stopwords_list:
+        add_stopword(word, reference_id)
     data = xlsx2dict(file_name)
     _category_list = []
     for _data in data:
