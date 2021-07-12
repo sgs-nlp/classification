@@ -23,6 +23,11 @@ class Category(models.Model):
         blank=False,
         null=False,
     )
+    title_code = models.CharField(
+        max_length=128,
+        blank=False,
+        null=False,
+    )
     reference = models.ForeignKey(
         to=Reference,
         on_delete=models.CASCADE,
@@ -32,8 +37,11 @@ class Category(models.Model):
 
 
 class News(models.Model):
-    titr_string = models.CharField(
-        max_length=512,
+    titr_string = models.TextField(
+        blank=False,
+        null=False,
+    )
+    titr_string_code = models.TextField(
         blank=False,
         null=False,
     )
@@ -41,7 +49,15 @@ class News(models.Model):
         blank=False,
         null=False,
     )
+    titr_words_code = models.JSONField(
+        blank=False,
+        null=False,
+    )
     titr_words_without_stopword = models.JSONField(
+        blank=False,
+        null=False,
+    )
+    titr_words_without_stopword_code = models.JSONField(
         blank=False,
         null=False,
     )
@@ -49,11 +65,23 @@ class News(models.Model):
         blank=False,
         null=False,
     )
+    content_string_code = models.TextField(
+        blank=False,
+        null=False,
+    )
     content_words = models.JSONField(
         blank=False,
         null=False,
     )
+    content_words_code = models.JSONField(
+        blank=False,
+        null=False,
+    )
     content_words_without_stopword = models.JSONField(
+        blank=False,
+        null=False,
+    )
+    content_words_without_stopword_code = models.JSONField(
         blank=False,
         null=False,
     )
@@ -75,9 +103,37 @@ class News(models.Model):
     )
 
 
+def add_word(string: str) -> int:
+    word = Word.objects.filter(string=string).first()
+    if word:
+        return word.pk
+    word = Word()
+    word.string = string
+    word.save()
+    return word.pk
+
+
+def word2code(string: str) -> str:
+    word = Word.objects.filter(string=string).first()
+    if word is None:
+        word_id = add_word(string)
+        word = Word.objects.get(pk=word_id)
+    return f'persian_word_{word.pk}'
+
+
+def code2word(code: str) -> str:
+    code = int(code.rsplit('_', 1)[1])
+    word = Word.objects.filter(pk=code).first()
+    if word:
+        return word.string
+    return None
+
+
 def add_category(category_title: str, reference_id: int):
+    title_code = word2code(category_title)
     category = Category()
     category.title = category_title
+    category.title_code = title_code
     category.reference_id = reference_id
     category.save()
     return category.pk
@@ -92,15 +148,20 @@ def add_reference(reference_title: str):
 
 def add_news(
         titr_string: str,
-        titr_words: dict,
-        titr_words_without_stopword: dict,
         content_string: str,
-        content_words: dict,
-        content_words_without_stopword: dict,
         category_id: int,
         reference_id: int,
         vector: dict = None
 ):
+    from nvd.pre_processing import normilizer, tokenizer, without_stopword
+    titr_words = tokenizer(titr_string)
+    titr_words_without_stopword = []
+    for sent in titr_words:
+        titr_words_without_stopword.append(without_stopword(sent))
+    content_words = tokenizer(content_string)
+    content_words_without_stopword = []
+    for sent in content_words:
+        content_words_without_stopword.append(without_stopword(sent))
     news = News()
     news.titr_string = titr_string
     news.titr_words = titr_words
@@ -112,6 +173,18 @@ def add_news(
     if vector:
         news.vector = vector
     news.reference_id = reference_id
+
+    # coding
+    # ->
+    tmp = _lists_coding(titr_words)
+    news.titr_string_code = _string_coding(tmp)
+    news.titr_words_code = tmp
+    news.titr_words_without_stopword_code = _lists_coding(titr_words_without_stopword)
+    tmp = _lists_coding(content_words)
+    news.content_string_code = _string_coding(tmp)
+    news.content_words_code = tmp
+    news.content_words_without_stopword_code = _lists_coding(content_words_without_stopword)
+    # <-
     news.save()
     return news.pk
 
@@ -119,36 +192,42 @@ def add_news(
 def update_news(
         news_id: int,
         titr_string: str = None,
-        titr_words: dict = None,
-        titr_words_without_stopword: dict = None,
         content_string: str = None,
-        content_words: dict = None,
-        content_words_without_stopword: dict = None,
         category_id: int = None,
         reference_id: int = None,
         vector: dict = None
 ):
+    from nvd.pre_processing import normilizer, tokenizer, without_stopword
+
     news = News.objects.get(pk=news_id)
     if news is None:
         return False
 
     if titr_string:
         news.titr_string = titr_string
-
-    if titr_words:
+        titr_words = tokenizer(titr_string)
+        titr_words_without_stopword = []
+        for sent in titr_words:
+            titr_words_without_stopword.append(without_stopword(sent))
         news.titr_words = titr_words
-
-    if titr_words_without_stopword:
         news.titr_words_without_stopword = titr_words_without_stopword
+        tmp = _lists_coding(titr_words)
+        news.titr_string_code = _string_coding(tmp)
+        news.titr_words_code = tmp
+        news.titr_words_without_stopword_code = _lists_coding(titr_words_without_stopword)
 
     if content_string:
         news.content_string = content_string
-
-    if content_words:
+        content_words = tokenizer(content_string)
+        content_words_without_stopword = []
+        for sent in content_words:
+            content_words_without_stopword.append(without_stopword(sent))
         news.content_words = content_words
-
-    if content_words_without_stopword:
         news.content_words_without_stopword = content_words_without_stopword
+        tmp = _lists_coding(content_words)
+        news.content_string_code = _string_coding(content_words)
+        news.content_words_code = tmp
+        news.content_words_without_stopword_code = _lists_coding(content_words_without_stopword)
 
     if category_id:
         news.category_id = category_id
@@ -161,3 +240,27 @@ def update_news(
 
     news.save()
     return True
+
+
+def _string_coding(string: list) -> str:
+    _string = ''
+    for s in string:
+        for w in s:
+            _string += w
+            _string += ' '
+        _string += '\n'
+    return _string
+
+
+def list_coding(words_list: list) -> list:
+    _words_list = []
+    for word in words_list:
+        _words_list.append(word2code(word))
+    return _words_list
+
+
+def _lists_coding(words_lists: list) -> list:
+    _words_lists = []
+    for sent in words_lists:
+        _words_lists.append(list_coding(sent))
+    return _words_lists
