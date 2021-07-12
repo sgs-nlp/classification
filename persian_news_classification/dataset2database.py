@@ -18,24 +18,10 @@ def add2database(file_name):
 
     for _data in data:
         titr_string = normilizer(_data['Titr'])
-        titr_words = tokenizer(titr_string)
-        titr_words_without_stopword = []
-        for sent in titr_words:
-            titr_words_without_stopword.append(without_stopword(sent))
-
         content_string = normilizer(_data['Content'])
-        content_words = tokenizer(content_string)
-        content_words_without_stopword = []
-        for sent in content_words:
-            content_words_without_stopword.append(without_stopword(sent))
-
         add_news(
             titr_string=titr_string,
-            titr_words=titr_words,
-            titr_words_without_stopword=titr_words_without_stopword,
             content_string=content_string,
-            content_words=content_words,
-            content_words_without_stopword=content_words_without_stopword,
             category_id=category_list[_data['Category']],
             reference_id=reference_id,
         )
