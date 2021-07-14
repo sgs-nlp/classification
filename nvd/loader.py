@@ -6,7 +6,7 @@ def xlsx2dict(file_name: str) -> dict:
     first = True
     column_title_list = []
     # todo
-    for row in sheet.iter_rows():
+    for row in sheet.iter_rows(max_row=50):
         col = []
         for cell in row:
             col.append(cell.value)
