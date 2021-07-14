@@ -17,7 +17,7 @@ from sklearn import svm
 
 
 def classification_1():
-    reference_title = 'statics_files/HamshahriData.xlsx'
+    reference_title = 'staticfiles/HamshahriData.xlsx'
     # load on database
     # ->
     news = News.objects.filter(reference__title=reference_title).all()
@@ -80,7 +80,7 @@ def classification_1():
 
 
 def classification_2():
-    reference_title = 'statics_files/HamshahriData.xlsx'
+    reference_title = 'staticfiles/HamshahriData.xlsx'
 
     # load categories on database
     # ->

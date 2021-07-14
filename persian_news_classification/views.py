@@ -7,7 +7,7 @@ from .controller import classification_2 as classification
 def prerequisites(request: HttpRequest):
     from pathlib import Path
     from datetime import datetime
-    file_name = Path('statics_files', 'HamshahriData.xlsx')
+    file_name = Path('staticfiles', 'HamshahriData.xlsx')
     start = datetime.utcnow()
     add2database(file_name)
     print(f'create database run time = {datetime.utcnow() - start}')
