@@ -14,7 +14,7 @@ def prerequisites(request: HttpRequest):
     start = datetime.utcnow()
     classification()
     print(f'create machine learning model run time = {datetime.utcnow() - start}')
-    return redirect('persian_news_classification:index')
+    return redirect('home')
 
 
 def index(request: HttpRequest):
