@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 
 from . import views
 
+app_name = 'classification'
 urlpatterns = [
                   path('', include('persian_news_classification.urls')),
                   path('sample', views.sample_view),
