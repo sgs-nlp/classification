@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import HttpRequest, JsonResponse
 from .dataset2database import add2database
-from .controller import classification_2 as classification
+from .controller import classification as classification
 
 
 def prerequisites(request: HttpRequest):
