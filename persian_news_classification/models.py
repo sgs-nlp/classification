@@ -125,7 +125,9 @@ def add_word(string: str) -> int:
         return word.pk
     from datetime import datetime
     now = datetime.utcnow()
-    code = f'persian_word_{now.year}{now.month}{now.day}{now.hour}{now.minute}{now.second}{now.microsecond}'
+    # todo tedade raghamashu say kon yeki koni masalan mahe 6 ro bokon mahe 06
+    code = f'{now.year}{now.month}{now.day}{now.hour}{now.minute}{now.second}{now.microsecond}'
+    code = int(code)
     word = Word()
     word.string = string
     word.code = code
