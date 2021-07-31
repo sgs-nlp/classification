@@ -18,7 +18,15 @@ def recall(false_negatives, true_positives):
 
 
 def accuracy(false_negatives, true_positives, true_negatives, false_positives):
-    return (true_positives + true_negatives) / (true_positives + true_negatives + false_positives + false_negatives)
+    true = {}
+    false = {}
+    for tp, tn, fp, fn in zip(true_positives.items(), true_negatives.items(), false_positives.items(),
+                              false_negatives.items()):
+        true[tp[0]] = tp[1] + tn[1]
+        false[fp[0]] = fp[1] + fn[1]
+    true = sum(true.values())
+    false = sum(false.values())
+    return true / (true + false) * 100
 
 
 def balanced_accuracy(false_negatives, true_positives, true_negatives, false_positives):
