@@ -101,6 +101,7 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-12">
+                    <!-- precesion -->
                     <div class="mb-4">
                         <span class="h5">Check system performance based on precision-score</span>
                     </div>
@@ -108,81 +109,94 @@
                         <table class="table shadow-soft rounded">
                             <tr>
                                 <th class="border-0" scope="col" id="classifier">Classifier/Embedding</th>
-                                <th class="border-0" scope="col" id="tfidf">tf-idf</th>
+                                <th class="border-0" scope="col" id="tfidf">bag-of-word</th>
                                 <th class="border-0" scope="col" id="doc2vec">doc2vec</th>
                             </tr>
                             <tr>
                                 <th scope="row" id="mnb">Multinomial Naive Baise</th>
                                 <th scope="row" id="Bolter" headers="mnb tfidf">80.0%</th>
-                                <th scope="row" id="Bolter" headers="mnb doc2vec">90.0%</th>
+                                <th scope="row" id="Bolter"
+                                    headers="mnb doc2vec">{{ scores.Multinomial_Naive_Baise.precision }}%</th>
                             </tr>
                             <tr>
-                                <th scope="row" id="mlp">Multilayer Perceptron</th>
-                                <th scope="row" id="Lam" headers="mlp tfidf">79.1%</th>
-                                <th scope="row" id="Lam" headers="mlp doc2vec">96.2%</th>
+                                <th scope="row" id="mnb">Multi Layer Perseptron</th>
+                                <th scope="row" id="Bolter" headers="mnb tfidf">80.0%</th>
+                                <th scope="row" id="Bolter"
+                                    headers="mnb doc2vec">{{ scores.Multi_Layer_Perseptron.precision }}%</th>
                             </tr>
                             <tr>
-                                <th scope="row" id="svm">Support Vector Machine</th>
-                                <th scope="row" id="Lam" headers="svm tfidf">86.0%</th>
-                                <th scope="row" id="Lam" headers="svm doc2vec">93.0%</th>
+                                <th scope="row" id="mnb">Support Vector Machine</th>
+                                <th scope="row" id="Bolter" headers="mnb tfidf">80.0%</th>
+                                <th scope="row" id="Bolter"
+                                    headers="mnb doc2vec">{{ scores.Support_Vector_Machine.precision }}%</th>
                             </tr>
                         </table>
                     </div>
+
+                    <!-- recall -->
                     <div class="mb-4">
                         <span class="h5">Check system performance based on recall-score</span>
                     </div>
                     <div class="mb-5">
-
                         <table class="table shadow-soft rounded">
                             <tr>
                                 <th class="border-0" scope="col" id="classifier">Classifier/Embedding</th>
-                                <th class="border-0" scope="col" id="tfidf">tf-idf</th>
+                                <th class="border-0" scope="col" id="tfidf">bag-of-word</th>
                                 <th class="border-0" scope="col" id="doc2vec">doc2vec</th>
                             </tr>
                             <tr>
                                 <th scope="row" id="mnb">Multinomial Naive Baise</th>
                                 <th scope="row" id="Bolter" headers="mnb tfidf">80.0%</th>
-                                <th scope="row" id="Bolter" headers="mnb doc2vec">90.0%</th>
+                                <th scope="row" id="Bolter"
+                                    headers="mnb doc2vec">{{ scores.Multinomial_Naive_Baise.recall }}%</th>
                             </tr>
                             <tr>
-                                <th scope="row" id="mlp">Multilayer Perceptron</th>
-                                <th scope="row" id="Lam" headers="mlp tfidf">79.1%</th>
-                                <th scope="row" id="Lam" headers="mlp doc2vec">96.2%</th>
+                                <th scope="row" id="mnb">Multi Layer Perseptron</th>
+                                <th scope="row" id="Bolter" headers="mnb tfidf">80.0%</th>
+                                <th scope="row" id="Bolter"
+                                    headers="mnb doc2vec">{{ scores.Multi_Layer_Perseptron.recall }}%</th>
                             </tr>
                             <tr>
-                                <th scope="row" id="svm">Support Vector Machine</th>
-                                <th scope="row" id="Lam" headers="svm tfidf">86.0%</th>
-                                <th scope="row" id="Lam" headers="svm doc2vec">93.0%</th>
+                                <th scope="row" id="mnb">Support Vector Machine</th>
+                                <th scope="row" id="Bolter" headers="mnb tfidf">80.0%</th>
+                                <th scope="row" id="Bolter"
+                                    headers="mnb doc2vec">{{ scores.Support_Vector_Machine.recall }}%</th>
                             </tr>
                         </table>
                     </div>
+
+                    <!-- accuracy -->
                     <div class="mb-4">
-                        <span class="h5">Check system performance based on f1-score</span>
+                        <span class="h5">Check system performance based on accuracy-score</span>
                     </div>
                     <div class="mb-5">
                         <table class="table shadow-soft rounded">
                             <tr>
                                 <th class="border-0" scope="col" id="classifier">Classifier/Embedding</th>
-                                <th class="border-0" scope="col" id="tfidf">tf-idf</th>
+                                <th class="border-0" scope="col" id="tfidf">bag-of-word</th>
                                 <th class="border-0" scope="col" id="doc2vec">doc2vec</th>
                             </tr>
                             <tr>
                                 <th scope="row" id="mnb">Multinomial Naive Baise</th>
                                 <th scope="row" id="Bolter" headers="mnb tfidf">80.0%</th>
-                                <th scope="row" id="Bolter" headers="mnb doc2vec">90.0%</th>
+                                <th scope="row" id="Bolter"
+                                    headers="mnb doc2vec">{{ scores.Multinomial_Naive_Baise.accuracy }}%</th>
                             </tr>
                             <tr>
-                                <th scope="row" id="mlp">Multilayer Perceptron</th>
-                                <th scope="row" id="Lam" headers="mlp tfidf">79.1%</th>
-                                <th scope="row" id="Lam" headers="mlp doc2vec">96.2%</th>
+                                <th scope="row" id="mnb">Multi Layer Perseptron</th>
+                                <th scope="row" id="Bolter" headers="mnb tfidf">80.0%</th>
+                                <th scope="row" id="Bolter"
+                                    headers="mnb doc2vec">{{ scores.Multi_Layer_Perseptron.accuracy }}%</th>
                             </tr>
                             <tr>
-                                <th scope="row" id="svm">Support Vector Machine</th>
-                                <th scope="row" id="Lam" headers="svm tfidf">86.0%</th>
-                                <th scope="row" id="Lam" headers="svm doc2vec">93.0%</th>
+                                <th scope="row" id="mnb">Support Vector Machine</th>
+                                <th scope="row" id="Bolter" headers="mnb tfidf">80.0%</th>
+                                <th scope="row" id="Bolter"
+                                    headers="mnb doc2vec">{{ scores.Support_Vector_Machine.accuracy }}%</th>
                             </tr>
                         </table>
                     </div>
+
                 </div>
             </div>
         </div>
