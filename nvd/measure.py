@@ -43,3 +43,31 @@ def f_beta(false_negatives, true_positives, true_negatives, false_positives, bet
     precision_score = precision(false_negatives, true_positives, true_negatives, false_positives)
     recall_score = recall(false_negatives, true_positives, true_negatives, false_positives)
     return (1 + beta ** 2)((precision_score * recall_score) / ((beta ** 2) * precision_score + recall_score))
+
+
+def true_or_false(predicted, y_test, classes):
+    true_positive = {}
+    true_negative = {}
+    false_positive = {}
+    false_negative = {}
+    true = {}
+    false = {}
+    for predicted_item, res in zip(predicted, y_test):
+        if predicted_item == res:
+            if res not in true:
+                true[res] = 0
+            true[res] += 1
+        else:
+            if res not in false:
+                false[res] = 0
+            false[res] += 1
+    for c in classes:
+        if c not in true:
+            true[c] = 0
+        true_positive[c] = true[c]
+        true_negative[c] = sum(true.values()) - true[c]
+        if c not in false:
+            false[c] = 0
+        false_positive[c] = false[c]
+        false_negative[c] = sum(false.values()) - false[c]
+    return false_negative, true_positive, true_negative, false_positive
