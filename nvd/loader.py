@@ -5,7 +5,7 @@ def xlsx2dict(file_name: str) -> dict:
     data = []
     first = True
     column_title_list = []
-    # todo
+    # todo max_row = ?
     for row in sheet.iter_rows(max_row=50):
         col = []
         for cell in row:
