@@ -7,11 +7,11 @@ from nvd.pre_processing import normilizer, tokenizer, without_stopword
 from .models import Reference, add_reference, add_category, add_news, add_stopword, add_word
 
 
-def add2database(file_name: str):
+def add2database(file_name: str) -> int:
     reference_id = Reference.objects.filter(title=file_name).first()
     if reference_id is not None:
         logging.info('The desired datset is available in the database.')
-        return
+        return reference_id
     logging.info('Started storing persian symbols in the database.')
     from nvd.symbols import LIST as PERSIAN_SYMBOLS
     for word in PERSIAN_SYMBOLS:
@@ -70,3 +70,4 @@ def add2database(file_name: str):
         )
         logging.info(f'The number {row_number} news item storage in the database is complete.')
         row_number += 1
+    return reference_id
