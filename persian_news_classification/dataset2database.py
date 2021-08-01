@@ -49,7 +49,7 @@ def add2database(file_name: str) -> int:
     row_number = 1
     category_dict = {}
     logging.info('Started storing persian news in the database.')
-    for row in sheet.iter_rows(max_row=50):
+    for row in sheet.iter_rows():
         col = []
         for cell in row:
             col.append(cell.value)
