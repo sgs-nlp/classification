@@ -59,7 +59,8 @@ def classification():
     res = {}
     # multinomial naive baise
     # ->
-    mnb_model = MultinomialNB().fit(x_train, y_train)
+    mnb_model = MultinomialNB()
+    mnb_model.fit(x_train, y_train)
     mnb_predicted = mnb_model.predict(x_test)
     fns, tps, tns, fps = true_or_false(mnb_predicted, y_test, category_index_list)
     per_mnb = precision(true_positives=tps, false_positives=fps)
@@ -74,8 +75,8 @@ def classification():
     # <-
     # Multi Layer Perseptron
     # ->
-    mlp_model = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(15,), random_state=1).fit(x_train,
-                                                                                                        y_train)
+    mlp_model = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(15,), random_state=1)
+    mlp_model.fit(x_train, y_train)
     mlp_predicted = mlp_model.predict(x_test)
     fns, tps, tns, fps = true_or_false(mlp_predicted, y_test, category_index_list)
     per_mlp = precision(true_positives=tps, false_positives=fps)
@@ -88,10 +89,10 @@ def classification():
     }
     res['Multi_Layer_Perseptron'] = mlp_scores
     # <-
-
     # Support Vector Machine
     # ->
-    svm_model = support_vector_machine.LinearSVC().fit(x_train, y_train)
+    svm_model = support_vector_machine.LinearSVC()
+    svm_model.fit(x_train, y_train)
     svm_predicted = svm_model.predict(x_test)
     fns, tps, tns, fps = true_or_false(svm_predicted, y_test, category_index_list)
     per_svm = precision(true_positives=tps, false_positives=fps)
@@ -105,7 +106,6 @@ def classification():
     res['Support_Vector_Machine'] = svm_scores
     # <-
     return res
-
 
 # def classification_2():
 #     reference_title = 'staticfiles/HamshahriData.xlsx'
