@@ -1,5 +1,6 @@
 from django.db import models
 import logging
+import os
 
 
 def get_upload_to(instance, file_name):
@@ -23,6 +24,11 @@ class Word(models.Model):
         blank=False,
     )
 
+    def __iter__(self):
+        yield 'pk', self.pk
+        yield 'string', self.string
+        yield 'code', self.code
+
 
 class StopWord(models.Model):
     word = models.ForeignKey(
@@ -34,6 +40,11 @@ class StopWord(models.Model):
         on_delete=models.CASCADE,
     )
 
+    def __iter__(self):
+        yield 'pk', self.pk
+        yield 'word', dict(self.word)
+        yield 'reference', dict(self.reference)
+
 
 class Reference(models.Model):
     title = models.CharField(
@@ -41,6 +52,10 @@ class Reference(models.Model):
         blank=False,
         null=False,
     )
+
+    def __iter__(self):
+        yield 'pk', self.pk
+        yield 'title', self.title
 
 
 class Category(models.Model):
@@ -60,6 +75,12 @@ class Category(models.Model):
         blank=False,
         null=False,
     )
+
+    def __iter__(self):
+        yield 'pk', self.pk
+        yield 'title', self.title
+        yield 'title_code', self.title_code
+        yield 'reference', dict(self.reference)
 
 
 class News(models.Model):
@@ -128,6 +149,23 @@ class News(models.Model):
         null=False,
     )
 
+    def __iter__(self):
+        yield 'titr_string', self.titr_string
+        yield 'titr_string_code', self.titr_string_code
+        yield 'titr_words', dict(self.titr_words)
+        yield 'titr_words_code', dict(self.titr_words_code)
+        yield 'titr_words_without_stopword', dict(self.titr_words_without_stopword)
+        yield 'titr_words_without_stopword_code', dict(self.titr_words_without_stopword_code)
+        yield 'content_string', self.content_string
+        yield 'content_string_code', self.content_string_code
+        yield 'content_words', dict(self.content_words)
+        yield 'content_words_code', dict(self.content_words_code)
+        yield 'content_words_without_stopword', dict(self.content_words_without_stopword)
+        yield 'content_words_without_stopword_code', dict(self.content_words_without_stopword_code)
+        yield 'category', dict(self.category)
+        yield 'vector', dict(self.vector)
+        yield 'reference', dict(self.reference)
+
 
 class File(models.Model):
     title = models.CharField(
@@ -141,7 +179,7 @@ class File(models.Model):
         blank=False,
     )
     file = models.FileField(
-        upload_to=get_upload_to,
+        # upload_to=get_upload_to,
     )
 
 
