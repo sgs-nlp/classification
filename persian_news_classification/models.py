@@ -147,29 +147,33 @@ class File(models.Model):
 
 def add_word(string: str) -> int:
     word = Word.objects.filter(string=string).first()
-    if word:
+    if word is not None:
+        logging.warning(f'String \"{string}\" is available in the database with ID {word.pk}.')
         return word.pk
     from datetime import datetime
     now = datetime.utcnow()
-    # todo tedade raghamashu say kon yeki koni masalan mahe 6 ro bokon mahe 06
-    code = f'{now.year}{now.month}{now.day}{now.hour}{now.minute}{now.second}{now.microsecond}'
+    # code = f'{now.year}{now.month}{now.day}{now.hour}{now.minute}{now.second}{now.microsecond}'
+    code = int(str(now).replace('-', '').replace(':', '').replace(' ', '').replace('.', ''))
     code = int(code)
     word = Word()
     word.string = string
     word.code = code
     word.save()
+    logging.info(f'String {string} with ID {word.pk} is stored in the database.')
     return word.pk
 
 
 def add_stopword(string: str, reference_id: int) -> int:
     stopword = StopWord.objects.filter(reference_id=reference_id).filter(word__string=string).first()
     if stopword:
+        logging.warning(f'String \"{string}\" is available in the database with ID {stopword.pk}.')
         return stopword.pk
     word_id = add_word(string)
     stopword = StopWord()
     stopword.word_id = word_id
     stopword.reference_id = reference_id
     stopword.save()
+    logging.info(f'String {string} with ID {stopword.pk} is stored in the database.')
     return stopword.pk
 
 
@@ -190,19 +194,29 @@ def code2word(code: str) -> str:
 
 
 def add_category(category_title: str, reference_id: int):
+    category = Category.objects.filter(reference_id=reference_id).filter(title=category_title).first()
+    if category:
+        logging.warning(f'Category title \"{category_title}\" is available in the database with ID {category.pk}.')
+        return category.pk
     title_code = word2code(category_title)
     category = Category()
     category.title = category_title
     category.title_code = title_code
     category.reference_id = reference_id
     category.save()
+    logging.info(f'Category title {category_title} with ID {category.pk} is stored in the database.')
     return category.pk
 
 
 def add_reference(reference_title: str):
+    reference = Reference.objects.filter(title=reference_title).first()
+    if reference:
+        logging.warning(f'Reference title \"{reference_title}\" is available in the database with ID {reference.pk}.')
+        return reference.pk
     reference = Reference()
     reference.title = reference_title
     reference.save()
+    logging.info(f'Reference title {reference_title} with ID {reference.pk} is stored in the database.')
     return reference.pk
 
 
@@ -214,12 +228,17 @@ def add_news(
         vector: dict = None
 ):
     from nvd.pre_processing import normilizer, tokenizer, without_stopword
+    logging.info(f'Titr Tokenizer.')
     titr_words = tokenizer(titr_string)
     titr_words_without_stopword = []
+    logging.info(f'Titr without stopwords.')
     for sent in titr_words:
         titr_words_without_stopword.append(without_stopword(sent))
+
+    logging.info(f'Content Tokenizer.')
     content_words = tokenizer(content_string)
     content_words_without_stopword = []
+    logging.info(f'Content without stopwords.')
     for sent in content_words:
         content_words_without_stopword.append(without_stopword(sent))
     news = News()
@@ -246,6 +265,7 @@ def add_news(
     news.content_words_without_stopword_code = _lists_coding(content_words_without_stopword)
     # <-
     news.save()
+    logging.info(f'News with ID {news.pk} is stored in the database.')
     return news.pk
 
 
@@ -261,6 +281,7 @@ def update_news(
 
     news = News.objects.get(pk=news_id)
     if news is None:
+        logging.warning(f'News with ID {news_id} is not exist in the database.')
         return False
 
     if titr_string:
@@ -299,6 +320,7 @@ def update_news(
         news.vector = vector
 
     news.save()
+    logging.info('News updated.')
     return True
 
 
