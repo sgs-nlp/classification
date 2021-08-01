@@ -1,4 +1,14 @@
 from django.db import models
+import logging
+
+
+def get_upload_to(instance, file_name):
+    from uuid import uuid4
+
+    _uuid = uuid4()
+    _uuid2 = uuid4()
+    ext = file_name.split('.')[-1]
+    return "files/{}.{}".format(str(_uuid), str(_uuid2), ext)
 
 
 class Word(models.Model):
