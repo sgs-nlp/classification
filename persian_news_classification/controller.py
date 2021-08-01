@@ -19,11 +19,10 @@ import numpy as np
 from nvd.normalizer import matrix_scale_matrix
 from nvd.embedding import GDoc2Vec
 from nvd.measure import true_or_false, precision, recall, accuracy
+import pickle
 
 
-def classification():
-    reference_title = 'staticfiles/HamshahriData.xlsx'
-
+def classification(reference_title: str = 'staticfiles/HamshahriData.xlsx'):
     # load categories on database
     # ->
     _category_list = Category.objects.filter(reference__title=reference_title).all()
@@ -34,6 +33,11 @@ def classification():
         category_list.append(category.title_code)
         category_index_list.append(i)
         i += 1
+
+    # with open('uploads/categories.pkl', 'rb') as pkl_file:
+    #     categories = pickle.load(pkl_file)
+    # print(categories)
+
     # <-
     # load on database
     # ->
@@ -44,11 +48,12 @@ def classification():
     x_data = []
     y_data = []
     for itm in news:
-        tmp = [int(itm.category.title_code)]
+        tmp = [str(itm.category.title_code)]
         for word in itm.titr_words_without_stopword_code[0]:
-            tmp.append(int(word))
+            tmp.append(str(word))
         x_data.append(tmp)
-        y_data.append(category_list.index(itm.category.title_code))
+        y_data.append(itm.category.pk)
+
     gensim_d2v_model = GDoc2Vec(x_data)
     x_data = gensim_d2v_model.vectors
     # <-
