@@ -115,6 +115,24 @@ class Reference(models.Model):
     def __iter__(self):
         yield 'pk', self.pk
         yield 'title', self.title
+        yield 'length', self.length
+        yield 'stopwords_list', dict(self.stopwords_list)
+        yield 'categories_list', dict(self.categories_list)
+        yield 'titr_string_flag', self.titr_string_flag
+        yield 'titr_string_code_flag', self.titr_string_code_flag
+        yield 'titr_words_flag', self.titr_words_flag
+        yield 'titr_words_code_flag', self.titr_words_code_flag
+        yield 'titr_words_without_stopword_flag', self.titr_words_without_stopword_flag
+        yield 'titr_words_without_stopword_code_flag', self.titr_words_without_stopword_code_flag
+        yield 'content_string_flag', self.content_string_flag
+        yield 'content_string_code_flag', self.content_string_code_flag
+        yield 'content_words_flag', self.content_words_flag
+        yield 'content_words_code_flag', self.content_words_code_flag
+        yield 'content_words_without_stopword_flag', self.content_words_without_stopword_flag
+        yield 'content_words_without_stopword_code_flag', self.content_words_without_stopword_code_flag
+        yield 'category_flag', self.category_flag
+        yield 'vector_flag', self.vector_flag
+        yield 'keywords_flag', self.keywords_flag
 
 
 class Category(models.Model):
