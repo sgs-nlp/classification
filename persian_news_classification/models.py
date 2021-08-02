@@ -225,6 +225,10 @@ class News(models.Model):
         blank=False,
         null=False,
     )
+    keywords = models.JSONField(
+        blank=True,
+        null=True,
+    )
 
     def __iter__(self):
         yield 'titr_string', self.titr_string
