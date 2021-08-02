@@ -68,3 +68,54 @@ class GDoc2Vec:
 
     def d2v(self, document):
         pass
+
+
+class BOWDoc2vec:
+    def __init__(self, data, dictionary):
+        self.data = data
+        _dictionary = {}
+        i = 0
+        for itm in dictionary:
+            i += 1
+            _dictionary[itm.code] = i
+
+        self.dictionary = _dictionary
+        self._vectors = None
+
+    @property
+    def vectors(self):
+        if self._vectors:
+            return self._vectors
+        _data = self.data
+        for i in range(len(_data)):
+            for j in range(len(_data[i])):
+                _data[i][j] = self.dictionary[_data[i][j]]
+        self._vectors = _data
+        return self._vectors
+
+
+class OneHotDoc2vec:
+    def __init__(self, data, dictionary):
+        self.data = data
+        _dictionary = {}
+        i = 0
+        for itm in dictionary:
+            _dictionary[itm.code] = i
+            i += 1
+
+        self.dictionary = _dictionary
+        self._vectors = None
+
+    @property
+    def vectors(self):
+        if self._vectors:
+            return self._vectors
+        len_dictionary = len(self.dictionary)
+        _data = []
+        for i in range(len(self.data)):
+            _doc = numpy.zeros(len_dictionary)
+            for j in range(len(self.data[i])):
+                _doc[self.dictionary[self.data[i][j]]] = 1
+            _data.append(_doc)
+        self._vectors = numpy.array(_data)
+        return self._vectors
