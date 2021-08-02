@@ -1,6 +1,5 @@
 .idea
 /.idea
-/tmp/db.sqlite3
 /.test.py
 /*.pkl
 /*.csv
@@ -8,3 +7,4 @@
 /uploads/
 /.log
 /tmp/
+/db.sqlite3
