@@ -1,3 +1,5 @@
+import logging
+
 from .stopword import LIST as STOPWORD_LIST
 from .symbols import LIST as SYMBOLS_LIST
 
@@ -16,6 +18,8 @@ hazm_normilizer = Normalizer(
 
 def normilizer(string: str) -> str:
     _str = ''
+    # todo hale asasiye moshkel bebin moshkel kojas
+    string = str(string)
     for c in string:
         if c in SYMBOLS_LIST:
             _str += f' {c} '
