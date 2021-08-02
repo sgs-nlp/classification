@@ -52,6 +52,65 @@ class Reference(models.Model):
         blank=False,
         null=False,
     )
+    load_complate_flag = models.BooleanField(
+        default=False,
+    )
+    length = models.IntegerField(
+        default=0,
+    )
+    stopwords_list = models.JSONField(
+        blank=True,
+        null=True,
+    )
+    categories_list = models.JSONField(
+        blank=True,
+        null=True,
+    )
+    titr_string_flag = models.BooleanField(
+        default=False,
+    )
+    titr_string_code_flag = models.BooleanField(
+        default=False,
+    )
+    titr_words_flag = models.BooleanField(
+        default=False,
+    )
+    titr_words_code_flag = models.BooleanField(
+        default=False,
+    )
+    titr_words_without_stopword_flag = models.BooleanField(
+        default=False,
+    )
+    titr_words_without_stopword_code_flag = models.BooleanField(
+        default=False,
+    )
+    content_string_flag = models.BooleanField(
+        default=False,
+    )
+    content_string_code_flag = models.BooleanField(
+        default=False,
+    )
+    content_words_flag = models.BooleanField(
+        default=False,
+    )
+    content_words_code_flag = models.BooleanField(
+        default=False,
+    )
+    content_words_without_stopword_flag = models.BooleanField(
+        default=False,
+    )
+    content_words_without_stopword_code_flag = models.BooleanField(
+        default=False,
+    )
+    category_flag = models.BooleanField(
+        default=False,
+    )
+    vector_flag = models.BooleanField(
+        default=False,
+    )
+    keywords_flag = models.BooleanField(
+        default=False,
+    )
 
     def __iter__(self):
         yield 'pk', self.pk
