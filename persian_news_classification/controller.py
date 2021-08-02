@@ -1,4 +1,4 @@
-from .models import News, StopWord, Category
+from .models import News, StopWord, Category, Word
 import pickle
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
@@ -17,7 +17,7 @@ from sklearn import svm as support_vector_machine
 import numpy as np
 
 from nvd.normalizer import matrix_scale_matrix
-from nvd.embedding import GDoc2Vec
+from nvd.embedding import GDoc2Vec, BOWDoc2vec, OneHotDoc2vec
 from nvd.measure import true_or_false, precision, recall, accuracy
 import pickle
 
@@ -54,45 +54,54 @@ def classification(reference_title: str = 'staticfiles/HamshahriData.xlsx'):
         x_data.append(tmp)
         y_data.append(itm.category.pk)
 
+    dictionary = Word.objects.all()
     gensim_d2v_model = GDoc2Vec(x_data)
-    x_data = gensim_d2v_model.vectors
+    x_data_by_gensim_vectorized = gensim_d2v_model.vectors
+
+    bow_d2v = OneHotDoc2vec(x_data, dictionary)
+    x_data_by_gensim_vectorized = bow_d2v.vectors
+
+    cls = Classification(x_data_by_gensim_vectorized, y_data, category_index_list)
+    print(cls.mlp.recall_score)
+
     # <-
     # train test split
     # ->
-    x_train, x_test, y_train, y_test = train_test_split(x_data, y_data, test_size=0.15, random_state=42)
+    x_train, x_test, y_train, y_test = train_test_split(x_data_by_gensim_vectorized, y_data, test_size=0.15,
+                                                        random_state=42)
     # <-
     res = {}
-    # multinomial naive baise
-    # ->
-    mnb_model = MultinomialNB()
-    mnb_model.fit(x_train, y_train)
-    mnb_predicted = mnb_model.predict(x_test)
-    fns, tps, tns, fps = true_or_false(mnb_predicted, y_test, category_index_list)
-    per_mnb = precision(true_positives=tps, false_positives=fps)
-    rec_mnb = recall(false_negatives=fns, true_positives=tps)
-    acc_mnb = accuracy(false_negatives=fns, true_positives=tps, true_negatives=tns, false_positives=fps)
-    mnb_scores = {
-        'precision': per_mnb,
-        'recall': rec_mnb,
-        'accuracy': acc_mnb,
-    }
-    res['Multinomial_Naive_Baise'] = mnb_scores
-    # <-
-    # Multi Layer Perseptron
-    # ->
-    mlp_model = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(15,), random_state=1)
-    mlp_model.fit(x_train, y_train)
-    mlp_predicted = mlp_model.predict(x_test)
-    fns, tps, tns, fps = true_or_false(mlp_predicted, y_test, category_index_list)
-    per_mlp = precision(true_positives=tps, false_positives=fps)
-    rec_mlp = recall(false_negatives=fns, true_positives=tps)
-    acc_mlp = accuracy(false_negatives=fns, true_positives=tps, true_negatives=tns, false_positives=fps)
-    mlp_scores = {
-        'precision': per_mlp,
-        'recall': rec_mlp,
-        'accuracy': acc_mlp,
-    }
-    res['Multi_Layer_Perseptron'] = mlp_scores
+    # # multinomial naive baise
+    # # ->
+    # mnb_model = MultinomialNB()
+    # mnb_model.fit(x_train, y_train)
+    # mnb_predicted = mnb_model.predict(x_test)
+    # fns, tps, tns, fps = true_or_false(mnb_predicted, y_test, category_index_list)
+    # per_mnb = precision(true_positives=tps, false_positives=fps)
+    # rec_mnb = recall(false_negatives=fns, true_positives=tps)
+    # acc_mnb = accuracy(false_negatives=fns, true_positives=tps, true_negatives=tns, false_positives=fps)
+    # mnb_scores = {
+    #     'precision': per_mnb,
+    #     'recall': rec_mnb,
+    #     'accuracy': acc_mnb,
+    # }
+    # res['Multinomial_Naive_Baise'] = mnb_scores
+    # # <-
+    # # Multi Layer Perseptron
+    # # ->
+    # mlp_model = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(15,), random_state=1)
+    # mlp_model.fit(x_train, y_train)
+    # mlp_predicted = mlp_model.predict(x_test)
+    # fns, tps, tns, fps = true_or_false(mlp_predicted, y_test, category_index_list)
+    # per_mlp = precision(true_positives=tps, false_positives=fps)
+    # rec_mlp = recall(false_negatives=fns, true_positives=tps)
+    # acc_mlp = accuracy(false_negatives=fns, true_positives=tps, true_negatives=tns, false_positives=fps)
+    # mlp_scores = {
+    #     'precision': per_mlp,
+    #     'recall': rec_mlp,
+    #     'accuracy': acc_mlp,
+    # }
+    # res['Multi_Layer_Perseptron'] = mlp_scores
     # <-
     # Support Vector Machine
     # ->
@@ -110,7 +119,22 @@ def classification(reference_title: str = 'staticfiles/HamshahriData.xlsx'):
     }
     res['Support_Vector_Machine'] = svm_scores
     # <-
+
+    mlp_scores = {
+        'precision': 0,
+        'recall': 0,
+        'accuracy': 0,
+    }
+    res['Multi_Layer_Perseptron'] = mlp_scores
+    mnb_scores = {
+        'precision': 0,
+        'recall': 0,
+        'accuracy': 0,
+    }
+    res['Multinomial_Naive_Baise'] = mnb_scores
+
     return res
+
 
 # def classification_2():
 #     reference_title = 'staticfiles/HamshahriData.xlsx'
