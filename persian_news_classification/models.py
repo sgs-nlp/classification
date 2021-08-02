@@ -339,6 +339,74 @@ def add_reference(reference_title: str):
     return reference.pk
 
 
+def update_reference(
+        reference_id: int,
+        length: int = None,
+        stopwords_list: list = None,
+        categories_list: list = None,
+        titr_string_flag: bool = None,
+        titr_string_code_flag: bool = None,
+        titr_words_flag: bool = None,
+        titr_words_code_flag: bool = None,
+        titr_words_without_stopword_flag: bool = None,
+        titr_words_without_stopword_code_flag: bool = None,
+        content_string_flag: bool = None,
+        content_string_code_flag: bool = None,
+        content_words_flag: bool = None,
+        content_words_code_flag: bool = None,
+        content_words_without_stopword_flag: bool = None,
+        content_words_without_stopword_code_flag: bool = None,
+        category_flag: bool = None,
+        vector_flag: bool = None,
+        keywords_flag: bool = None,
+        load_complate_flag: bool = None,
+):
+    ref = Reference.objects.get(pk=reference_id)
+    if ref is None:
+        logging.warning(f'Reference with ID {reference_id} is not exist in the database.')
+        return False
+    if load_complate_flag:
+        ref.load_complate_flag = load_complate_flag
+    if stopwords_list:
+        ref.stopwords_list = stopwords_list
+    if length:
+        ref.length = length
+    if categories_list:
+        ref.categories_list = categories_list
+    if titr_string_flag:
+        ref.titr_string_flag = titr_string_flag
+    if titr_string_code_flag:
+        ref.titr_string_code_flag = titr_string_code_flag
+    if titr_words_flag:
+        ref.titr_words_flag = titr_words_flag
+    if titr_words_code_flag:
+        ref.titr_words_code_flag = titr_words_code_flag
+    if titr_words_without_stopword_flag:
+        ref.titr_words_without_stopword_flag = titr_words_without_stopword_flag
+    if titr_words_without_stopword_code_flag:
+        ref.titr_words_without_stopword_code_flag = titr_words_without_stopword_code_flag
+    if content_string_flag:
+        ref.content_string_flag = content_string_flag
+    if content_string_code_flag:
+        ref.content_string_code_flag = content_string_code_flag
+    if content_words_flag:
+        ref.content_words_flag = content_words_flag
+    if content_words_code_flag:
+        ref.content_words_code_flag = content_words_code_flag
+    if content_words_without_stopword_flag:
+        ref.content_words_without_stopword_flag = content_words_without_stopword_flag
+    if content_words_without_stopword_code_flag:
+        ref.content_words_without_stopword_code_flag = content_words_without_stopword_code_flag
+    if category_flag:
+        ref.category_flag = category_flag
+    if vector_flag:
+        ref.vector_flag = vector_flag
+    if keywords_flag:
+        ref.keywords_flag = keywords_flag
+    ref.save()
+    return ref.pk
+
+
 def add_news(
         titr_string: str,
         content_string: str,
