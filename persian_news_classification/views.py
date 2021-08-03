@@ -14,16 +14,14 @@ def prerequisites(request: HttpRequest):
     add2database(file_name)
     logging.info('Data storage in the database is complete.')
     logging.info('Started classification analys.')
-    scores = classification()
+    clss = classification()
     logging.info('Classification analys complate.')
     return render(
         request,
         'ai_index.html',
-        context={
-            'scores': scores,
-        },
+        context=clss,
     )
 
 
 def index(request: HttpRequest):
-    return render(request, 'test.html', context={})
+    return render(request, 'index.html', context={})
