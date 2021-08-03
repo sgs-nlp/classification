@@ -467,7 +467,8 @@ def update_news(
         content_string: str = None,
         category_id: int = None,
         reference_id: int = None,
-        vector: dict = None
+        vector: list = None,
+        keywords: list = None
 ):
     from nvd.pre_processing import normilizer, tokenizer, without_stopword
 
@@ -510,6 +511,9 @@ def update_news(
 
     if vector:
         news.vector = vector
+
+    if keywords:
+        news.keywords = keywords
 
     news.save()
     logging.info('News updated.')
