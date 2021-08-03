@@ -305,7 +305,6 @@ def word2code(string: str) -> str:
 
 
 def code2word(code: str) -> str:
-    code = int(code.rsplit('_', 1)[1])
     word = Word.objects.filter(code=code).first()
     if word:
         return word.string
@@ -449,7 +448,13 @@ def add_news(
     tmp = _lists_coding(content_words)
     news.content_string_code = _string_coding(tmp)
     news.content_words_code = tmp
-    news.content_words_without_stopword_code = _lists_coding(content_words_without_stopword)
+    content_words_without_stopword_code = _lists_coding(content_words_without_stopword)
+    news.content_words_without_stopword_code = content_words_without_stopword_code
+
+    from nvd.extractor import Keywords
+    keywords_extractor = Keywords(minimum_frequency=0.46)
+    news.keywords = keywords_extractor.by_frequency(content_words_without_stopword_code)
+
     # <-
     news.save()
     logging.info(f'News with ID {news.pk} is stored in the database.')
