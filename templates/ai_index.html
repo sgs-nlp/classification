@@ -67,8 +67,11 @@
                 <div class="navbar-collapse-header">
                 </div>
                 <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
+                    <li><a class="dropdown-item" href="#Performance">Performance</a></li>
+                    <li><a class="dropdown-item" href="#Test">Test</a></li>
+                    <li><a class="dropdown-item" href="#">API</a></li>
                     <li><a class="dropdown-item" href="#">About me</a></li>
-                    <li><a class="dropdown-item" href="#">Contact me</a></li>
+                    <li><a class="dropdown-item" href="#ContactMe">Contact me</a></li>
                 </ul>
             </div>
         </div>
@@ -76,8 +79,8 @@
 </header>
 <main>
 
-    <!-- Hero -->
-    <section class="section section bg-soft pb-5 overflow-hidden z-2">
+    <!-- Section Info -->
+    <section class="section bg-primary pb-0 section-lg">
         <div class="container z-2">
             <div class="row justify-content-center text-center pt-6">
                 <div class="col-lg-8 col-xl-8">
@@ -94,11 +97,18 @@
             </div>
         </div>
     </section>
+    <!-- End of Info -->
 
-
-    <!-- End of Hero -->
-    <div class="section bg-primary pt-0 section-lg">
+    <!-- Section Performance -->
+    <section class="section bg-primary pt-0 section-lg" id="Performance">
         <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="mb-5">
+                        <span class="font-weight-bold">Performance</span>
+                    </div>
+                </div>
+            </div>
             <div class="row justify-content-center">
                 <div class="col-lg-12">
                     <!-- precesion -->
@@ -109,26 +119,35 @@
                         <table class="table shadow-soft rounded">
                             <tr>
                                 <th class="border-0" scope="col" id="classifier">Classifier/Embedding</th>
-                                <th class="border-0" scope="col" id="tfidf">bag-of-word</th>
+                                <th class="border-0" scope="col" id="tfidf">one_hot_encoding</th>
                                 <th class="border-0" scope="col" id="doc2vec">doc2vec</th>
                             </tr>
                             <tr>
                                 <th scope="row" id="mnb">Multinomial Naive Baise</th>
-                                <th scope="row" id="Bolter" headers="mnb tfidf">80.0%</th>
                                 <th scope="row" id="Bolter"
-                                    headers="mnb doc2vec">{{ scores.Multinomial_Naive_Baise.precision }}%</th>
+                                    headers="mnb tfidf">{{ one_hot_encoding_word_embeding__mnb__precision_score }}%
+                                </th>
+                                <th scope="row" id="Bolter"
+                                    headers="mnb doc2vec">{{ word2vec_word_embeding__mnb__precision_score }}%
+                                </th>
                             </tr>
                             <tr>
                                 <th scope="row" id="mnb">Multi Layer Perseptron</th>
-                                <th scope="row" id="Bolter" headers="mnb tfidf">80.0%</th>
                                 <th scope="row" id="Bolter"
-                                    headers="mnb doc2vec">{{ scores.Multi_Layer_Perseptron.precision }}%</th>
+                                    headers="mnb tfidf">{{ one_hot_encoding_word_embeding__mlp__precision_score }}%
+                                </th>
+                                <th scope="row" id="Bolter"
+                                    headers="mnb doc2vec">{{ word2vec_word_embeding__mlp__precision_score }}%
+                                </th>
                             </tr>
                             <tr>
                                 <th scope="row" id="mnb">Support Vector Machine</th>
-                                <th scope="row" id="Bolter" headers="mnb tfidf">80.0%</th>
                                 <th scope="row" id="Bolter"
-                                    headers="mnb doc2vec">{{ scores.Support_Vector_Machine.precision }}%</th>
+                                    headers="mnb tfidf">{{ one_hot_encoding_word_embeding__svm__precision_score }}%
+                                </th>
+                                <th scope="row" id="Bolter"
+                                    headers="mnb doc2vec">{{ word2vec_word_embeding__svm__precision_score }}%
+                                </th>
                             </tr>
                         </table>
                     </div>
@@ -141,26 +160,35 @@
                         <table class="table shadow-soft rounded">
                             <tr>
                                 <th class="border-0" scope="col" id="classifier">Classifier/Embedding</th>
-                                <th class="border-0" scope="col" id="tfidf">bag-of-word</th>
+                                <th class="border-0" scope="col" id="tfidf">one_hot_encoding</th>
                                 <th class="border-0" scope="col" id="doc2vec">doc2vec</th>
                             </tr>
                             <tr>
                                 <th scope="row" id="mnb">Multinomial Naive Baise</th>
-                                <th scope="row" id="Bolter" headers="mnb tfidf">80.0%</th>
                                 <th scope="row" id="Bolter"
-                                    headers="mnb doc2vec">{{ scores.Multinomial_Naive_Baise.recall }}%</th>
+                                    headers="mnb tfidf">{{ one_hot_encoding_word_embeding__mnb__recall_score }}%
+                                </th>
+                                <th scope="row" id="Bolter"
+                                    headers="mnb doc2vec">{{ word2vec_word_embeding__mnb__recall_score }}%
+                                </th>
                             </tr>
                             <tr>
                                 <th scope="row" id="mnb">Multi Layer Perseptron</th>
-                                <th scope="row" id="Bolter" headers="mnb tfidf">80.0%</th>
                                 <th scope="row" id="Bolter"
-                                    headers="mnb doc2vec">{{ scores.Multi_Layer_Perseptron.recall }}%</th>
+                                    headers="mnb tfidf">{{ one_hot_encoding_word_embeding__mlp__recall_score }}%
+                                </th>
+                                <th scope="row" id="Bolter"
+                                    headers="mnb doc2vec">{{ word2vec_word_embeding__mlp__recall_score }}%
+                                </th>
                             </tr>
                             <tr>
                                 <th scope="row" id="mnb">Support Vector Machine</th>
-                                <th scope="row" id="Bolter" headers="mnb tfidf">80.0%</th>
                                 <th scope="row" id="Bolter"
-                                    headers="mnb doc2vec">{{ scores.Support_Vector_Machine.recall }}%</th>
+                                    headers="mnb tfidf">{{ one_hot_encoding_word_embeding__svm__recall_score }}%
+                                </th>
+                                <th scope="row" id="Bolter"
+                                    headers="mnb doc2vec">{{ word2vec_word_embeding__svm__recall_score }}%
+                                </th>
                             </tr>
                         </table>
                     </div>
@@ -173,26 +201,35 @@
                         <table class="table shadow-soft rounded">
                             <tr>
                                 <th class="border-0" scope="col" id="classifier">Classifier/Embedding</th>
-                                <th class="border-0" scope="col" id="tfidf">bag-of-word</th>
+                                <th class="border-0" scope="col" id="tfidf">one_hot_encoding</th>
                                 <th class="border-0" scope="col" id="doc2vec">doc2vec</th>
                             </tr>
                             <tr>
                                 <th scope="row" id="mnb">Multinomial Naive Baise</th>
-                                <th scope="row" id="Bolter" headers="mnb tfidf">80.0%</th>
                                 <th scope="row" id="Bolter"
-                                    headers="mnb doc2vec">{{ scores.Multinomial_Naive_Baise.accuracy }}%</th>
+                                    headers="mnb tfidf">{{ one_hot_encoding_word_embeding__mnb__accuracy_score }}%
+                                </th>
+                                <th scope="row" id="Bolter"
+                                    headers="mnb doc2vec">{{ word2vec_word_embeding__mnb__accuracy_score }}%
+                                </th>
                             </tr>
                             <tr>
                                 <th scope="row" id="mnb">Multi Layer Perseptron</th>
-                                <th scope="row" id="Bolter" headers="mnb tfidf">80.0%</th>
                                 <th scope="row" id="Bolter"
-                                    headers="mnb doc2vec">{{ scores.Multi_Layer_Perseptron.accuracy }}%</th>
+                                    headers="mnb tfidf">{{ one_hot_encoding_word_embeding__mlp__accuracy_score }}%
+                                </th>
+                                <th scope="row" id="Bolter"
+                                    headers="mnb doc2vec">{{ word2vec_word_embeding__mlp__accuracy_score }}%
+                                </th>
                             </tr>
                             <tr>
                                 <th scope="row" id="mnb">Support Vector Machine</th>
-                                <th scope="row" id="Bolter" headers="mnb tfidf">80.0%</th>
                                 <th scope="row" id="Bolter"
-                                    headers="mnb doc2vec">{{ scores.Support_Vector_Machine.accuracy }}%</th>
+                                    headers="mnb tfidf">{{ one_hot_encoding_word_embeding__svm__accuracy_score }}%
+                                </th>
+                                <th scope="row" id="Bolter"
+                                    headers="mnb doc2vec">{{ word2vec_word_embeding__svm__accuracy_score }}%
+                                </th>
                             </tr>
                         </table>
                     </div>
