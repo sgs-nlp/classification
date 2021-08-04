@@ -100,6 +100,7 @@ def add2database(file_name: str) -> int:
                 content_words_without_stopword_code_flag=True,
                 category_flag=True,
                 length=row_number,
+                keywords_flag=True,
             )
             logging.info('Started categories pkl file craeted.')
             if not os.path.isfile('uploads/categories.pkl'):
@@ -200,6 +201,7 @@ def add2database(file_name: str) -> int:
             content_words_without_stopword_code_flag=True,
             category_flag=True,
             length=row_number,
+            keywords_flag=True,
         )
         logging.info('Started categories pkl file craeted.')
         if not os.path.isfile('uploads/categories.pkl'):
