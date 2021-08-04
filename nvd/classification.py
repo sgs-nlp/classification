@@ -112,37 +112,44 @@ class SVM:
     _tps = None
     _tns = None
     _fps = None
+    _predicted = None
+
+    @property
+    def predicted(self):
+        if self._predicted is not None:
+            return self._predicted
+        for i in self.x_test:
+            print(i)
+        print()
+        self._predicted = self.model.predict(self.x_test)
+        return self._predicted
 
     @property
     def fns(self):
         if self._fns is not None:
             return self._fns
-        predicted = self.model.predict(self.x_test)
-        self._fns, self._tps, self._tns, self._fps = true_or_false(predicted, self.y_test, self.categories_list)
+        self._fns, self._tps, self._tns, self._fps = true_or_false(self.predicted, self.y_test, self.categories_list)
         return self._fns
 
     @property
     def tps(self):
         if self._tps is not None:
             return self._tps
-        predicted = self.model.predict(self.x_test)
-        self._fns, self._tps, self._tns, self._fps = true_or_false(predicted, self.y_test, self.categories_list)
+        self._fns, self._tps, self._tns, self._fps = true_or_false(self.predicted, self.y_test, self.categories_list)
         return self._tps
 
     @property
     def tns(self):
         if self._tns is not None:
             return self._tns
-        predicted = self.model.predict(self.x_test)
-        self._fns, self._tps, self._tns, self._fps = true_or_false(predicted, self.y_test, self.categories_list)
+        self._fns, self._tps, self._tns, self._fps = true_or_false(self.predicted, self.y_test, self.categories_list)
         return self._tns
 
     @property
     def fps(self):
         if self._fps is not None:
             return self._fps
-        predicted = self.model.predict(self.x_test)
-        self._fns, self._tps, self._tns, self._fps = true_or_false(predicted, self.y_test, self.categories_list)
+        self._fns, self._tps, self._tns, self._fps = true_or_false(self.predicted, self.y_test, self.categories_list)
         return self._fps
 
     _precision_score = None
@@ -200,37 +207,41 @@ class MLP:
     _tps = None
     _tns = None
     _fps = None
+    _predicted = None
+
+    @property
+    def predicted(self):
+        if self._predicted is not None:
+            return self._predicted
+        self._predicted = self.model.predict(self.x_test)
+        return self._predicted
 
     @property
     def fns(self):
         if self._fns is not None:
             return self._fns
-        predicted = self.model.predict(self.x_test)
-        self._fns, self._tps, self._tns, self._fps = true_or_false(predicted, self.y_test, self.categories_list)
+        self._fns, self._tps, self._tns, self._fps = true_or_false(self.predicted, self.y_test, self.categories_list)
         return self._fns
 
     @property
     def tps(self):
         if self._tps is not None:
             return self._tps
-        predicted = self.model.predict(self.x_test)
-        self._fns, self._tps, self._tns, self._fps = true_or_false(predicted, self.y_test, self.categories_list)
+        self._fns, self._tps, self._tns, self._fps = true_or_false(self.predicted, self.y_test, self.categories_list)
         return self._tps
 
     @property
     def tns(self):
         if self._tns is not None:
             return self._tns
-        predicted = self.model.predict(self.x_test)
-        self._fns, self._tps, self._tns, self._fps = true_or_false(predicted, self.y_test, self.categories_list)
+        self._fns, self._tps, self._tns, self._fps = true_or_false(self.predicted, self.y_test, self.categories_list)
         return self._tns
 
     @property
     def fps(self):
         if self._fps is not None:
             return self._fps
-        predicted = self.model.predict(self.x_test)
-        self._fns, self._tps, self._tns, self._fps = true_or_false(predicted, self.y_test, self.categories_list)
+        self._fns, self._tps, self._tns, self._fps = true_or_false(self.predicted, self.y_test, self.categories_list)
         return self._fps
 
     _precision_score = None
@@ -288,37 +299,41 @@ class MNB:
     _tps = None
     _tns = None
     _fps = None
+    _predicted = None
+
+    @property
+    def predicted(self):
+        if self._predicted is not None:
+            return self._predicted
+        self._predicted = self.model.predict(self.x_test)
+        return self._predicted
 
     @property
     def fns(self):
         if self._fns is not None:
             return self._fns
-        predicted = self.model.predict(self.x_test)
-        self._fns, self._tps, self._tns, self._fps = true_or_false(predicted, self.y_test, self.categories_list)
+        self._fns, self._tps, self._tns, self._fps = true_or_false(self.predicted, self.y_test, self.categories_list)
         return self._fns
 
     @property
     def tps(self):
         if self._tps is not None:
             return self._tps
-        predicted = self.model.predict(self.x_test)
-        self._fns, self._tps, self._tns, self._fps = true_or_false(predicted, self.y_test, self.categories_list)
+        self._fns, self._tps, self._tns, self._fps = true_or_false(self.predicted, self.y_test, self.categories_list)
         return self._tps
 
     @property
     def tns(self):
         if self._tns is not None:
             return self._tns
-        predicted = self.model.predict(self.x_test)
-        self._fns, self._tps, self._tns, self._fps = true_or_false(predicted, self.y_test, self.categories_list)
+        self._fns, self._tps, self._tns, self._fps = true_or_false(self.predicted, self.y_test, self.categories_list)
         return self._tns
 
     @property
     def fps(self):
         if self._fps is not None:
             return self._fps
-        predicted = self.model.predict(self.x_test)
-        self._fns, self._tps, self._tns, self._fps = true_or_false(predicted, self.y_test, self.categories_list)
+        self._fns, self._tps, self._tns, self._fps = true_or_false(self.predicted, self.y_test, self.categories_list)
         return self._fps
 
     _precision_score = None
