@@ -116,8 +116,8 @@ class Reference(models.Model):
         yield 'pk', self.pk
         yield 'title', self.title
         yield 'length', self.length
-        yield 'stopwords_list', dict(self.stopwords_list)
-        yield 'categories_list', dict(self.categories_list)
+        yield 'stopwords_list', self.stopwords_list
+        yield 'categories_list', self.categories_list
         yield 'titr_string_flag', self.titr_string_flag
         yield 'titr_string_code_flag', self.titr_string_code_flag
         yield 'titr_words_flag', self.titr_words_flag
@@ -364,43 +364,43 @@ def update_reference(
     if ref is None:
         logging.warning(f'Reference with ID {reference_id} is not exist in the database.')
         return False
-    if load_complate_flag:
+    if load_complate_flag is not None:
         ref.load_complate_flag = load_complate_flag
-    if stopwords_list:
+    if stopwords_list is not None:
         ref.stopwords_list = stopwords_list
-    if length:
+    if length is not None:
         ref.length = length
-    if categories_list:
+    if categories_list is not None:
         ref.categories_list = categories_list
-    if titr_string_flag:
+    if titr_string_flag is not None:
         ref.titr_string_flag = titr_string_flag
-    if titr_string_code_flag:
+    if titr_string_code_flag is not None:
         ref.titr_string_code_flag = titr_string_code_flag
-    if titr_words_flag:
+    if titr_words_flag is not None:
         ref.titr_words_flag = titr_words_flag
-    if titr_words_code_flag:
+    if titr_words_code_flag is not None:
         ref.titr_words_code_flag = titr_words_code_flag
-    if titr_words_without_stopword_flag:
+    if titr_words_without_stopword_flag is not None:
         ref.titr_words_without_stopword_flag = titr_words_without_stopword_flag
-    if titr_words_without_stopword_code_flag:
+    if titr_words_without_stopword_code_flag is not None:
         ref.titr_words_without_stopword_code_flag = titr_words_without_stopword_code_flag
-    if content_string_flag:
+    if content_string_flag is not None:
         ref.content_string_flag = content_string_flag
-    if content_string_code_flag:
+    if content_string_code_flag is not None:
         ref.content_string_code_flag = content_string_code_flag
-    if content_words_flag:
+    if content_words_flag is not None:
         ref.content_words_flag = content_words_flag
-    if content_words_code_flag:
+    if content_words_code_flag is not None:
         ref.content_words_code_flag = content_words_code_flag
-    if content_words_without_stopword_flag:
+    if content_words_without_stopword_flag is not None:
         ref.content_words_without_stopword_flag = content_words_without_stopword_flag
-    if content_words_without_stopword_code_flag:
+    if content_words_without_stopword_code_flag is not None:
         ref.content_words_without_stopword_code_flag = content_words_without_stopword_code_flag
-    if category_flag:
+    if category_flag is not None:
         ref.category_flag = category_flag
-    if vector_flag:
+    if vector_flag is not None:
         ref.vector_flag = vector_flag
-    if keywords_flag:
+    if keywords_flag is not None:
         ref.keywords_flag = keywords_flag
     ref.save()
     return ref.pk
