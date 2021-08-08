@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'persian_news_classification.apps.PersianNewsClassificationConfig',
+    'statistical_pnc.apps.StatisticalPncConfig',
 ]
 
 MIDDLEWARE = [

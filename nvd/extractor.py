@@ -1,7 +1,9 @@
 from json import loads
 from math import log as logarithm
+import os
+from classification.settings import BASE_DIR
 
-STOP_WORDS_PATH = './persian.stopword.json'
+STOP_WORDS_PATH = os.path.join(BASE_DIR, 'nvd', 'persian.stopword.json')
 
 
 class Stopwords:
@@ -40,10 +42,35 @@ class Stopwords:
         """
         pass
 
+    def without_stopwords(self, document: list, sents=1) -> list:
+        """
+        in tabe yek document ra k shamele listi az jomalat va har jomle shamele listi az kalamat mibashad va dar nahayat
+        stopwords hara hazf mikonad va dar ghalebe yek list az kalamat an ra bar migardanad.
+        dar sorati k sents barabare ba sefr bashad kalamate daron yek document faregh az jomle darnazar gerefte khahad
+        shod.
+
+        :param document:
+        :return:
+        """
+        res = []
+        if sents:
+            for sent in document:
+                tmp = []
+                for wrd in sent:
+                    if not self.is_stopword(wrd):
+                        tmp.append(wrd)
+                res.append(tmp)
+            return res
+        else:
+            for wrd in document:
+                if not self.is_stopword(wrd):
+                    res.append(wrd)
+            return [res]
+
 
 class Keywords:
-    def __init__(self, stopwords_list: list = None, minimum_frequency: float = 0.51,
-                 maximum_frequency: float = 1, keywords_number: int = -1) -> None:
+    def __init__(self, stopwords_list: list = None, minimum_frequency: float = 0,
+                 maximum_frequency: float = 1, keywords_number: int = -1, fre=False) -> None:
         """
         in kelas modiriyate keyword ha ra anjam midahad.
         :param stopwords_list: list paythoni az stopword ha.
@@ -52,6 +79,7 @@ class Keywords:
         :param maximum_frequency: adadi beyene sefr va yek,
          bishtarin frquency ehtemali baraye shenasayi kalamate ba arzeshe bishtar.
         """
+        self.fre = fre
         self.keywords_number = keywords_number
         if stopwords_list is not None:
             self.stopwords_list = stopwords_list
@@ -64,7 +92,22 @@ class Keywords:
 
     stopwords_list = []
 
-    def by_frequency(self, document: list, func=None) -> list:
+    def by_frequency(self, document: list, stopword=0, sents=1, func=None) -> list:
+        """
+        estekhraje keyword ha bar asase bedast avardane ferekanse kalamat dar yek matn
+        :param document: yek liste pythoni shamele kalamate darone document(b in sorat document = ['w1','w2', ...]).
+        :param func: dar inja shuma mitavanid tabe mohasebeye ferekans more taeid khod ra entekhab konid,
+        dar hale hazer pishfarz ma az tabe Frequency.normal_tfidf ast.
+        :return: liste pythoni shamele kywords ha.
+        """
+        if stopword == 0:
+            return self._by_fre(document, func)
+        if stopword == 1:
+            stpw = Stopwords()
+            document = stpw.without_stopwords(document, sents=sents)
+            return self._by_fre(document, func)
+
+    def _by_fre(self, document: list, func=None) -> list:
         """
         estekhraje keyword ha bar asase bedast avardane ferekanse kalamat dar yek matn
         :param document: yek liste pythoni shamele kalamate darone document(b in sorat document = ['w1','w2', ...]).
@@ -76,9 +119,17 @@ class Keywords:
             func = self.frequency_func
         keywords = []
         res = func(document)
+        res = dict(sorted(res.items(), key=lambda item: item[1], reverse=True))
+        if self.fre:
+            for (word, value) in res.items():
+                if self.minimum_frequency <= value <= self.maximum_frequency:
+                    keywords.append({'word': word, 'frequency': value})
+            return keywords[:self.keywords_number]
+
         for (word, value) in res.items():
             if self.minimum_frequency <= value <= self.maximum_frequency:
                 keywords.append(word)
+
         return keywords[:self.keywords_number]
 
 
@@ -147,5 +198,4 @@ class Frequency:
                 document_tfidf[word] = 1
                 continue
             document_tfidf[word] = (value - minimum_frequency) / (maximum_frequency - minimum_frequency)
-
         return document_tfidf

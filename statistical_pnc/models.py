@@ -1,15 +1,11 @@
 from django.db import models
-from hazm import Normalizer, WordTokenizer
+from nvd.pre_processing import normilizer, tokenizer
+from nvd.extractor import Keywords
 
-NORMILIZER = Normalizer()
-WORD_TOKENIZER = WordTokenizer()
-
-
-# todo ; keywords extractor tarif shavad
-
-class KEYWORDS_EXTRACTOR:
-    def __init__(self, string: str):
-        pass
+NORMILIZER = normilizer
+WORD_TOKENIZER = tokenizer
+KEYWORDS = Keywords(fre=True)
+KEYWORDS_EXTRACTOR = KEYWORDS.by_frequency
 
 
 class Word(models.Model):
@@ -18,9 +14,13 @@ class Word(models.Model):
         blank=False,
         null=False,
     )
-    number_of_repetitions = models.PositiveIntegerField(
+    _number_of_repetitions = models.PositiveIntegerField(
         default=0,
     )
+
+    @property
+    def number_of_repetitions(self):
+        return self._number_of_repetitions
 
     @property
     def code(self):
@@ -43,9 +43,13 @@ class Category(models.Model):
         null=False,
         blank=False,
     )
-    number_of_subcategories = models.PositiveIntegerField(
+    _number_of_subcategories = models.PositiveIntegerField(
         default=0,
     )
+
+    @property
+    def number_of_subcategories(self):
+        return self._number_of_subcategories
 
     @property
     def code(self):
@@ -62,7 +66,7 @@ def category2db(title: str) -> Category:
     return category
 
 
-class Context(models.Model):
+class Content(models.Model):
     string = models.TextField()
     words = models.ManyToManyField(
         to='Word',
@@ -73,24 +77,25 @@ class Context(models.Model):
         return str(self.pk)
 
 
-def context2db(string: str) -> Context:
-    context = Context.objects.filter(string=string).first()
-    if context is not None:
-        return context
+def content2db(string: str) -> Content:
+    content = Content.objects.filter(string=string).first()
+    if content is not None:
+        return content
 
-    context = Context()
-    string = NORMILIZER.normalize(string)
-    context.string = string
-    context.save()
+    content = Content()
+    string = NORMILIZER(string)
+    content.string = string
+    content.save()
 
-    words_string = WORD_TOKENIZER.tokenize(string)
-    for word_string in words_string:
-        word = word2db(word_string)
-        word.number_of_repetitions += 1
-        word.save()
-        context.words.add(word)
-    context.save()
-    return context
+    words_string = WORD_TOKENIZER(string)
+    for sent in words_string:
+        for word_string in sent:
+            word = word2db(word_string)
+            word._number_of_repetitions += 1
+            word.save()
+            content.words.add(word)
+    content.save()
+    return content
 
 
 class Titr(models.Model):
@@ -110,16 +115,17 @@ def titr2db(string: str) -> Titr:
         return titr
 
     titr = Titr()
-    string = NORMILIZER.normalize(string)
+    string = NORMILIZER(string)
     titr.string = string
     titr.save()
 
-    words_string = WORD_TOKENIZER.tokenize(string)
-    for word_string in words_string:
-        word = word2db(word_string)
-        word.number_of_repetitions += 1
-        word.save()
-        titr.words.add(word)
+    words_string = WORD_TOKENIZER(string)
+    for sent in words_string:
+        for word_string in sent:
+            word = word2db(word_string)
+            word._number_of_repetitions += 1
+            word.save()
+            titr.words.add(word)
     titr.save()
     return titr
 
@@ -152,33 +158,38 @@ class StatisticalWordCategory(models.Model):
 
 
 def statistical_word_category2db(word: Word, category: Category, docs_frequency: int = None) -> StatisticalWordCategory:
-    obj = StatisticalWordCategory.objects.filter(word=word).filter(category=category).first()
-    if obj is None:
-        obj = StatisticalWordCategory()
-        obj.word = word
-        obj.category = category
-        obj.all_docs_frequency = [docs_frequency]
-        obj.docs_frequency_mean = docs_frequency
-        obj.docs_frequency_stdev = 0
-        obj.save()
-        return obj
+    _obj = StatisticalWordCategory.objects.filter(word=word).filter(category=category).first()
+    if _obj is None:
+        _obj = StatisticalWordCategory()
+        _obj.word = word
+        _obj.category = category
+        _obj.all_docs_frequency = [docs_frequency]
+        _obj.docs_frequency_mean = docs_frequency
+        _obj.docs_frequency_stdev = 0
+        _obj.save()
+        return _obj
     from statistics import mean, stdev
-    tmp = list(obj.all_docs_frequency)
-    tmp = tmp.append(docs_frequency)
-    obj.all_docs_frequency = tmp
-    obj.docs_frequency_mean = mean(tmp)
-    obj.docs_frequency_stdev = stdev(tmp)
-    obj.save()
-    return obj
+    tmp = list(_obj.all_docs_frequency)
+    tmp.append(docs_frequency)
+    _obj.all_docs_frequency = tmp
+    _obj.docs_frequency_mean = mean(tmp)
+    _obj.docs_frequency_stdev = stdev(tmp)
+    _obj.save()
+    return _obj
 
 
 class News(models.Model):
     string = models.TextField()
-    words_tokenize = models.ManyToManyField(
-        to='Word'
+    words = models.ManyToManyField(
+        to='Word',
+        related_name='sn_words'
     )
-    context = models.ForeignKey(
-        to='Context',
+    words_tokenize = models.ManyToManyField(
+        to='Word',
+        related_name='sn_words_tokenize'
+    )
+    content = models.ForeignKey(
+        to='Content',
         on_delete=models.CASCADE,
     )
     titr = models.ForeignKey(
@@ -191,43 +202,48 @@ class News(models.Model):
     )
     keywords = models.ManyToManyField(
         to='Word',
+        related_name='sn_keywords',
     )
 
 
-def news2db(titr_string: str, context_string: str, category_title: str) -> News:
+def news2db(titr_string: str, content_string: str, category_title: str) -> News:
     news = News()
     news.titr = titr2db(titr_string)
-    news.context = context2db(context_string)
-    news.string = f'{news.titr.string} {news.context.string}'
+    news.content = content2db(content_string)
+    news.string = f'{news.titr.string} {news.content.string}'
 
     category = category2db(category_title)
-    category.number_of_subcategories += 1
+    category._number_of_subcategories += 1
     category.save()
 
     news.category = category
     news.save()
-    words = news.titr.words.all() + news.context.words.all()
-    news.words_tokenize.add(words)
-    news.save()
-    keywords = KEYWORDS_EXTRACTOR(news.string)
+    for wrd in news.titr.words.all():
+        news.words_tokenize.add(wrd)
+    for wrd in news.content.words.all():
+        news.words_tokenize.add(wrd)
+    for wrd in news.words_tokenize.all():
+        if wrd not in news.words.all():
+            news.words.add(wrd)
+
+    doc = WORD_TOKENIZER(news.string)
+    keywords = KEYWORDS_EXTRACTOR(document=doc, stopword=1, sents=1)
     for keyword in keywords:
-        word = word2db(keyword['string'])
+        word = word2db(keyword['word'])
         news.keywords.add(word)
         statistical_word_category2db(word, category, docs_frequency=keyword['frequency'])
     news.save()
-
     return news
 
 
 def get_all_news() -> list:
-    objs = News.objects.all()
+    _objs = News.objects.all()
     news = []
-    for obj in objs:
+    for _obj in _objs:
         new = []
-        for word in obj.words_tokenize.all():
+        for word in _obj.words_tokenize.all():
             new.append(word.code)
         news.append(new)
     return news
 
-
-ALL_NEWS = get_all_news()
+# ALL_NEWS = get_all_news()
