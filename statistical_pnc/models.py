@@ -8,6 +8,31 @@ KEYWORDS = Keywords(fre=True)
 KEYWORDS_EXTRACTOR = KEYWORDS.by_frequency
 
 
+class Reference(models.Model):
+    title = models.CharField(
+        max_length=32,
+        blank=False,
+        null=False,
+    )
+    load_symbols_list = models.BooleanField(
+        default=False,
+    )
+    load_stopwords_list = models.BooleanField(
+        default=False,
+    )
+    load_complate = models.BooleanField(
+        default=False,
+    )
+
+
+def reference2db(title: str) -> Reference:
+    ref = Reference.objects.filter(title=title).first()
+    if ref is None:
+        ref = Reference(title=title)
+        ref.save()
+    return ref
+
+
 class Word(models.Model):
     string = models.CharField(
         max_length=32,
