@@ -163,6 +163,58 @@ def titr2db(string: str) -> Titr:
     return titr
 
 
+class Symbol(models.Model):
+    reference = models.ForeignKey(
+        to='Reference',
+        on_delete=models.CASCADE,
+    )
+    word = models.ForeignKey(
+        to='Word',
+        on_delete=models.CASCADE,
+    )
+
+
+def symbol2db(reference: Reference = None, reference_title: str = None, word: Word = None,
+              string: str = None) -> Symbol:
+    if reference is None:
+        if reference_title is None:
+            raise Exception('Refrence(or reference title) is not define... .')
+        reference = reference2db(reference_title)
+    if word is None:
+        if string is None:
+            raise Exception('Word(or string) is not define... .')
+        word = word2db(string)
+    symbol = Symbol(reference=reference, word=word)
+    symbol.save()
+    return symbol
+
+
+class StopWord(models.Model):
+    reference = models.ForeignKey(
+        to='Reference',
+        on_delete=models.CASCADE,
+    )
+    word = models.ForeignKey(
+        to='Word',
+        on_delete=models.CASCADE,
+    )
+
+
+def stopword2db(reference: Reference = None, reference_title: str = None, word: Word = None,
+                string: str = None) -> StopWord:
+    if reference is None:
+        if reference_title is None:
+            raise Exception('Refrence(or reference title) is not define... .')
+        reference = reference2db(reference_title)
+    if word is None:
+        if string is None:
+            raise Exception('Word(or string) is not define... .')
+        word = word2db(string)
+    stopword = StopWord(reference=reference, word=word)
+    stopword.save()
+    return stopword
+
+
 class StatisticalWordCategory(models.Model):
     word = models.ForeignKey(
         to='Word',
