@@ -31,6 +31,14 @@ content_string = """به گزارش خبرنگار اعزامي خبرگزاري
 category_title = 'آموزشي'
 
 
+def index(request: HttpRequest):
+    return render(
+        request,
+        'ai_index.html',
+        context={},
+    )
+
+
 def prerequisites(request: HttpRequest):
     from pathlib import Path
     from datetime import datetime
