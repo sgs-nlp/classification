@@ -99,6 +99,7 @@
     </section>
     <!-- End of Info -->
 
+
     <!-- Section Performance -->
     <section class="section bg-primary pt-0 section-lg" id="Performance">
         <div class="container">
@@ -262,20 +263,20 @@
                                 You can enter a document in the text box below so that we can categorize your document.
                             </p>
                         </div>
-                        <form class="col-12 col-md-8 mx-auto">
+                        <form class="col-12 col-md-8 mx-auto" method="post" id="news_for_test_performance_form">
                             <!-- Form -->
                             <div class="form-group">
                                 <label for="exampleFormControlTextarea2">Your Text</label>
-                                <textarea class="form-control" placeholder="Enter your text..."
-                                          id="exampleFormControlTextarea2" rows="10"></textarea>
+                                <textarea class="form-control" name="text_for_classify"
+                                          id="news_for_test_performance_textarea"
+                                          placeholder="Enter your text..."
+                                          rows="10"></textarea>
                             </div>
                             <!-- End of Form -->
+                            <div class="px-0 mx-auto" style="margin-top: 10px">
+                                <button type="submit" class="btn btn-primary">Classification</button>
+                            </div>
                         </form>
-                        <div class="card-footer px-0 mx-auto">
-                            <button type="submit" class="btn btn-primary">Classification</button>
-                        </div>
-                        <span class="alert-heading">Category:</span>
-                        text_category
                     </div>
                     <!-- End of Contact Card -->
                 </div>
@@ -421,6 +422,41 @@
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 
 <!-- Neumorphism JS -->
+{% block javascript %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // catch the form's submit event
+            $('#news_for_test_performance_form').submit(function () {
+                // create an AJAX call
+                $.ajax({
+                    data: $(this).serialize(), // get the form data
+                    type: $(this).attr('method'), // GET or POST
+                    url: "{% url 'statistical_pnc:classification' %}",
+                    // on success
+                    success: function (response) {
+                        if (response.TEXT == true) {
+                            $('#category_title').remove()
+                            $('#news_for_test_performance_error_message').remove()
+                            $('#news_for_test_performance_textarea').after('<div class="alert alert-info" id="category_title"> Category title: ' + response.CATEGORY_TITLE + '</div>')
+                        } else {
+                            $('#category_title').remove()
+                            $('#news_for_test_performance_error_message').remove()
+                            $('#news_for_test_performance_textarea').after('<div class="alert alert-danger" id = "news_for_test_performance_error_message">' + response.ERROR_MESSAGE + '</div>')
+                        }
+                    },
+                    // on error
+                    error: function (response) {
+                        // alert the error if any error occured
+                        alert(response.responseJSON.errors);
+                        console.log(response.responseJSON.errors)
+                    }
+                });
+                return false;
+            });
+        })
+    </script>
+{% endblock javascript %}
 <script src="{% static './assets/js/neumorphism.js' %}"></script>
 </body>
 
