@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpRequest, JsonResponse
 from .dataset2database import add2database
 import logging
+from django.contrib import messages
 
 titr_string = 'نخستين مركز آموزش عالي بين‌المللي دانشگاه موناش استراليا در كيش آغاز به كار كرد'
 
@@ -41,16 +42,28 @@ def prerequisites(request: HttpRequest):
     # logging.info('Started classification analys.')
     # clss = classification()
     # logging.info('Classification analys complate.')
-    from statistical_pnc.models import news2db
-    file_name = Path('staticfiles', 'HamshahriData.xlsx')
-    add2database(file_name)
+    # from statistical_pnc.models import news2db
+    # file_name = Path('staticfiles', 'HamshahriData.xlsx')
+    # add2database(file_name)
     # s = news2db(titr_string=titr_string, content_string=content_string, category_title=category_title)
     return render(
         request,
         'ai_index.html',
-        context={},  # clss,
+        context={'word2vec_word_embeding__svm__accuracy_score': 1},  # clss,
     )
 
 
 def index(request: HttpRequest):
     return render(request, 'index.html', context={})
+
+
+def classification(request: HttpRequest):
+    response = {}
+    text = request.POST['text_for_classify']
+    if text is None or len(text) == 0:
+        response['TEXT'] = False
+        response['ERROR_MESSAGE'] = 'Please enter the news you want to categorize in this section.'
+        return JsonResponse(response)
+    response['TEXT'] = True
+    response['CATEGORY_TITLE'] = 'Educational'
+    return JsonResponse(response)
