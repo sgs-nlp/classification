@@ -42,7 +42,6 @@ def index(request: HttpRequest):
 def prerequisites(request: HttpRequest):
     from pathlib import Path
     from datetime import datetime
-
     # logging.info('Started storing dataset in the database.')
     # file_name = Path('staticfiles', 'HamshahriData.xlsx')
     # add2database(file_name)
@@ -61,7 +60,7 @@ def prerequisites(request: HttpRequest):
     )
 
 
-def index(request: HttpRequest):
+def sample(request: HttpRequest):
     return render(request, 'index.html', context={})
 
 
