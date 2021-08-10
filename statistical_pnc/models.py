@@ -63,6 +63,10 @@ def word2db(string: str) -> Word:
 
 
 class Category(models.Model):
+    reference = models.ForeignKey(
+        to='Reference',
+        on_delete=models.CASCADE,
+    )
     title = models.CharField(
         max_length=64,
         null=False,
@@ -81,11 +85,15 @@ class Category(models.Model):
         return str(self.pk)
 
 
-def category2db(title: str) -> Category:
+def category2db(title: str, reference: Reference = None, reference_title: str = None) -> Category:
     category = Category.objects.filter(title=title).first()
     if category is not None:
         return category
-    category = Category()
+    if reference is None:
+        if reference_title is None:
+            raise Exception('Refrence(or reference title) is not define... .')
+        reference = reference2db(reference_title)
+    category = Category(reference=reference)
     category.title = title
     category.save()
     return category
@@ -204,6 +212,12 @@ def statistical_word_category2db(word: Word, category: Category, docs_frequency:
 
 
 class News(models.Model):
+    reference = models.ForeignKey(
+        to='Reference',
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False,
+    )
     string = models.TextField()
     words = models.ManyToManyField(
         to='Word',
@@ -231,13 +245,19 @@ class News(models.Model):
     )
 
 
-def news2db(titr_string: str, content_string: str, category_title: str) -> News:
+def news2db(titr_string: str, content_string: str, category_title: str, reference: Reference = None,
+            reference_title: str = None) -> News:
+    if reference is None:
+        if reference_title is None:
+            raise Exception('Refrence(or reference title) is not define... .')
+        reference = reference2db(reference_title)
     news = News()
+    news.reference = reference
     news.titr = titr2db(titr_string)
     news.content = content2db(content_string)
     news.string = f'{news.titr.string} {news.content.string}'
 
-    category = category2db(category_title)
+    category = category2db(title=category_title, reference=reference)
     category._number_of_subcategories += 1
     category.save()
 
