@@ -75,3 +75,35 @@ def classification(request: HttpRequest):
     response['TEXT'] = True
     response['CATEGORY_TITLE'] = 'Educational'
     return JsonResponse(response)
+
+
+def preprocessing(request: HttpRequest):
+    from .controller import prerequisites
+    prerequisites()
+    response = {
+        'RESULT': True,
+        'word2vec_word_embeding__svm__precision_score': 1,
+        'word2vec_word_embeding__svm__recall_score': 2,
+        'word2vec_word_embeding__svm__accuracy_score': 3,
+
+        'word2vec_word_embeding__mlp__precision_score': 4,
+        'word2vec_word_embeding__mlp__recall_score': 5,
+        'word2vec_word_embeding__mlp__accuracy_score': 6,
+
+        'word2vec_word_embeding__mnb__precision_score': 7,
+        'word2vec_word_embeding__mnb__recall_score': 8,
+        'word2vec_word_embeding__mnb__accuracy_score': 9,
+
+        'one_hot_encoding_word_embeding__svm__precision_score': 10,
+        'one_hot_encoding_word_embeding__svm__recall_score': 11,
+        'one_hot_encoding_word_embeding__svm__accuracy_score': 12,
+
+        'one_hot_encoding_word_embeding__mlp__precision_score': 13,
+        'one_hot_encoding_word_embeding__mlp__recall_score': 14,
+        'one_hot_encoding_word_embeding__mlp__accuracy_score': 15,
+
+        'one_hot_encoding_word_embeding__mnb__precision_score': 16,
+        'one_hot_encoding_word_embeding__mnb__recall_score': 17,
+        'one_hot_encoding_word_embeding__mnb__accuracy_score': 18,
+    }
+    return JsonResponse(response)
