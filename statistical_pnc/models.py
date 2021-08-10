@@ -343,4 +343,54 @@ def get_all_news() -> list:
         news.append(new)
     return news
 
+
+def stopwords_list(reference: Reference = None, reference_title: str = None) -> list:
+    if reference is None:
+        if reference_title is None:
+            raise Exception('Refrence(or reference title) is not define... .')
+        reference = reference2db(reference_title)
+    stpwrds = StopWord.objects.filter(reference=reference).all()
+    if stpwrds is None:
+        return []
+    stpwrds_list = []
+    for stpwrd in stpwrds:
+        stpwrds_list.append(stpwrd.word.string)
+    return stpwrds_list
+
+
+def symbols_list(reference: Reference = None, reference_title: str = None) -> list:
+    if reference is None:
+        if reference_title is None:
+            raise Exception('Refrence(or reference title) is not define... .')
+        reference = reference2db(reference_title)
+    syms = Symbol.objects.filter(reference=reference).all()
+    if syms is None:
+        return []
+    syms_list = []
+    for sym in syms:
+        syms_list.append(sym.word.string)
+    return syms_list
+
+
+def categories_list(reference: Reference = None, reference_title: str = None, vector: bool = False):
+    if reference is None:
+        if reference_title is None:
+            raise Exception('Refrence(or reference title) is not define... .')
+        reference = reference2db(reference_title)
+    cats = Category.objects.filter(reference=reference).all()
+    if not vector:
+        cats_list = {}
+        for cat in cats:
+            cats_list[cat.pk] = cat.title
+        return cats_list
+    vector_len = Word.objects.last()
+    vector_len = vector_len.pk
+    cats_list = {}
+    for cat in cats:
+        vector = [0] * vector_len
+        cat_statistical = StatisticalWordCategory.objects.filter(category=cat).all()
+        for cs in cat_statistical:
+            vector[int(cs.word.pk)] = cs.docs_frequency_mean
+        cats_list[cat.pk] = vector
+    return cats_list
 # ALL_NEWS = get_all_news()
