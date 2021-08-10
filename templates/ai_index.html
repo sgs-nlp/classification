@@ -125,29 +125,74 @@
                             </tr>
                             <tr>
                                 <th scope="row" id="mnb">Multinomial Naive Baise</th>
-                                <th scope="row" id="Bolter"
-                                    headers="mnb tfidf">{{ one_hot_encoding_word_embeding__mnb__precision_score }}%
+                                <th scope="row" id="one_hot_encoding_word_embeding__mnb__precision_score_th"
+                                    headers="mnb tfidf">
+                                    <button class="btn btn-primary" type="button"
+                                            id="one_hot_encoding_word_embeding__mnb__precision_score_loading_btn"
+                                            disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                        <span class="sr-only">Loading...</span>
+                                    </button>
+                                    {#                                    {{ one_hot_encoding_word_embeding__mnb__precision_score }}%#}
                                 </th>
-                                <th scope="row" id="Bolter"
-                                    headers="mnb doc2vec">{{ word2vec_word_embeding__mnb__precision_score }}%
+                                <th scope="row" id="word2vec_word_embeding__mnb__precision_score_th"
+                                    headers="mnb doc2vec">
+                                    <button class="btn btn-primary" type="button"
+                                            id="word2vec_word_embeding__mnb__precision_score_loading_btn" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                        <span class="sr-only">Loading...</span>
+                                    </button>
+                                    {#                                    {{ word2vec_word_embeding__mnb__precision_score }}%#}
                                 </th>
                             </tr>
                             <tr>
                                 <th scope="row" id="mnb">Multi Layer Perseptron</th>
-                                <th scope="row" id="Bolter"
-                                    headers="mnb tfidf">{{ one_hot_encoding_word_embeding__mlp__precision_score }}%
+                                <th scope="row" id="one_hot_encoding_word_embeding__mlp__precision_score_th"
+                                    headers="mnb tfidf">
+                                    <button class="btn btn-primary" type="button"
+                                            id="one_hot_encoding_word_embeding__mlp__precision_score_loading_btn"
+                                            disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                        <span class="sr-only">Loading...</span>
+                                    </button>
+                                    {#                                    {{ one_hot_encoding_word_embeding__mlp__precision_score }}%#}
                                 </th>
-                                <th scope="row" id="Bolter"
-                                    headers="mnb doc2vec">{{ word2vec_word_embeding__mlp__precision_score }}%
+                                <th scope="row" id="word2vec_word_embeding__mlp__precision_score_th"
+                                    headers="mnb doc2vec">
+                                    <button class="btn btn-primary" type="button"
+                                            id="word2vec_word_embeding__mlp__precision_score_loading_btn" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                        <span class="sr-only">Loading...</span>
+                                    </button>
+                                    {#                                    {{ word2vec_word_embeding__mlp__precision_score }}%#}
                                 </th>
                             </tr>
                             <tr>
                                 <th scope="row" id="mnb">Support Vector Machine</th>
-                                <th scope="row" id="Bolter"
-                                    headers="mnb tfidf">{{ one_hot_encoding_word_embeding__svm__precision_score }}%
+                                <th scope="row" id="one_hot_encoding_word_embeding__svm__precision_score_th"
+                                    headers="mnb tfidf">
+                                    <button class="btn btn-primary" type="button"
+                                            id="one_hot_encoding_word_embeding__svm__precision_score_loading_btn"
+                                            disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                        <span class="sr-only">Loading...</span>
+                                    </button>
+                                    {#                                    {{ one_hot_encoding_word_embeding__svm__precision_score }}%#}
                                 </th>
-                                <th scope="row" id="Bolter"
-                                    headers="mnb doc2vec">{{ word2vec_word_embeding__svm__precision_score }}%
+                                <th scope="row" id="word2vec_word_embeding__svm__precision_score_th"
+                                    headers="mnb doc2vec">
+                                    <button class="btn btn-primary" type="button"
+                                            id="word2vec_word_embeding__svm__precision_score_loading_btn" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                        <span class="sr-only">Loading...</span>
+                                    </button>
+                                    {#                                    {{ word2vec_word_embeding__svm__precision_score }}%#}
                                 </th>
                             </tr>
                         </table>
@@ -166,29 +211,71 @@
                             </tr>
                             <tr>
                                 <th scope="row" id="mnb">Multinomial Naive Baise</th>
-                                <th scope="row" id="Bolter"
-                                    headers="mnb tfidf">{{ one_hot_encoding_word_embeding__mnb__recall_score }}%
+                                <th scope="row" id="one_hot_encoding_word_embeding__mnb__recall_score_th"
+                                    headers="mnb tfidf">
+                                    <button class="btn btn-primary" type="button"
+                                            id="one_hot_encoding_word_embeding__mnb__recall_score_loading_btn" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                        <span class="sr-only">Loading...</span>
+                                    </button>
+                                    {#                                    {{ one_hot_encoding_word_embeding__mnb__recall_score }}%#}
                                 </th>
-                                <th scope="row" id="Bolter"
-                                    headers="mnb doc2vec">{{ word2vec_word_embeding__mnb__recall_score }}%
+                                <th scope="row" id="word2vec_word_embeding__mnb__recall_score_th"
+                                    headers="mnb doc2vec">
+                                    <button class="btn btn-primary" type="button"
+                                            id="word2vec_word_embeding__mnb__recall_score_loading_btn" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                        <span class="sr-only">Loading...</span>
+                                    </button>
+                                    {#                                    {{ word2vec_word_embeding__mnb__recall_score }}%#}
                                 </th>
                             </tr>
                             <tr>
                                 <th scope="row" id="mnb">Multi Layer Perseptron</th>
-                                <th scope="row" id="Bolter"
-                                    headers="mnb tfidf">{{ one_hot_encoding_word_embeding__mlp__recall_score }}%
+                                <th scope="row" id="one_hot_encoding_word_embeding__mlp__recall_score_th"
+                                    headers="mnb tfidf">
+                                    <button class="btn btn-primary" type="button"
+                                            id="one_hot_encoding_word_embeding__mlp__recall_score_loading_btn" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                        <span class="sr-only">Loading...</span>
+                                    </button>
+                                    {#                                    {{ one_hot_encoding_word_embeding__mlp__recall_score }}%#}
                                 </th>
-                                <th scope="row" id="Bolter"
-                                    headers="mnb doc2vec">{{ word2vec_word_embeding__mlp__recall_score }}%
+                                <th scope="row" id="word2vec_word_embeding__mlp__recall_score_th"
+                                    headers="mnb doc2vec">
+                                    <button class="btn btn-primary" type="button"
+                                            id="word2vec_word_embeding__mlp__recall_score_loading_btn" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                        <span class="sr-only">Loading...</span>
+                                    </button>
+                                    {#                                    {{ word2vec_word_embeding__mlp__recall_score }}%#}
                                 </th>
                             </tr>
                             <tr>
                                 <th scope="row" id="mnb">Support Vector Machine</th>
-                                <th scope="row" id="Bolter"
-                                    headers="mnb tfidf">{{ one_hot_encoding_word_embeding__svm__recall_score }}%
+                                <th scope="row" id="one_hot_encoding_word_embeding__svm__recall_score_th"
+                                    headers="mnb tfidf">
+                                    <button class="btn btn-primary" type="button"
+                                            id="one_hot_encoding_word_embeding__svm__recall_score_loading_btn" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                        <span class="sr-only">Loading...</span>
+                                    </button>
+                                    {#                                    {{ one_hot_encoding_word_embeding__svm__recall_score }}%#}
                                 </th>
-                                <th scope="row" id="Bolter"
-                                    headers="mnb doc2vec">{{ word2vec_word_embeding__svm__recall_score }}%
+                                <th scope="row" id="word2vec_word_embeding__svm__recall_score_th"
+                                    headers="mnb doc2vec">
+                                    <button class="btn btn-primary" type="button"
+                                            id="word2vec_word_embeding__svm__recall_score_loading_btn" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                        <span class="sr-only">Loading...</span>
+                                    </button>
+                                    {#                                    {{ word2vec_word_embeding__svm__recall_score }}%#}
                                 </th>
                             </tr>
                         </table>
@@ -207,29 +294,74 @@
                             </tr>
                             <tr>
                                 <th scope="row" id="mnb">Multinomial Naive Baise</th>
-                                <th scope="row" id="Bolter"
-                                    headers="mnb tfidf">{{ one_hot_encoding_word_embeding__mnb__accuracy_score }}%
+                                <th scope="row" id="one_hot_encoding_word_embeding__mnb__accuracy_score_th"
+                                    headers="mnb tfidf">
+                                    <button class="btn btn-primary" type="button"
+                                            id="one_hot_encoding_word_embeding__mnb__accuracy_score_loading_btn"
+                                            disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                        <span class="sr-only">Loading...</span>
+                                    </button>
+                                    {#                                    {{ one_hot_encoding_word_embeding__mnb__accuracy_score }}%#}
                                 </th>
-                                <th scope="row" id="Bolter"
-                                    headers="mnb doc2vec">{{ word2vec_word_embeding__mnb__accuracy_score }}%
+                                <th scope="row" id="word2vec_word_embeding__mnb__accuracy_score_th"
+                                    headers="mnb doc2vec">
+                                    <button class="btn btn-primary" type="button"
+                                            id="word2vec_word_embeding__mnb__accuracy_score_loading_btn" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                        <span class="sr-only">Loading...</span>
+                                    </button>
+                                    {#                                    {{ word2vec_word_embeding__mnb__accuracy_score }}%#}
                                 </th>
                             </tr>
                             <tr>
                                 <th scope="row" id="mnb">Multi Layer Perseptron</th>
-                                <th scope="row" id="Bolter"
-                                    headers="mnb tfidf">{{ one_hot_encoding_word_embeding__mlp__accuracy_score }}%
+                                <th scope="row" id="one_hot_encoding_word_embeding__mlp__accuracy_score_th"
+                                    headers="mnb tfidf">
+                                    <button class="btn btn-primary" type="button"
+                                            id="one_hot_encoding_word_embeding__mlp__accuracy_score_loading_btn"
+                                            disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                        <span class="sr-only">Loading...</span>
+                                    </button>
+                                    {#                                    {{ one_hot_encoding_word_embeding__mlp__accuracy_score }}%#}
                                 </th>
-                                <th scope="row" id="Bolter"
-                                    headers="mnb doc2vec">{{ word2vec_word_embeding__mlp__accuracy_score }}%
+                                <th scope="row" id="word2vec_word_embeding__mlp__accuracy_score_th"
+                                    headers="mnb doc2vec">
+                                    <button class="btn btn-primary" type="button"
+                                            id="word2vec_word_embeding__mlp__accuracy_score_loading_btn" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                        <span class="sr-only">Loading...</span>
+                                    </button>
+                                    {#                                    {{ word2vec_word_embeding__mlp__accuracy_score }}%#}
                                 </th>
                             </tr>
                             <tr>
                                 <th scope="row" id="mnb">Support Vector Machine</th>
-                                <th scope="row" id="Bolter"
-                                    headers="mnb tfidf">{{ one_hot_encoding_word_embeding__svm__accuracy_score }}%
+                                <th scope="row" id="one_hot_encoding_word_embeding__svm__accuracy_score_th"
+                                    headers="mnb tfidf">
+                                    <button class="btn btn-primary" type="button"
+                                            id="one_hot_encoding_word_embeding__svm__accuracy_score_loading_btn"
+                                            disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                        <span class="sr-only">Loading...</span>
+                                    </button>
+                                    {#                                    {{ one_hot_encoding_word_embeding__svm__accuracy_score }}%#}
                                 </th>
-                                <th scope="row" id="Bolter"
-                                    headers="mnb doc2vec">{{ word2vec_word_embeding__svm__accuracy_score }}%
+                                <th scope="row" id="word2vec_word_embeding__svm__accuracy_score_th"
+                                    headers="mnb doc2vec">
+                                    <button class="btn btn-primary" type="button"
+                                            id="word2vec_word_embeding__svm__accuracy_score_loading_btn" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                        <span class="sr-only">Loading...</span>
+                                    </button>
+                                    {#                                    {{ word2vec_word_embeding__svm__accuracy_score }}%#}
                                 </th>
                             </tr>
                         </table>
@@ -426,6 +558,76 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         $(document).ready(function () {
+            $.ajax({
+                data: $(this).serialize(), // get the form data
+                type: $(this).attr('method'), // GET or POST
+                url: "{% url 'statistical_pnc:preprocessing' %}",
+                // on success
+                success: function (response) {
+                    if (response.RESULT == true) {
+                        var word2vec_word_embeding__svm__precision_score_var = $('#word2vec_word_embeding__svm__precision_score_loading_btn').parent();
+                        $('#word2vec_word_embeding__svm__precision_score_loading_btn').remove();
+                        word2vec_word_embeding__svm__precision_score_var.append(response.word2vec_word_embeding__svm__precision_score+'%');
+                        var word2vec_word_embeding__svm__recall_score_var = $('#word2vec_word_embeding__svm__recall_score_loading_btn').parent();
+                        $('#word2vec_word_embeding__svm__recall_score_loading_btn').remove();
+                        word2vec_word_embeding__svm__recall_score_var.append(response.word2vec_word_embeding__svm__recall_score+'%');
+                        var word2vec_word_embeding__svm__accuracy_score_var = $('#word2vec_word_embeding__svm__accuracy_score_loading_btn').parent();
+                        $('#word2vec_word_embeding__svm__accuracy_score_loading_btn').remove();
+                        word2vec_word_embeding__svm__accuracy_score_var.append(response.word2vec_word_embeding__svm__accuracy_score+'%');
+                        var word2vec_word_embeding__mlp__precision_score_var = $('#word2vec_word_embeding__mlp__precision_score_loading_btn').parent();
+                        $('#word2vec_word_embeding__mlp__precision_score_loading_btn').remove();
+                        word2vec_word_embeding__mlp__precision_score_var.append(response.word2vec_word_embeding__mlp__precision_score+'%');
+                        var word2vec_word_embeding__mlp__recall_score_var = $('#word2vec_word_embeding__mlp__recall_score_loading_btn').parent();
+                        $('#word2vec_word_embeding__mlp__recall_score_loading_btn').remove();
+                        word2vec_word_embeding__mlp__recall_score_var.append(response.word2vec_word_embeding__mlp__recall_score+'%');
+                        var word2vec_word_embeding__mlp__accuracy_score_var = $('#word2vec_word_embeding__mlp__accuracy_score_loading_btn').parent();
+                        $('#word2vec_word_embeding__mlp__accuracy_score_loading_btn').remove();
+                        word2vec_word_embeding__mlp__accuracy_score_var.append(response.word2vec_word_embeding__mlp__accuracy_score+'%');
+                        var word2vec_word_embeding__mnb__precision_score_var = $('#word2vec_word_embeding__mnb__precision_score_loading_btn').parent();
+                        $('#word2vec_word_embeding__mnb__precision_score_loading_btn').remove();
+                        word2vec_word_embeding__mnb__precision_score_var.append(response.word2vec_word_embeding__mnb__precision_score+'%');
+                        var word2vec_word_embeding__mnb__recall_score_var = $('#word2vec_word_embeding__mnb__recall_score_loading_btn').parent();
+                        $('#word2vec_word_embeding__mnb__recall_score_loading_btn').remove();
+                        word2vec_word_embeding__mnb__recall_score_var.append(response.word2vec_word_embeding__mnb__recall_score+'%');
+                        var word2vec_word_embeding__mnb__accuracy_score_var = $('#word2vec_word_embeding__mnb__accuracy_score_loading_btn').parent();
+                        $('#word2vec_word_embeding__mnb__accuracy_score_loading_btn').remove();
+                        word2vec_word_embeding__mnb__accuracy_score_var.append(response.word2vec_word_embeding__mnb__accuracy_score+'%');
+                        var one_hot_encoding_word_embeding__svm__precision_score_var = $('#one_hot_encoding_word_embeding__svm__precision_score_loading_btn').parent();
+                        $('#one_hot_encoding_word_embeding__svm__precision_score_loading_btn').remove();
+                        one_hot_encoding_word_embeding__svm__precision_score_var.append(response.one_hot_encoding_word_embeding__svm__precision_score+'%');
+                        var one_hot_encoding_word_embeding__svm__recall_score_var = $('#one_hot_encoding_word_embeding__svm__recall_score_loading_btn').parent();
+                        $('#one_hot_encoding_word_embeding__svm__recall_score_loading_btn').remove();
+                        one_hot_encoding_word_embeding__svm__recall_score_var.append(response.one_hot_encoding_word_embeding__svm__recall_score+'%');
+                        var one_hot_encoding_word_embeding__svm__accuracy_score_var = $('#one_hot_encoding_word_embeding__svm__accuracy_score_loading_btn').parent();
+                        $('#one_hot_encoding_word_embeding__svm__accuracy_score_loading_btn').remove();
+                        one_hot_encoding_word_embeding__svm__accuracy_score_var.append(response.one_hot_encoding_word_embeding__svm__accuracy_score+'%');
+                        var one_hot_encoding_word_embeding__mlp__precision_score_var = $('#one_hot_encoding_word_embeding__mlp__precision_score_loading_btn').parent();
+                        $('#one_hot_encoding_word_embeding__mlp__precision_score_loading_btn').remove();
+                        one_hot_encoding_word_embeding__mlp__precision_score_var.append(response.one_hot_encoding_word_embeding__mlp__precision_score+'%');
+                        var one_hot_encoding_word_embeding__mlp__recall_score_var = $('#one_hot_encoding_word_embeding__mlp__recall_score_loading_btn').parent();
+                        $('#one_hot_encoding_word_embeding__mlp__recall_score_loading_btn').remove();
+                        one_hot_encoding_word_embeding__mlp__recall_score_var.append(response.one_hot_encoding_word_embeding__mlp__recall_score+'%');
+                        var one_hot_encoding_word_embeding__mlp__accuracy_score_var = $('#one_hot_encoding_word_embeding__mlp__accuracy_score_loading_btn').parent();
+                        $('#one_hot_encoding_word_embeding__mlp__accuracy_score_loading_btn').remove();
+                        one_hot_encoding_word_embeding__mlp__accuracy_score_var.append(response.one_hot_encoding_word_embeding__mlp__accuracy_score+'%');
+                        var one_hot_encoding_word_embeding__mnb__precision_score_var = $('#one_hot_encoding_word_embeding__mnb__precision_score_loading_btn').parent();
+                        $('#one_hot_encoding_word_embeding__mnb__precision_score_loading_btn').remove();
+                        one_hot_encoding_word_embeding__mnb__precision_score_var.append(response.one_hot_encoding_word_embeding__mnb__precision_score+'%');
+                        var one_hot_encoding_word_embeding__mnb__recall_score_var = $('#one_hot_encoding_word_embeding__mnb__recall_score_loading_btn').parent();
+                        $('#one_hot_encoding_word_embeding__mnb__recall_score_loading_btn').remove();
+                        one_hot_encoding_word_embeding__mnb__recall_score_var.append(response.one_hot_encoding_word_embeding__mnb__recall_score+'%');
+                        var one_hot_encoding_word_embeding__mnb__accuracy_score_var = $('#one_hot_encoding_word_embeding__mnb__accuracy_score_loading_btn').parent();
+                        $('#one_hot_encoding_word_embeding__mnb__accuracy_score_loading_btn').remove();
+                        one_hot_encoding_word_embeding__mnb__accuracy_score_var.append(response.one_hot_encoding_word_embeding__mnb__accuracy_score+'%');
+                    }
+                },
+                // on error
+                error: function (response) {
+                    // alert the error if any error occured
+                    alert(response.responseJSON.errors);
+                    console.log(response.responseJSON.errors)
+                }
+            });
             // catch the form's submit event
             $('#news_for_test_performance_form').submit(function () {
                 // create an AJAX call
