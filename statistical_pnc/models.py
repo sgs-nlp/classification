@@ -1,3 +1,5 @@
+import logging
+
 from django.db import models
 from nvd.pre_processing import normilizer, tokenizer
 from nvd.extractor import Keywords
@@ -30,6 +32,8 @@ def reference2db(title: str) -> Reference:
     if ref is None:
         ref = Reference(title=title)
         ref.save()
+        logging.info(f'Reference title: {title} -> Stored in bata base.')
+    logging.info(f'Reference title: {title} -> Available in memory.')
     return ref
 
 
@@ -54,11 +58,11 @@ class Word(models.Model):
 
 def word2db(string: str) -> Word:
     word = Word.objects.filter(string=string).first()
-    if word is not None:
-        return word
-    word = Word()
-    word.string = string
-    word.save()
+    if word is None:
+        word = Word(string=string)
+        word.save()
+        logging.info(f'Word String: {string} -> Stored in bata base.')
+    logging.info(f'Word String: {string} -> Available in memory.')
     return word
 
 
@@ -87,15 +91,15 @@ class Category(models.Model):
 
 def category2db(title: str, reference: Reference = None, reference_title: str = None) -> Category:
     category = Category.objects.filter(title=title).first()
-    if category is not None:
-        return category
-    if reference is None:
-        if reference_title is None:
-            raise Exception('Refrence(or reference title) is not define... .')
-        reference = reference2db(reference_title)
-    category = Category(reference=reference)
-    category.title = title
-    category.save()
+    if category is None:
+        if reference is None:
+            if reference_title is None:
+                raise Exception('Refrence(or reference title) is not define... .')
+            reference = reference2db(reference_title)
+        category = Category(reference=reference, title=title)
+        category.save()
+        logging.info(f'Category title: {title} -> Stored in bata base.')
+    logging.info(f'Category title: {title} -> Available in memory.')
     return category
 
 
@@ -112,22 +116,22 @@ class Content(models.Model):
 
 def content2db(string: str) -> Content:
     content = Content.objects.filter(string=string).first()
-    if content is not None:
-        return content
+    if content is None:
+        content = Content()
+        string = NORMILIZER(string)
+        content.string = string
+        content.save()
 
-    content = Content()
-    string = NORMILIZER(string)
-    content.string = string
-    content.save()
-
-    words_string = WORD_TOKENIZER(string)
-    for sent in words_string:
-        for word_string in sent:
-            word = word2db(word_string)
-            word._number_of_repetitions += 1
-            word.save()
-            content.words.add(word)
-    content.save()
+        words_string = WORD_TOKENIZER(string)
+        for sent in words_string:
+            for word_string in sent:
+                word = word2db(word_string)
+                word._number_of_repetitions += 1
+                word.save()
+                content.words.add(word)
+        content.save()
+        logging.info(f'Content String: {string} -> Stored in bata base.')
+    logging.info(f'Content String: {string} -> Available in memory.')
     return content
 
 
@@ -144,22 +148,22 @@ class Titr(models.Model):
 
 def titr2db(string: str) -> Titr:
     titr = Titr.objects.filter(string=string).first()
-    if titr is not None:
-        return titr
+    if titr is None:
+        titr = Titr()
+        string = NORMILIZER(string)
+        titr.string = string
+        titr.save()
 
-    titr = Titr()
-    string = NORMILIZER(string)
-    titr.string = string
-    titr.save()
-
-    words_string = WORD_TOKENIZER(string)
-    for sent in words_string:
-        for word_string in sent:
-            word = word2db(word_string)
-            word._number_of_repetitions += 1
-            word.save()
-            titr.words.add(word)
-    titr.save()
+        words_string = WORD_TOKENIZER(string)
+        for sent in words_string:
+            for word_string in sent:
+                word = word2db(word_string)
+                word._number_of_repetitions += 1
+                word.save()
+                titr.words.add(word)
+        titr.save()
+        logging.info(f'Titr string: {string} -> Stored in bata base.')
+    logging.info(f'Titr string: {string} -> Available in memory.')
     return titr
 
 
@@ -184,8 +188,12 @@ def symbol2db(reference: Reference = None, reference_title: str = None, word: Wo
         if string is None:
             raise Exception('Word(or string) is not define... .')
         word = word2db(string)
-    symbol = Symbol(reference=reference, word=word)
-    symbol.save()
+    symbol = Symbol.objects.filter(reference=reference).filter(word=word).first()
+    if symbol is None:
+        symbol = Symbol(reference=reference, word=word)
+        symbol.save()
+        logging.info(f'Symbol string: {string} -> Stored in bata base.')
+    logging.info(f'Symbol string: {string} -> Available in memory.')
     return symbol
 
 
@@ -210,8 +218,12 @@ def stopword2db(reference: Reference = None, reference_title: str = None, word: 
         if string is None:
             raise Exception('Word(or string) is not define... .')
         word = word2db(string)
-    stopword = StopWord(reference=reference, word=word)
-    stopword.save()
+    stopword = StopWord.objects.filter(reference=reference).filter(word=word).first()
+    if stopword is None:
+        stopword = StopWord(reference=reference, word=word)
+        stopword.save()
+        logging.info(f'Stop word string: {string} -> Stored in bata base.')
+    logging.info(f'Stop word string: {string} -> Available in memory.')
     return stopword
 
 
@@ -252,6 +264,7 @@ def statistical_word_category2db(word: Word, category: Category, docs_frequency:
         _obj.docs_frequency_mean = docs_frequency
         _obj.docs_frequency_stdev = 0
         _obj.save()
+        logging.info(f'Statical-word::category-: {word.string}::{category.title} -> Stored in bata base.')
         return _obj
     from statistics import mean, stdev
     tmp = list(_obj.all_docs_frequency)
@@ -260,6 +273,7 @@ def statistical_word_category2db(word: Word, category: Category, docs_frequency:
     _obj.docs_frequency_mean = mean(tmp)
     _obj.docs_frequency_stdev = stdev(tmp)
     _obj.save()
+    logging.info(f'Statical-word::category-: {word.string}::{category.title} -> Available in memory.')
     return _obj
 
 

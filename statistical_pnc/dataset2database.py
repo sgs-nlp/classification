@@ -4,6 +4,8 @@ import openpyxl
 import pickle
 import os
 
+from django.contrib.auth.views import LoginView
+
 from nvd.pre_processing import normilizer, tokenizer, without_stopword
 
 from .models import category2db, news2db, reference2db, symbol2db, stopword2db, categories_list
@@ -12,13 +14,17 @@ from .models import category2db, news2db, reference2db, symbol2db, stopword2db, 
 def add2database(corpus_file_path: str, symbols_list_file_path: str = None,
                  stopwords_list_file_path: str = None) -> int:
     file_name = os.path.basename(corpus_file_path)
+
     reference = reference2db(file_name)
+
     if not reference.load_symbols_list:
         logging.info('Started symbols list loading... .')
         if symbols_list_file_path is None:
+            logging.info('loading from nvd.symbols.')
             from nvd.symbols import LIST as nvd_symbols_list
             symbols_list = nvd_symbols_list
         else:
+            logging.info(f'loading from {symbols_list_file_path}.')
             with open(symbols_list_file_path) as file:
                 symbols_list_file = file.read()
                 symbols_list = json.loads(symbols_list_file)
@@ -29,12 +35,15 @@ def add2database(corpus_file_path: str, symbols_list_file_path: str = None,
         reference.load_symbols_list = True
         reference.save()
         logging.info('Persian symbols storage in the database is complete.')
+
     if not reference.load_stopwords_list:
         logging.info('Started stopwords list loading... .')
         if stopwords_list_file_path is None:
+            logging.info('loading from nvd.stopwords.')
             from nvd.stopword import LIST as nvd_stopwords_list
             stopwords_list = nvd_stopwords_list
         else:
+            logging.info(f'loading from {stopwords_list_file_path}.')
             with open(stopwords_list_file_path) as file:
                 stopwords_list_file = file.read()
                 stopwords_list = json.loads(stopwords_list_file)
@@ -45,6 +54,7 @@ def add2database(corpus_file_path: str, symbols_list_file_path: str = None,
         reference.load_stopwords_list = True
         reference.save()
         logging.info('Persian stopwords storage in the database is complete.')
+
     if not reference.load_complate:
         logging.info('Started news file loading... .')
         wb_obj = openpyxl.load_workbook(corpus_file_path)
