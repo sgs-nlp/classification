@@ -195,22 +195,17 @@ class Symbol(models.Model):
     def __str__(self):
         return str(self.word)
 
-def symbol2db(reference: Reference = None, reference_title: str = None, word: Word = None,
-              string: str = None) -> Symbol:
-    if reference is None:
-        if reference_title is None:
-            raise Exception('Refrence(or reference title) is not define... .')
-        reference = reference2db(reference_title)
-    if word is None:
-        if string is None:
-            raise Exception('Word(or string) is not define... .')
-        word = word2db(string)
-    symbol = Symbol.objects.filter(reference=reference).filter(word=word).first()
+
+def symbol2db(reference: Reference, word: Word) -> Symbol:
+    sym_typ = {'type': 'Symbol', 'reference': reference, 'word': word}
+    symbol = BASE_DICT.get_item(sym_typ)
     if symbol is None:
-        symbol = Symbol(reference=reference, word=word)
-        symbol.save()
-        logging.info(f'Symbol string: {string} -> Stored in bata base.')
-    logging.info(f'Symbol string: {string} -> Available in memory.')
+        symbol = Symbol.objects.filter(reference=reference).filter(word=word).first()
+        if symbol is None:
+            symbol = Symbol(reference=reference, word=word)
+            symbol.save()
+        BASE_DICT.set_item(sym_typ, symbol)
+    logging.info(f'Symbol : {symbol} -> Available in memory.')
     return symbol
 
 
