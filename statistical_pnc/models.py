@@ -33,11 +33,14 @@ class Reference(models.Model):
 
 
 def reference2db(title: str) -> Reference:
-    ref = Reference.objects.filter(title=title).first()
+    ref_key = {'type': 'Reference', 'title': title}
+    ref = BASE_DICT.get_item(ref_key)
     if ref is None:
-        ref = Reference(title=title)
-        ref.save()
-        logging.info(f'Reference title: {title} -> Stored in bata base.')
+        ref = Reference.objects.filter(title=title).first()
+        if ref is None:
+            ref = Reference(title=title)
+            ref.save()
+        BASE_DICT.set_item(ref_key, ref)
     logging.info(f'Reference title: {title} -> Available in memory.')
     return ref
 
