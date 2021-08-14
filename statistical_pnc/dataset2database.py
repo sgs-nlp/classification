@@ -1,14 +1,9 @@
 import json
 import logging
-import openpyxl
-import pickle
 import os
+import openpyxl
 
-from django.contrib.auth.views import LoginView
-
-from nvd.pre_processing import normilizer, tokenizer, without_stopword
-
-from .models import category2db, news2db, reference2db, symbol2db, stopword2db, categories_list, word2db
+from .models import news2db, reference2db, symbol2db, stopword2db, categories_list, word2db, category2db
 
 
 def add2database(corpus_file_path: str, symbols_list_file_path: str = None,
@@ -66,7 +61,7 @@ def add2database(corpus_file_path: str, symbols_list_file_path: str = None,
         column_title_list = []
         row_number = 1
         logging.info('Started storing persian news in the database.')
-        for row in sheet.iter_rows(max_row=2):
+        for row in sheet.iter_rows(max_row=5):
             col = []
             for cell in row:
                 col.append(cell.value)
@@ -79,14 +74,14 @@ def add2database(corpus_file_path: str, symbols_list_file_path: str = None,
                 _data[column_title_list[i]] = col[i]
 
             logging.info(f'Started storing the number {row_number} news item in the database.')
+
             news2db(
                 reference=reference,
                 titr_string=_data['Titr'],
                 content_string=_data['Content'],
-                category_title=_data['Category']
+                category=category2db(title=_data['Category'], reference=reference)
             )
             logging.info(f'The number {row_number} news item storage in the database is complete.')
         reference.load_complate = True
         reference.save()
-    print(categories_list(reference=reference, vector=True))
     return reference
