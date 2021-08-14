@@ -12,9 +12,10 @@ KEYWORDS_EXTRACTOR = KEYWORDS.by_frequency
 
 class Reference(models.Model):
     title = models.CharField(
-        max_length=32,
+        max_length=64,
         blank=False,
         null=False,
+        unique=True,
     )
     load_symbols_list = models.BooleanField(
         default=False,
