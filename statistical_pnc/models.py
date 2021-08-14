@@ -106,16 +106,16 @@ class Category(models.Model):
     def __str__(self):
         return self.title
 
-def category2db(title: str, reference: Reference = None, reference_title: str = None) -> Category:
-    category = Category.objects.filter(title=title).first()
+
+def category2db(title: str, reference: Reference) -> Category:
+    cat_key = {'type': 'Category', 'reference': reference, 'title': title}
+    category = BASE_DICT.get_item(cat_key)
     if category is None:
-        if reference is None:
-            if reference_title is None:
-                raise Exception('Refrence(or reference title) is not define... .')
-            reference = reference2db(reference_title)
-        category = Category(reference=reference, title=title)
-        category.save()
-        logging.info(f'Category title: {title} -> Stored in bata base.')
+        category = Category.objects.filter(reference=reference).filter(title=title).first()
+        if category is None:
+            category = Category(reference=reference, title=title)
+            category.save()
+        BASE_DICT.set_item(cat_key, category)
     logging.info(f'Category title: {title} -> Available in memory.')
     return category
 
