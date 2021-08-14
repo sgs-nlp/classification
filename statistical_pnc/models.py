@@ -262,6 +262,9 @@ class StatisticalWordCategory(models.Model):
         blank=True,
     )
 
+    def __str__(self):
+        return str(self.pk)
+
 
 def statistical_word_category2db(word: Word, category: Category, docs_frequency: int = None) -> StatisticalWordCategory:
     _obj = StatisticalWordCategory.objects.filter(word=word).filter(category=category).first()
