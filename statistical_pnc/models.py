@@ -267,26 +267,31 @@ class StatisticalWordCategory(models.Model):
 
 
 def statistical_word_category2db(word: Word, category: Category, docs_frequency: int = None) -> StatisticalWordCategory:
-    _obj = StatisticalWordCategory.objects.filter(word=word).filter(category=category).first()
-    if _obj is None:
-        _obj = StatisticalWordCategory()
-        _obj.word = word
-        _obj.category = category
-        _obj.all_docs_frequency = [docs_frequency]
-        _obj.docs_frequency_mean = docs_frequency
-        _obj.docs_frequency_stdev = 0
-        _obj.save()
-        logging.info(f'Statical-word::category-: {word.string}::{category.title} -> Stored in bata base.')
-        return _obj
+    swc_key = {'type': 'StatisticalWordCategory', 'word': word, 'category': category}
+    swc = BASE_DICT.get_item(swc_key)
+    if swc is None:
+        swc = StatisticalWordCategory.objects.filter(word=word).filter(category=category).first()
+        if swc is None:
+            swc = StatisticalWordCategory()
+            swc.word = word
+            swc.category = category
+            swc.all_docs_frequency = [docs_frequency]
+            swc.docs_frequency_mean = docs_frequency
+            swc.docs_frequency_stdev = 0
+            swc.save()
+            logging.info(f'Statical-word::category-: {word.string}::{category.title} -> Stored in bata base.')
+            BASE_DICT.set_item(swc_key, swc)
+            return swc
     from statistics import mean, stdev
-    tmp = list(_obj.all_docs_frequency)
+    tmp = list(swc.all_docs_frequency)
     tmp.append(docs_frequency)
-    _obj.all_docs_frequency = tmp
-    _obj.docs_frequency_mean = mean(tmp)
-    _obj.docs_frequency_stdev = stdev(tmp)
-    _obj.save()
+    swc.all_docs_frequency = tmp
+    swc.docs_frequency_mean = mean(tmp)
+    swc.docs_frequency_stdev = stdev(tmp)
+    swc.save()
     logging.info(f'Statical-word::category-: {word.string}::{category.title} -> Available in memory.')
-    return _obj
+    BASE_DICT.set_item(swc_key, swc)
+    return swc
 
 
 class News(models.Model):
@@ -322,13 +327,11 @@ class News(models.Model):
         related_name='sn_keywords',
     )
 
+    def __str__(self):
+        return str(self.string)
 
-def news2db(titr_string: str, content_string: str, category_title: str, reference: Reference = None,
-            reference_title: str = None) -> News:
-    if reference is None:
-        if reference_title is None:
-            raise Exception('Refrence(or reference title) is not define... .')
-        reference = reference2db(reference_title)
+
+def news2db(titr_string: str, content_string: str, category_title: str, reference: Reference) -> News:
     news = News()
     news.reference = reference
     news.titr = titr2db(titr_string)
@@ -370,53 +373,61 @@ def get_all_news() -> list:
     return news
 
 
-def stopwords_list(reference: Reference = None, reference_title: str = None) -> list:
-    if reference is None:
-        if reference_title is None:
-            raise Exception('Refrence(or reference title) is not define... .')
-        reference = reference2db(reference_title)
-    stpwrds = StopWord.objects.filter(reference=reference).all()
-    if stpwrds is None:
-        return []
-    stpwrds_list = []
-    for stpwrd in stpwrds:
-        stpwrds_list.append(stpwrd.word.string)
+def stopwords_list(reference: Reference) -> list:
+    swl_key = {'type': 'stopwords_list', 'reference': reference}
+    stpwrds_list = BASE_DICT.get_item(swl_key)
+    if stpwrds_list is None:
+        stpwrds = StopWord.objects.filter(reference=reference).all()
+        if stpwrds is None:
+            return []
+        stpwrds_list = []
+        for stpwrd in stpwrds:
+            stpwrds_list.append(stpwrd.word.string)
     return stpwrds_list
 
 
-def symbols_list(reference: Reference = None, reference_title: str = None) -> list:
-    if reference is None:
-        if reference_title is None:
-            raise Exception('Refrence(or reference title) is not define... .')
-        reference = reference2db(reference_title)
-    syms = Symbol.objects.filter(reference=reference).all()
-    if syms is None:
-        return []
-    syms_list = []
-    for sym in syms:
-        syms_list.append(sym.word.string)
+def symbols_list(reference: Reference) -> list:
+    syml_key = {'type': 'symbols_list', 'reference': reference}
+    syms_list = BASE_DICT.get_item(syml_key)
+    if syms_list is None:
+        syms = Symbol.objects.filter(reference=reference).all()
+        syms_list = []
+        for sym in syms:
+            syms_list.append(sym.word.string)
+        BASE_DICT.set_item(syml_key, syms_list)
     return syms_list
 
 
-def categories_list(reference: Reference = None, reference_title: str = None, vector: bool = False):
-    if reference is None:
-        if reference_title is None:
-            raise Exception('Refrence(or reference title) is not define... .')
-        reference = reference2db(reference_title)
-    cats = Category.objects.filter(reference=reference).all()
-    if not vector:
+def categories_list(reference: Reference, vector: bool = False):
+    cats_key = {'type': 'categories_list', 'reference': reference, 'vector': vector}
+    cats_list = BASE_DICT.get_item(cats_key)
+
+    if vector:
+        if cats_list is not None:
+            vector_len = Word.objects.last()
+            vector_len = vector_len.pk
+            if len(cats_list[0]) == vector_len:
+                return cats_list
+        cats = Category.objects.filter(reference=reference).all()
+        vector_len = Word.objects.last()
+        vector_len = vector_len.pk
+        cats_list = {}
+        for cat in cats:
+            vector = [0] * vector_len
+            cat_statistical = StatisticalWordCategory.objects.filter(category=cat).all()
+            for cs in cat_statistical:
+                vector[int(cs.word.pk)] = cs.docs_frequency_mean
+            cats_list[cat.pk] = vector
+        BASE_DICT.set_item(cats_key, cats_list)
+        return cats_list
+
+    else:
+        if cats_list is not None:
+            return cats_list
+
+        cats = Category.objects.filter(reference=reference).all()
         cats_list = {}
         for cat in cats:
             cats_list[cat.pk] = cat.title
+        BASE_DICT.set_item(cats_key, cats_list)
         return cats_list
-    vector_len = Word.objects.last()
-    vector_len = vector_len.pk
-    cats_list = {}
-    for cat in cats:
-        vector = [0] * vector_len
-        cat_statistical = StatisticalWordCategory.objects.filter(category=cat).all()
-        for cs in cat_statistical:
-            vector[int(cs.word.pk)] = cs.docs_frequency_mean
-        cats_list[cat.pk] = vector
-    return cats_list
-# ALL_NEWS = get_all_news()
