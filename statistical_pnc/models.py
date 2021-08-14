@@ -3,6 +3,7 @@ import logging
 from django.db import models
 from nvd.pre_processing import normilizer, tokenizer
 from nvd.extractor import Keywords
+from classification.settings import BASE_DICT
 
 NORMILIZER = normilizer
 WORD_TOKENIZER = tokenizer
@@ -26,6 +27,9 @@ class Reference(models.Model):
     load_complate = models.BooleanField(
         default=False,
     )
+
+    def __str__(self):
+        return self.title
 
 
 def reference2db(title: str) -> Reference:
