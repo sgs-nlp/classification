@@ -166,22 +166,18 @@ class Titr(models.Model):
 
 
 def titr2db(string: str) -> Titr:
-    titr = Titr.objects.filter(string=string).first()
-    if titr is None:
-        titr = Titr()
-        string = NORMILIZER(string)
-        titr.string = string
-        titr.save()
-
-        words_string = WORD_TOKENIZER(string)
-        for sent in words_string:
-            for word_string in sent:
-                word = word2db(word_string)
-                word._number_of_repetitions += 1
-                word.save()
-                titr.words.add(word)
-        titr.save()
-        logging.info(f'Titr string: {string} -> Stored in bata base.')
+    titr = Titr()
+    string = NORMILIZER(string)
+    titr.string = string
+    titr.save()
+    words_string = WORD_TOKENIZER(string)
+    for sent in words_string:
+        for word_string in sent:
+            word = word2db(word_string)
+            word._number_of_repetitions += 1
+            word.save()
+            titr.words.add(word)
+    titr.save()
     logging.info(f'Titr string: {string} -> Available in memory.')
     return titr
 
