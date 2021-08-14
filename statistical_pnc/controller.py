@@ -1,13 +1,12 @@
-from django.shortcuts import render, redirect
-from django.http import HttpRequest, JsonResponse
-from .dataset2database import add2database
 import logging
-from django.contrib import messages
+from pathlib import Path
+from scipy.spatial.distance import cosine
+
+from .dataset2database import add2database
+from .models import Category, news2db, News, Word, Keyword, categories_list, Reference
 
 
 def prerequisites():
-    from pathlib import Path
-    from datetime import datetime
     logging.info('Started storing dataset in the database.')
     corpus_file_path = Path('staticfiles', 'HamshahriData.xlsx')
     add2database(corpus_file_path)
