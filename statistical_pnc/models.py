@@ -192,6 +192,8 @@ class Symbol(models.Model):
         on_delete=models.CASCADE,
     )
 
+    def __str__(self):
+        return str(self.word)
 
 def symbol2db(reference: Reference = None, reference_title: str = None, word: Word = None,
               string: str = None) -> Symbol:
