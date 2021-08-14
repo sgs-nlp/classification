@@ -392,15 +392,20 @@
                         <div class="card-header pb-0 text-center">
                             <h2 class="h1 mb-3">Uncategorized text category.</h2>
                             <p class="mb-5 lead">
-                                You can enter a document in the text box below so that we can categorize your document.
+                                You can enter a news in the text box below so that we can categorize your news.
                             </p>
                         </div>
                         <form class="col-12 col-md-8 mx-auto" method="post" id="news_for_test_performance_form">
                             <!-- Form -->
                             <div class="form-group">
-                                <label for="exampleFormControlTextarea2">Your Text</label>
-                                <textarea class="form-control" name="text_for_classify"
-                                          id="news_for_test_performance_textarea"
+                                <label for="exampleFormControlTextarea2">Titr</label>
+                                <textarea class="form-control" name="titr_text_for_classify"
+                                          id="titr_news_for_test_performance_textarea"
+                                          placeholder="Enter your text..."
+                                          rows="1"></textarea>
+                                <label for="exampleFormControlTextarea2">Content</label>
+                                <textarea class="form-control" name="content_text_for_classify"
+                                          id="content_news_for_test_performance_textarea"
                                           placeholder="Enter your text..."
                                           rows="10"></textarea>
                             </div>
@@ -567,58 +572,58 @@
                     if (response.RESULT == true) {
                         var word2vec_word_embeding__svm__precision_score_var = $('#word2vec_word_embeding__svm__precision_score_loading_btn').parent();
                         $('#word2vec_word_embeding__svm__precision_score_loading_btn').remove();
-                        word2vec_word_embeding__svm__precision_score_var.append(response.word2vec_word_embeding__svm__precision_score+'%');
+                        word2vec_word_embeding__svm__precision_score_var.append(response.word2vec_word_embeding__svm__precision_score + '%');
                         var word2vec_word_embeding__svm__recall_score_var = $('#word2vec_word_embeding__svm__recall_score_loading_btn').parent();
                         $('#word2vec_word_embeding__svm__recall_score_loading_btn').remove();
-                        word2vec_word_embeding__svm__recall_score_var.append(response.word2vec_word_embeding__svm__recall_score+'%');
+                        word2vec_word_embeding__svm__recall_score_var.append(response.word2vec_word_embeding__svm__recall_score + '%');
                         var word2vec_word_embeding__svm__accuracy_score_var = $('#word2vec_word_embeding__svm__accuracy_score_loading_btn').parent();
                         $('#word2vec_word_embeding__svm__accuracy_score_loading_btn').remove();
-                        word2vec_word_embeding__svm__accuracy_score_var.append(response.word2vec_word_embeding__svm__accuracy_score+'%');
+                        word2vec_word_embeding__svm__accuracy_score_var.append(response.word2vec_word_embeding__svm__accuracy_score + '%');
                         var word2vec_word_embeding__mlp__precision_score_var = $('#word2vec_word_embeding__mlp__precision_score_loading_btn').parent();
                         $('#word2vec_word_embeding__mlp__precision_score_loading_btn').remove();
-                        word2vec_word_embeding__mlp__precision_score_var.append(response.word2vec_word_embeding__mlp__precision_score+'%');
+                        word2vec_word_embeding__mlp__precision_score_var.append(response.word2vec_word_embeding__mlp__precision_score + '%');
                         var word2vec_word_embeding__mlp__recall_score_var = $('#word2vec_word_embeding__mlp__recall_score_loading_btn').parent();
                         $('#word2vec_word_embeding__mlp__recall_score_loading_btn').remove();
-                        word2vec_word_embeding__mlp__recall_score_var.append(response.word2vec_word_embeding__mlp__recall_score+'%');
+                        word2vec_word_embeding__mlp__recall_score_var.append(response.word2vec_word_embeding__mlp__recall_score + '%');
                         var word2vec_word_embeding__mlp__accuracy_score_var = $('#word2vec_word_embeding__mlp__accuracy_score_loading_btn').parent();
                         $('#word2vec_word_embeding__mlp__accuracy_score_loading_btn').remove();
-                        word2vec_word_embeding__mlp__accuracy_score_var.append(response.word2vec_word_embeding__mlp__accuracy_score+'%');
+                        word2vec_word_embeding__mlp__accuracy_score_var.append(response.word2vec_word_embeding__mlp__accuracy_score + '%');
                         var word2vec_word_embeding__mnb__precision_score_var = $('#word2vec_word_embeding__mnb__precision_score_loading_btn').parent();
                         $('#word2vec_word_embeding__mnb__precision_score_loading_btn').remove();
-                        word2vec_word_embeding__mnb__precision_score_var.append(response.word2vec_word_embeding__mnb__precision_score+'%');
+                        word2vec_word_embeding__mnb__precision_score_var.append(response.word2vec_word_embeding__mnb__precision_score + '%');
                         var word2vec_word_embeding__mnb__recall_score_var = $('#word2vec_word_embeding__mnb__recall_score_loading_btn').parent();
                         $('#word2vec_word_embeding__mnb__recall_score_loading_btn').remove();
-                        word2vec_word_embeding__mnb__recall_score_var.append(response.word2vec_word_embeding__mnb__recall_score+'%');
+                        word2vec_word_embeding__mnb__recall_score_var.append(response.word2vec_word_embeding__mnb__recall_score + '%');
                         var word2vec_word_embeding__mnb__accuracy_score_var = $('#word2vec_word_embeding__mnb__accuracy_score_loading_btn').parent();
                         $('#word2vec_word_embeding__mnb__accuracy_score_loading_btn').remove();
-                        word2vec_word_embeding__mnb__accuracy_score_var.append(response.word2vec_word_embeding__mnb__accuracy_score+'%');
+                        word2vec_word_embeding__mnb__accuracy_score_var.append(response.word2vec_word_embeding__mnb__accuracy_score + '%');
                         var one_hot_encoding_word_embeding__svm__precision_score_var = $('#one_hot_encoding_word_embeding__svm__precision_score_loading_btn').parent();
                         $('#one_hot_encoding_word_embeding__svm__precision_score_loading_btn').remove();
-                        one_hot_encoding_word_embeding__svm__precision_score_var.append(response.one_hot_encoding_word_embeding__svm__precision_score+'%');
+                        one_hot_encoding_word_embeding__svm__precision_score_var.append(response.one_hot_encoding_word_embeding__svm__precision_score + '%');
                         var one_hot_encoding_word_embeding__svm__recall_score_var = $('#one_hot_encoding_word_embeding__svm__recall_score_loading_btn').parent();
                         $('#one_hot_encoding_word_embeding__svm__recall_score_loading_btn').remove();
-                        one_hot_encoding_word_embeding__svm__recall_score_var.append(response.one_hot_encoding_word_embeding__svm__recall_score+'%');
+                        one_hot_encoding_word_embeding__svm__recall_score_var.append(response.one_hot_encoding_word_embeding__svm__recall_score + '%');
                         var one_hot_encoding_word_embeding__svm__accuracy_score_var = $('#one_hot_encoding_word_embeding__svm__accuracy_score_loading_btn').parent();
                         $('#one_hot_encoding_word_embeding__svm__accuracy_score_loading_btn').remove();
-                        one_hot_encoding_word_embeding__svm__accuracy_score_var.append(response.one_hot_encoding_word_embeding__svm__accuracy_score+'%');
+                        one_hot_encoding_word_embeding__svm__accuracy_score_var.append(response.one_hot_encoding_word_embeding__svm__accuracy_score + '%');
                         var one_hot_encoding_word_embeding__mlp__precision_score_var = $('#one_hot_encoding_word_embeding__mlp__precision_score_loading_btn').parent();
                         $('#one_hot_encoding_word_embeding__mlp__precision_score_loading_btn').remove();
-                        one_hot_encoding_word_embeding__mlp__precision_score_var.append(response.one_hot_encoding_word_embeding__mlp__precision_score+'%');
+                        one_hot_encoding_word_embeding__mlp__precision_score_var.append(response.one_hot_encoding_word_embeding__mlp__precision_score + '%');
                         var one_hot_encoding_word_embeding__mlp__recall_score_var = $('#one_hot_encoding_word_embeding__mlp__recall_score_loading_btn').parent();
                         $('#one_hot_encoding_word_embeding__mlp__recall_score_loading_btn').remove();
-                        one_hot_encoding_word_embeding__mlp__recall_score_var.append(response.one_hot_encoding_word_embeding__mlp__recall_score+'%');
+                        one_hot_encoding_word_embeding__mlp__recall_score_var.append(response.one_hot_encoding_word_embeding__mlp__recall_score + '%');
                         var one_hot_encoding_word_embeding__mlp__accuracy_score_var = $('#one_hot_encoding_word_embeding__mlp__accuracy_score_loading_btn').parent();
                         $('#one_hot_encoding_word_embeding__mlp__accuracy_score_loading_btn').remove();
-                        one_hot_encoding_word_embeding__mlp__accuracy_score_var.append(response.one_hot_encoding_word_embeding__mlp__accuracy_score+'%');
+                        one_hot_encoding_word_embeding__mlp__accuracy_score_var.append(response.one_hot_encoding_word_embeding__mlp__accuracy_score + '%');
                         var one_hot_encoding_word_embeding__mnb__precision_score_var = $('#one_hot_encoding_word_embeding__mnb__precision_score_loading_btn').parent();
                         $('#one_hot_encoding_word_embeding__mnb__precision_score_loading_btn').remove();
-                        one_hot_encoding_word_embeding__mnb__precision_score_var.append(response.one_hot_encoding_word_embeding__mnb__precision_score+'%');
+                        one_hot_encoding_word_embeding__mnb__precision_score_var.append(response.one_hot_encoding_word_embeding__mnb__precision_score + '%');
                         var one_hot_encoding_word_embeding__mnb__recall_score_var = $('#one_hot_encoding_word_embeding__mnb__recall_score_loading_btn').parent();
                         $('#one_hot_encoding_word_embeding__mnb__recall_score_loading_btn').remove();
-                        one_hot_encoding_word_embeding__mnb__recall_score_var.append(response.one_hot_encoding_word_embeding__mnb__recall_score+'%');
+                        one_hot_encoding_word_embeding__mnb__recall_score_var.append(response.one_hot_encoding_word_embeding__mnb__recall_score + '%');
                         var one_hot_encoding_word_embeding__mnb__accuracy_score_var = $('#one_hot_encoding_word_embeding__mnb__accuracy_score_loading_btn').parent();
                         $('#one_hot_encoding_word_embeding__mnb__accuracy_score_loading_btn').remove();
-                        one_hot_encoding_word_embeding__mnb__accuracy_score_var.append(response.one_hot_encoding_word_embeding__mnb__accuracy_score+'%');
+                        one_hot_encoding_word_embeding__mnb__accuracy_score_var.append(response.one_hot_encoding_word_embeding__mnb__accuracy_score + '%');
                     }
                 },
                 // on error
@@ -640,11 +645,11 @@
                         if (response.TEXT == true) {
                             $('#category_title').remove()
                             $('#news_for_test_performance_error_message').remove()
-                            $('#news_for_test_performance_textarea').after('<div class="alert alert-info" id="category_title"> Category title: ' + response.CATEGORY_TITLE + '</div>')
+                            $('#content_news_for_test_performance_textarea').after('<div class="alert alert-info" id="category_title"> Category title: ' + response.CATEGORY_TITLE + '</div>')
                         } else {
                             $('#category_title').remove()
                             $('#news_for_test_performance_error_message').remove()
-                            $('#news_for_test_performance_textarea').after('<div class="alert alert-danger" id = "news_for_test_performance_error_message">' + response.ERROR_MESSAGE + '</div>')
+                            $('#content_news_for_test_performance_textarea').after('<div class="alert alert-danger" id = "news_for_test_performance_error_message">' + response.ERROR_MESSAGE + '</div>')
                         }
                     },
                     // on error
