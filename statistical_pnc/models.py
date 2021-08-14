@@ -69,11 +69,14 @@ class Word(models.Model):
 
 
 def word2db(string: str) -> Word:
-    word = Word.objects.filter(string=string).first()
+    word_key = {'type': 'Word', 'string': string}
+    word = BASE_DICT.get_item(word_key)
     if word is None:
-        word = Word(string=string)
-        word.save()
-        logging.info(f'Word String: {string} -> Stored in bata base.')
+        word = Word.objects.filter(string=string).first()
+        if word is None:
+            word = Word(string=string)
+            word.save()
+        BASE_DICT.set_item(word_key, word)
     logging.info(f'Word String: {string} -> Available in memory.')
     return word
 
