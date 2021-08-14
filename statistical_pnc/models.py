@@ -161,6 +161,9 @@ class Titr(models.Model):
     def code(self):
         return str(self.pk)
 
+    def __str__(self):
+        return self.string
+
 
 def titr2db(string: str) -> Titr:
     titr = Titr.objects.filter(string=string).first()
