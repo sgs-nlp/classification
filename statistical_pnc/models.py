@@ -135,22 +135,18 @@ class Content(models.Model):
 
 
 def content2db(string: str) -> Content:
-    content = Content.objects.filter(string=string).first()
-    if content is None:
-        content = Content()
-        string = NORMILIZER(string)
-        content.string = string
-        content.save()
-
-        words_string = WORD_TOKENIZER(string)
-        for sent in words_string:
-            for word_string in sent:
-                word = word2db(word_string)
-                word._number_of_repetitions += 1
-                word.save()
-                content.words.add(word)
-        content.save()
-        logging.info(f'Content String: {string} -> Stored in bata base.')
+    content = Content()
+    string = NORMILIZER(string)
+    content.string = string
+    content.save()
+    words_string = WORD_TOKENIZER(string)
+    for sent in words_string:
+        for word_string in sent:
+            word = word2db(word_string)
+            word._number_of_repetitions += 1
+            word.save()
+            content.words.add(word)
+    content.save()
     logging.info(f'Content String: {string} -> Available in memory.')
     return content
 
