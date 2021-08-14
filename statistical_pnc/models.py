@@ -64,6 +64,9 @@ class Word(models.Model):
     def code(self):
         return str(self.pk)
 
+    def __str__(self):
+        return self.string
+
 
 def word2db(string: str) -> Word:
     word = Word.objects.filter(string=string).first()
