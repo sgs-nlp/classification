@@ -103,6 +103,8 @@ class Category(models.Model):
     def code(self):
         return str(self.pk)
 
+    def __str__(self):
+        return self.title
 
 def category2db(title: str, reference: Reference = None, reference_title: str = None) -> Category:
     category = Category.objects.filter(title=title).first()
