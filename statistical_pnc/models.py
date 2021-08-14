@@ -371,19 +371,22 @@ def keyword2db(news: News, word: Word, frequency: float) -> Keyword:
 def news2db(content_string: str, titr_string: str = None, category: Category = None,
             reference: Reference = None) -> News:
     news = News()
-    news.reference = reference
-    news.titr = titr2db(titr_string)
     news.content = content2db(content_string)
-    news.string = f'{news.titr.string} {news.content.string}'
-
-    category = category2db(title=category_title, reference=reference)
-    category._number_of_subcategories += 1
-    category.save()
-
-    news.category = category
+    if reference is not None:
+        news.reference = reference
+    if titr_string is not None:
+        news.titr = titr2db(titr_string)
+        news.string = f'{news.titr.string} {news.content.string}'
+    else:
+        news.string = f'{news.content.string}'
+    if category is not None:
+        category._number_of_subcategories += 1
+        category.save()
+        news.category = category
     news.save()
-    for wrd in news.titr.words.all():
-        news.words_tokenize.add(wrd)
+    if titr_string is not None:
+        for wrd in news.titr.words.all():
+            news.words_tokenize.add(wrd)
     for wrd in news.content.words.all():
         news.words_tokenize.add(wrd)
     for wrd in news.words_tokenize.all():
@@ -394,8 +397,9 @@ def news2db(content_string: str, titr_string: str = None, category: Category = N
     keywords = KEYWORDS_EXTRACTOR(document=doc, stopword=1, sents=1)
     for keyword in keywords:
         word = word2db(keyword['word'])
-        news.keywords.add(word)
-        statistical_word_category2db(word, category, docs_frequency=keyword['frequency'])
+        keyword2db(news=news, word=word, frequency=keyword['frequency'])
+        if category is not None:
+            statistical_word_category2db(word, category, docs_frequency=keyword['frequency'])
     news.save()
     return news
 
@@ -457,7 +461,7 @@ def categories_list(reference: Reference, vector: bool = False):
             vector_len = vector_len.pk
             cats_list = {}
             for cat in cats:
-                vector = [0] * vector_len
+                vector = [0] * (vector_len + 1)
                 cat_statistical = StatisticalWordCategory.objects.filter(category=cat).all()
                 for cs in cat_statistical:
                     vector[int(cs.word.pk)] = cs.docs_frequency_mean
