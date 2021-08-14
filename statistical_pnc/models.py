@@ -298,8 +298,8 @@ class News(models.Model):
     reference = models.ForeignKey(
         to='Reference',
         on_delete=models.CASCADE,
-        blank=False,
-        null=False,
+        blank=True,
+        null=True,
     )
     string = models.TextField()
     words = models.ManyToManyField(
@@ -313,18 +313,20 @@ class News(models.Model):
     content = models.ForeignKey(
         to='Content',
         on_delete=models.CASCADE,
+        blank=False,
+        null=False,
     )
     titr = models.ForeignKey(
         to='Titr',
         on_delete=models.CASCADE,
+        blank=True,
+        null=True,
     )
     category = models.ForeignKey(
         to='Category',
         on_delete=models.CASCADE,
-    )
-    keywords = models.ManyToManyField(
-        to='Word',
-        related_name='sn_keywords',
+        blank=True,
+        null=True,
     )
 
     def __str__(self):
