@@ -5,6 +5,7 @@ Create by 'nvd' on '2021 July 12' Date.
 from pathlib import Path
 import os
 import logging
+from nvd.base_dict import BaseDict
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -129,10 +130,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # logging
 
-
 logging.basicConfig(
     level=logging.DEBUG,
     filename='.log',
     filemode='w',
     format='%(levelname)s - %(asctime)s - module: %(module)s - message: \"%(message)s\"'
 )
+
+# chashing
+BASE_DICT = BaseDict()
