@@ -331,7 +331,43 @@ class News(models.Model):
         return str(self.string)
 
 
-def news2db(titr_string: str, content_string: str, category_title: str, reference: Reference) -> News:
+class Keyword(models.Model):
+    news = models.ForeignKey(
+        to='News',
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False,
+    )
+    word = models.ForeignKey(
+        to='Word',
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False,
+    )
+    frequency = models.FloatField(
+        blank=False,
+        null=False,
+    )
+
+    def __str__(self):
+        return str(self.word)
+
+
+def keyword2db(news: News, word: Word, frequency: float) -> Keyword:
+    kw_key = {'type': 'Keyword', 'news': news, 'word': word}
+    kywrd = BASE_DICT.get_item(kw_key)
+    if kywrd is None:
+        kywrd = Keyword.objects.filter(news=news).filter(word=word).first()
+        if kywrd is None:
+            kywrd = Keyword(news=news, word=word, frequency=frequency)
+            kywrd.save()
+        BASE_DICT.set_item(kw_key, kywrd)
+    logging.info(f'Stop word : {kywrd} -> Available in memory.')
+    return kywrd
+
+
+def news2db(content_string: str, titr_string: str = None, category: Category = None,
+            reference: Reference = None) -> News:
     news = News()
     news.reference = reference
     news.titr = titr2db(titr_string)
