@@ -130,6 +130,9 @@ class Content(models.Model):
     def code(self):
         return str(self.pk)
 
+    def __str__(self):
+        return self.string
+
 
 def content2db(string: str) -> Content:
     content = Content.objects.filter(string=string).first()
