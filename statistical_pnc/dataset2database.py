@@ -8,7 +8,7 @@ from django.contrib.auth.views import LoginView
 
 from nvd.pre_processing import normilizer, tokenizer, without_stopword
 
-from .models import category2db, news2db, reference2db, symbol2db, stopword2db, categories_list
+from .models import category2db, news2db, reference2db, symbol2db, stopword2db, categories_list, word2db
 
 
 def add2database(corpus_file_path: str, symbols_list_file_path: str = None,
@@ -31,7 +31,8 @@ def add2database(corpus_file_path: str, symbols_list_file_path: str = None,
         logging.info('Symbols list loaded.')
         logging.info('Started storing persian symbols in the database.')
         for string in symbols_list:
-            symbol2db(reference=reference, string=string)
+            sym_wrd = word2db(string=string)
+            symbol2db(reference=reference, word=sym_wrd)
         reference.load_symbols_list = True
         reference.save()
         logging.info('Persian symbols storage in the database is complete.')
@@ -50,7 +51,8 @@ def add2database(corpus_file_path: str, symbols_list_file_path: str = None,
         logging.info('Stopwords list loaded.')
         logging.info('Started storing Persian stopwords in the database.')
         for string in stopwords_list:
-            stopword2db(reference=reference, string=string)
+            stpwrd_wrd = word2db(string=string)
+            stopword2db(reference=reference, word=stpwrd_wrd)
         reference.load_stopwords_list = True
         reference.save()
         logging.info('Persian stopwords storage in the database is complete.')
