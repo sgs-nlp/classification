@@ -43,6 +43,7 @@ class Word(models.Model):
         max_length=32,
         blank=False,
         null=False,
+        unique=True,
     )
     _number_of_repetitions = models.PositiveIntegerField(
         default=0,
