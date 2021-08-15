@@ -18,21 +18,23 @@ def news_classification(reference: Reference, content: str, titr: str = None) ->
         content_string=content,
         titr_string=titr,
     )
-    # news = News.objects.get(pk=3)
     news_vector = news2vector(news)
     cats_list = categories_list(reference=reference, vector=True)
-    print(cats_list)
-    distances_list = []
-    for cat in cats_list:
-        distances_list.append(cosine(news_vector, cat))
-    print(sorted(distances_list))
-    return min(distances_list)
+    minimum_value = 100
+    minimum_index = ''
+    for cat_key, cat_val in cats_list.items():
+        dist = cosine(news_vector, cat_val)
+        if minimum_value > dist:
+            minimum_value = dist
+            minimum_index = cat_key
+    near_category = Category.objects.get(pk=minimum_index)
+    return near_category
 
 
 def news2vector(news: News) -> list:
     vector_len = Word.objects.last()
     vector_len = int(vector_len.pk)
-    vector = [0] * vector_len
+    vector = [0] * (vector_len + 1)
     kwrds = Keyword.objects.filter(news=news).all()
     for kw in kwrds:
         vector[int(kw.word.pk)] = kw.frequency

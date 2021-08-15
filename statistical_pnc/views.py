@@ -50,8 +50,8 @@ def classification(request: HttpRequest):
 
     response['TEXT'] = True
     reference = reference2db('HamshahriData.xlsx')
-    category_title = news_classification(reference=reference, content=content, titr=titr)
-    response['CATEGORY_TITLE'] = category_title  # 'category.string'
+    category = news_classification(reference=reference, content=content, titr=titr)
+    response['CATEGORY_TITLE'] = category.title
     return JsonResponse(response)
 
 

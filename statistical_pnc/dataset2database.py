@@ -61,7 +61,7 @@ def add2database(corpus_file_path: str, symbols_list_file_path: str = None,
         column_title_list = []
         row_number = 1
         logging.info('Started storing persian news in the database.')
-        for row in sheet.iter_rows(max_row=5):
+        for row in sheet.iter_rows():
             col = []
             for cell in row:
                 col.append(cell.value)
