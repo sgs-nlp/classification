@@ -1,13 +1,17 @@
+import redis
+import pickle
+
+
 class BaseDict:
     def __init__(self):
-        self.base_dict = {}
+        self.redis_instance = redis.StrictRedis(host='localhost', port=6379, db=0)
 
     def set_item(self, key, value):
-        key = str(key)
-        self.base_dict[key] = value
+        value = pickle.dumps(value)
+        self.redis_instance.set(str(key), value)
 
     def get_item(self, key):
-        key = str(key)
-        if key in self.base_dict:
-            return self.base_dict[key]
-        return None
+        value = self.redis_instance.get(str(key))
+        if value is not None:
+            value = pickle.loads(value)
+        return value
