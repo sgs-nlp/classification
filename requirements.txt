@@ -19,3 +19,5 @@ sklearn==0.0
 smart-open==5.1.0
 sqlparse==0.4.1
 threadpoolctl==2.2.0
+
+redis~=3.5.3
