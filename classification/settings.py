@@ -31,7 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'persian_news_classification.apps.PersianNewsClassificationConfig',
+    # 'persian_news_classification.apps.PersianNewsClassificationConfig',
     'statistical_pnc.apps.StatisticalPncConfig',
 ]
 
@@ -139,3 +139,7 @@ logging.basicConfig(
 
 # chashing
 BASE_DICT = BaseDict()
+
+# caches
+# REDIS_HOST = 'localhost'
+# REDIS_PORT = 6379
