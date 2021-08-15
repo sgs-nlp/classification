@@ -1,8 +1,10 @@
 from django.http import HttpRequest, JsonResponse
 from django.shortcuts import render
-
+from django.conf import settings
 from .controller import news_classification, prerequisites
 from .models import reference2db
+import redis
+import pickle
 
 
 def index(request: HttpRequest):
@@ -46,8 +48,6 @@ def classification(request: HttpRequest):
         response['ERROR_MESSAGE'] = 'Please enter the news you want to categorize in this section.'
         return JsonResponse(response)
 
-    # category = news_classification(content=content, titr=titr)
-
     response['TEXT'] = True
     reference = reference2db('HamshahriData.xlsx')
     category = news_classification(reference=reference, content=content, titr=titr)
@@ -88,4 +88,3 @@ def preprocessing(request: HttpRequest):
 # 0790160000000000774260366
 
 # 09151712846
-
