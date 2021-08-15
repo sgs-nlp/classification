@@ -410,6 +410,14 @@
                                           rows="10"></textarea>
                             </div>
                             <!-- End of Form -->
+                            <div class="alert alert-info" id="category_title_empty"> Category title:
+                                <button class="btn btn-primary" type="button"
+                                        id="classification_submited_loading" disabled style="visibility:hidden;">
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                    <span class="sr-only">Loading...</span>
+                                </button>
+                            </div>
                             <div class="px-0 mx-auto" style="margin-top: 10px">
                                 <button type="submit" class="btn btn-primary">Classification</button>
                             </div>
@@ -636,6 +644,8 @@
             // catch the form's submit event
             $('#news_for_test_performance_form').submit(function () {
                 // create an AJAX call
+                {#$('#classification_submited_loading').style.visibility = "visible";#}
+                document.getElementById("classification_submited_loading").style.visibility = "visible";
                 $.ajax({
                     data: $(this).serialize(), // get the form data
                     type: $(this).attr('method'), // GET or POST
@@ -645,10 +655,12 @@
                         if (response.TEXT == true) {
                             $('#category_title').remove()
                             $('#news_for_test_performance_error_message').remove()
-                            $('#content_news_for_test_performance_textarea').after('<div class="alert alert-info" id="category_title"> Category title: ' + response.CATEGORY_TITLE + '</div>')
+                            $('#category_title_empty').remove()
+                            $('#content_news_for_test_performance_textarea').after('<div class="alert alert-info" id="category_title"> Category title:  ' + response.CATEGORY_TITLE + '</div>')
                         } else {
                             $('#category_title').remove()
                             $('#news_for_test_performance_error_message').remove()
+                            $('#category_title_empty').remove()
                             $('#content_news_for_test_performance_textarea').after('<div class="alert alert-danger" id = "news_for_test_performance_error_message">' + response.ERROR_MESSAGE + '</div>')
                         }
                     },
