@@ -33,6 +33,7 @@ INSTALLED_APPS = [
 
     # 'persian_news_classification.apps.PersianNewsClassificationConfig',
     'statistical_pnc.apps.StatisticalPncConfig',
+    'extra_settings.apps.ExtraSettingsConfig',
 ]
 
 MIDDLEWARE = [
