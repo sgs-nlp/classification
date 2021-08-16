@@ -39,3 +39,18 @@ def news2vector(news: News) -> list:
     for kw in kwrds:
         vector[int(kw.word.pk)] = kw.frequency
     return vector
+
+
+class NewsClassification:
+    def __init__(self):
+        data = News.objects.filter(category__isnull=False).all()
+        x_data = []
+        y_data = []
+        for _d in data:
+            x_data.append(_d.string)
+            y_data.append(_d.category.title)
+        self.x_data = x_data
+        self.y_data = y_data
+
+    def print_d(self):
+        print(self.y_data)

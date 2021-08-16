@@ -5,9 +5,15 @@ from .controller import news_classification, prerequisites
 from .models import reference2db
 import redis
 import pickle
+from pathlib import Path
 
 
 def index(request: HttpRequest):
+    from extra_settings.models import File
+    file = File()
+    file.save(Path('staticfiles', 'HamshahriData.xlsx'))
+    res, header = file.load(file_name='HamshahriData.xlsx', to_be_continued=False, from_which_row=8, up_to_which_row=10)
+    print(res)
     return render(
         request,
         'ai_index.html',
@@ -40,18 +46,18 @@ def sample(request: HttpRequest):
 
 def classification(request: HttpRequest):
     response = {}
-    content = request.POST['content_text_for_classify']
-    titr = request.POST['titr_text_for_classify']
-
-    if content is None or len(content) == 0:
-        response['TEXT'] = False
-        response['ERROR_MESSAGE'] = 'Please enter the news you want to categorize in this section.'
-        return JsonResponse(response)
-
-    response['TEXT'] = True
-    reference = reference2db('HamshahriData.xlsx')
-    category = news_classification(reference=reference, content=content, titr=titr)
-    response['CATEGORY_TITLE'] = category.title
+    # content = request.POST['content_text_for_classify']
+    # titr = request.POST['titr_text_for_classify']
+    #
+    # if content is None or len(content) == 0:
+    #     response['TEXT'] = False
+    #     response['ERROR_MESSAGE'] = 'Please enter the news you want to categorize in this section.'
+    #     return JsonResponse(response)
+    #
+    # response['TEXT'] = True
+    # reference = reference2db('HamshahriData.xlsx')
+    # category = news_classification(reference=reference, content=content, titr=titr)
+    # response['CATEGORY_TITLE'] = category.title
     return JsonResponse(response)
 
 
