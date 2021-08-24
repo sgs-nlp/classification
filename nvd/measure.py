@@ -6,6 +6,8 @@ def precision(true_positives, false_positives):
     for tp, fp in zip(true_positives.items(), false_positives.items()):
         if tp[1] + fp[1] != 0:
             res[tp[0]] = tp[1] / (tp[1] + fp[1])
+    if res == {}:
+        return None
     return statistics.mean(res.values()) * 100
 
 
@@ -14,6 +16,8 @@ def recall(false_negatives, true_positives):
     for tp, fn in zip(true_positives.items(), false_negatives.items()):
         if tp[1] + fn[1] != 0:
             res[tp[0]] = tp[1] / (tp[1] + fn[1])
+    if res == {}:
+        return None
     return statistics.mean(res.values()) * 100
 
 
