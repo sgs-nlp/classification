@@ -118,9 +118,6 @@ class SVM:
     def predicted(self):
         if self._predicted is not None:
             return self._predicted
-        for i in self.x_test:
-            print(i)
-        print()
         self._predicted = self.model.predict(self.x_test)
         return self._predicted
 
