@@ -6,11 +6,16 @@ import openpyxl
 from .models import news2db, reference2db, symbol2db, stopword2db, categories_list, word2db, category2db
 
 
-def add2database(corpus_file_path: str, symbols_list_file_path: str = None,
-                 stopwords_list_file_path: str = None) -> int:
-    file_name = os.path.basename(corpus_file_path)
-
-    reference = reference2db(file_name)
+def add2database(corpus_file_path: str = None, file_name: str = None, symbols_list_file_path: str = None,
+                 stopwords_list_file_path: str = None, part_of_data: list = None,
+                 part_of_data_header: list = None) -> int:
+    if corpus_file_path is not None:
+        file_name = os.path.basename(corpus_file_path)
+        reference = reference2db(file_name)
+    elif file_name is not None:
+        reference = reference2db(file_name)
+    else:
+        raise Exception('Enter corpus_file_path or file_name.')
 
     if not reference.load_symbols_list:
         logging.info('Started symbols list loading... .')
@@ -53,35 +58,60 @@ def add2database(corpus_file_path: str, symbols_list_file_path: str = None,
         logging.info('Persian stopwords storage in the database is complete.')
 
     if not reference.load_complate:
-        logging.info('Started news file loading... .')
-        wb_obj = openpyxl.load_workbook(corpus_file_path)
-        logging.info('News file loaded.')
-        sheet = wb_obj.active
-        first = True
-        column_title_list = []
-        row_number = 1
-        logging.info('Started storing persian news in the database.')
-        for row in sheet.iter_rows():
-            col = []
-            for cell in row:
-                col.append(cell.value)
-            if first:
-                column_title_list = col
-                first = False
-                continue
-            _data = {}
-            for i in range(len(column_title_list)):
-                _data[column_title_list[i]] = col[i]
+        if part_of_data is None:
+            logging.info('Started news file loading... .')
+            wb_obj = openpyxl.load_workbook(corpus_file_path)
+            logging.info('News file loaded.')
+            sheet = wb_obj.active
+            first = True
+            column_title_list = []
+            row_number = 1
+            logging.info('Started storing persian news in the database.')
+            for row in sheet.iter_rows():
+                col = []
+                for cell in row:
+                    col.append(cell.value)
+                if first:
+                    column_title_list = col
+                    first = False
+                    continue
+                _data = {}
+                for i in range(len(column_title_list)):
+                    _data[column_title_list[i]] = col[i]
 
-            logging.info(f'Started storing the number {row_number} news item in the database.')
+                logging.info(f'Started storing the number {row_number} news item in the database.')
 
-            news2db(
-                reference=reference,
-                titr_string=_data['Titr'],
-                content_string=_data['Content'],
-                category=category2db(title=_data['Category'], reference=reference)
-            )
-            logging.info(f'The number {row_number} news item storage in the database is complete.')
-        reference.load_complate = True
-        reference.save()
+                news2db(
+                    reference=reference,
+                    titr_string=_data['Titr'],
+                    content_string=_data['Content'],
+                    category=category2db(title=_data['Category'], reference=reference)
+                )
+                logging.info(f'The number {row_number} news item storage in the database is complete.')
+            reference.load_complate = True
+            reference.save()
+        else:
+            logging.info('Started news file loading... .')
+            logging.info('News file loaded.')
+            column_title_list = part_of_data_header
+            row_number = 1
+            logging.info('Started storing persian news in the database.')
+            for row in part_of_data:
+                col = []
+                for cell in row:
+                    col.append(cell)
+                _data = {}
+                for i in range(len(column_title_list)):
+                    _data[column_title_list[i]] = col[i]
+
+                logging.info(f'Started storing the number {row_number} news item in the database.')
+
+                news2db(
+                    reference=reference,
+                    titr_string=_data['Titr'],
+                    content_string=_data['Content'],
+                    category=category2db(title=_data['Category'], reference=reference)
+                )
+                logging.info(f'The number {row_number} news item storage in the database is complete.')
+            reference.save()
     return reference
