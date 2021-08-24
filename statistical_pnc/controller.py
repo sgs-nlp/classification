@@ -1,15 +1,28 @@
 import logging
 from pathlib import Path
 from scipy.spatial.distance import cosine
-
+from random import sample
 from .dataset2database import add2database
 from .models import Category, news2db, News, Word, Keyword, categories_list, Reference
+# from nvd.classification import Classification
+from nvd.converter import bag_of_word2one_hot
 
 
 def prerequisites():
     logging.info('Started storing dataset in the database.')
-    corpus_file_path = Path('staticfiles', 'HamshahriData.xlsx')
-    add2database(corpus_file_path)
+    from extra_settings.models import File
+    file_name = 'HamshahriData.xlsx'
+    from_which_row = 1
+    up_to_which_row = 50
+    file = File(file_name)
+    if not file.is_complate(from_which_row, up_to_which_row):
+        file.save(file_path=Path('staticfiles', file_name))
+        res, header = file.load(to_be_continued=False, from_which_row=from_which_row,
+                                up_to_which_row=up_to_which_row)
+        add2database(file_name=file_name, part_of_data=res, part_of_data_header=header)
+        file.save(complate=True, from_which_row=from_which_row, up_to_which_row=up_to_which_row)
+    # corpus_file_path = Path('staticfiles', 'HamshahriData.xlsx')
+    # add2database(corpus_file_path)
     logging.info('Data storage in the database is complete.')
 
 
