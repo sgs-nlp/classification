@@ -1,19 +1,16 @@
 from django.http import HttpRequest, JsonResponse
 from django.shortcuts import render
 from django.conf import settings
-from .controller import news_classification, prerequisites
-from .models import reference2db
 import redis
 import pickle
 from pathlib import Path
 
+from .controller import news_classification, prerequisites
+from .models import reference2db
+from .dataset2database import add2database
+
 
 def index(request: HttpRequest):
-    from extra_settings.models import File
-    file = File()
-    file.save(Path('staticfiles', 'HamshahriData.xlsx'))
-    res, header = file.load(file_name='HamshahriData.xlsx', to_be_continued=False, from_which_row=8, up_to_which_row=10)
-    print(res)
     return render(
         request,
         'ai_index.html',
@@ -63,6 +60,9 @@ def classification(request: HttpRequest):
 
 def preprocessing(request: HttpRequest):
     prerequisites()
+    from .controller import NewsClassification
+    nc = NewsClassification()
+    nc.print_d()
     response = {
         'RESULT': True,
         'word2vec_word_embeding__svm__precision_score': 1,
