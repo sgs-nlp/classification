@@ -103,4 +103,4 @@ class NewsClassification:
         return _precision, _recall, _accuracy
 
     def print_d(self):
-        print(self.y_data)
+        print(self.performance())
