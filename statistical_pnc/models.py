@@ -440,31 +440,60 @@ def symbols_list(reference: Reference) -> list:
     return syms_list
 
 
-def categories_list(reference: Reference, vector: bool = False):
-    if vector is False:
-        cats_key = {'type': 'categories_list', 'reference': reference, 'vector': False}
-        cats_list = BASE_DICT.get_item(cats_key)
-        if cats_list is None:
-            cats = Category.objects.filter(reference=reference).all()
-            cats_list = {}
-            for cat in cats:
-                cats_list[cat.pk] = cat.title
-            BASE_DICT.set_item(cats_key, cats_list)
-    else:
-        vector_len = Word.objects.last()
-        vector_len = int(vector_len.pk)
-        cats_key = {'type': 'categories_list', 'reference': reference, 'vector': vector_len}
-        cats_list = BASE_DICT.get_item(cats_key)
-        if cats_list is None:
-            cats = Category.objects.filter(reference=reference).all()
+def categories_list(reference: Reference = None, vector: bool = False):
+    if reference is None:
+        if vector is False:
+            cats_key = {'type': 'categories_list', 'reference': reference, 'vector': False}
+            cats_list = BASE_DICT.get_item(cats_key)
+            if cats_list is None:
+                cats = Category.objects.all()
+                cats_list = {}
+                for cat in cats:
+                    cats_list[cat.pk] = cat.title
+                BASE_DICT.set_item(cats_key, cats_list)
+        else:
             vector_len = Word.objects.last()
-            vector_len = vector_len.pk
-            cats_list = {}
-            for cat in cats:
-                vector = [0] * (vector_len + 1)
-                cat_statistical = StatisticalWordCategory.objects.filter(category=cat).all()
-                for cs in cat_statistical:
-                    vector[int(cs.word.pk)] = cs.docs_frequency_mean
-                cats_list[cat.pk] = vector
-            BASE_DICT.set_item(cats_key, cats_list)
-    return cats_list
+            vector_len = int(vector_len.pk)
+            cats_key = {'type': 'categories_list', 'reference': reference, 'vector': vector_len}
+            cats_list = BASE_DICT.get_item(cats_key)
+            if cats_list is None:
+                cats = Category.objects.all()
+                vector_len = Word.objects.last()
+                vector_len = vector_len.pk
+                cats_list = {}
+                for cat in cats:
+                    vector = [0] * (vector_len + 1)
+                    cat_statistical = StatisticalWordCategory.objects.filter(category=cat).all()
+                    for cs in cat_statistical:
+                        vector[int(cs.word.pk)] = cs.docs_frequency_mean
+                    cats_list[cat.pk] = vector
+                BASE_DICT.set_item(cats_key, cats_list)
+        return cats_list
+    else:
+        if vector is False:
+            cats_key = {'type': 'categories_list', 'reference': reference, 'vector': False}
+            cats_list = BASE_DICT.get_item(cats_key)
+            if cats_list is None:
+                cats = Category.objects.filter(reference=reference).all()
+                cats_list = {}
+                for cat in cats:
+                    cats_list[cat.pk] = cat.title
+                BASE_DICT.set_item(cats_key, cats_list)
+        else:
+            vector_len = Word.objects.last()
+            vector_len = int(vector_len.pk)
+            cats_key = {'type': 'categories_list', 'reference': reference, 'vector': vector_len}
+            cats_list = BASE_DICT.get_item(cats_key)
+            if cats_list is None:
+                cats = Category.objects.filter(reference=reference).all()
+                vector_len = Word.objects.last()
+                vector_len = vector_len.pk
+                cats_list = {}
+                for cat in cats:
+                    vector = [0] * (vector_len + 1)
+                    cat_statistical = StatisticalWordCategory.objects.filter(category=cat).all()
+                    for cs in cat_statistical:
+                        vector[int(cs.word.pk)] = cs.docs_frequency_mean
+                    cats_list[cat.pk] = vector
+                BASE_DICT.set_item(cats_key, cats_list)
+        return cats_list
