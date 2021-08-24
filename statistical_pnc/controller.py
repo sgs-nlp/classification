@@ -43,14 +43,51 @@ def news2vector(news: News) -> list:
 
 class NewsClassification:
     def __init__(self):
+        data_len = News.objects.last()
+        data_len = data_len.pk
+        data_test_len = round(data_len / 6)
+        test_ary_list = sample(range(1, data_len), data_test_len)
         data = News.objects.filter(category__isnull=False).all()
-        x_data = []
-        y_data = []
-        for _d in data:
-            x_data.append(_d.string)
-            y_data.append(_d.category.title)
-        self.x_data = x_data
-        self.y_data = y_data
+        _data = []
+        for i in test_ary_list:
+            _data.append(data.get(pk=i))
+        self.data_for_test = _data
+        self.categories_list = categories_list(vector=True)
+        self.categories_list_pk = self.categories_list.keys()
+
+    def _classification(self, news):
+        news_vector = news2vector(news)
+        cats_list = self.categories_list
+        minimum_value = 100
+        minimum_index = ''
+        for cat_key, cat_val in cats_list.items():
+            dist = cosine(news_vector, cat_val)
+            if minimum_value > dist:
+                minimum_value = dist
+                minimum_index = cat_key
+        near_category = Category.objects.get(pk=minimum_index)
+        return near_category
+
+    def classification(self, content: str, titr: str = None) -> Category:
+        news = news2db(
+            content_string=content,
+            titr_string=titr,
+        )
+        return self._classification(news)
+
+    def performance(self):
+        y_test = []
+        predicted = []
+        for itm in self.data_for_test:
+            y_test.append(itm.category.pk)
+            predicted.append(self._classification(itm).pk)
+        from nvd.measure import true_or_false, precision, recall, accuracy
+        false_negative, true_positive, true_negative, false_positive = true_or_false(predicted, y_test,
+                                                                                     self.categories_list_pk)
+        _precision = precision(true_positive, false_positive)
+        _recall = recall(false_negative, true_positive)
+        _accuracy = accuracy(false_negative, true_positive, true_negative, false_positive)
+        return _precision, _recall, _accuracy
 
     def print_d(self):
         print(self.y_data)
