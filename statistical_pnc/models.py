@@ -81,6 +81,36 @@ def word2db(string: str) -> Word:
     return word
 
 
+class StatisticalWordCategory(models.Model):
+    word = models.ForeignKey(
+        to='Word',
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+    )
+    category = models.ForeignKey(
+        to='Category',
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+    )
+    all_docs_frequency = models.JSONField(
+        null=True,
+        blank=True,
+    )
+    docs_frequency_mean = models.FloatField(
+        null=True,
+        blank=True,
+    )
+    docs_frequency_stdev = models.FloatField(
+        null=True,
+        blank=True,
+    )
+
+    def __str__(self):
+        return str(self.pk)
+
+
 class Category(models.Model):
     reference = models.ForeignKey(
         to='Reference',
@@ -94,6 +124,16 @@ class Category(models.Model):
     _number_of_subcategories = models.PositiveIntegerField(
         default=0,
     )
+
+    @property
+    def vector(self):
+        swcs = StatisticalWordCategory.objects.filter(category=self).all()
+        word_dict_len = Word.objects.last()
+        word_dict_len = word_dict_len.pk
+        vector = [0] * word_dict_len
+        for swc in swcs:
+            vector[swc.word.pk] = swc.docs_frequency_mean
+        return vector
 
     @property
     def number_of_subcategories(self):
@@ -236,36 +276,6 @@ def stopword2db(reference: Reference, word: Word) -> StopWord:
     return stopword
 
 
-class StatisticalWordCategory(models.Model):
-    word = models.ForeignKey(
-        to='Word',
-        on_delete=models.CASCADE,
-        null=False,
-        blank=False,
-    )
-    category = models.ForeignKey(
-        to='Category',
-        on_delete=models.CASCADE,
-        null=False,
-        blank=False,
-    )
-    all_docs_frequency = models.JSONField(
-        null=True,
-        blank=True,
-    )
-    docs_frequency_mean = models.FloatField(
-        null=True,
-        blank=True,
-    )
-    docs_frequency_stdev = models.FloatField(
-        null=True,
-        blank=True,
-    )
-
-    def __str__(self):
-        return str(self.pk)
-
-
 def statistical_word_category2db(word: Word, category: Category, docs_frequency: int = None) -> StatisticalWordCategory:
     swc_key = {'type': 'StatisticalWordCategory', 'word': word, 'category': category}
     swc = BASE_DICT.get_item(swc_key)
@@ -328,6 +338,25 @@ class News(models.Model):
         blank=True,
         null=True,
     )
+
+    _vector = models.JSONField(
+        null=True,
+        blank=True,
+    )
+
+    @property
+    def vector(self):
+        word_dict_len = Word.objects.last()
+        word_dict_len = word_dict_len.pk
+        if len(self._vector) == word_dict_len:
+            return self._vector
+
+        self.vector = self._vector + [0] * (word_dict_len - len(self._vector))
+        return self._vector
+
+    @vector.setter
+    def vector(self, value):
+        self._vector = value
 
     def __str__(self):
         return str(self.string)
@@ -395,11 +424,16 @@ def news2db(content_string: str, titr_string: str = None, category: Category = N
 
     doc = WORD_TOKENIZER(news.string)
     keywords = KEYWORDS_EXTRACTOR(document=doc, stopword=1, sents=1)
+    news_vector = [0]
     for keyword in keywords:
         word = word2db(keyword['word'])
         keyword2db(news=news, word=word, frequency=keyword['frequency'])
+        if len(news_vector) < word.pk:
+            news_vector = news_vector + [0] * (word.pk - len(news_vector) + 1)
+            news_vector[word.pk] = keyword['frequency']
         if category is not None:
             statistical_word_category2db(word, category, docs_frequency=keyword['frequency'])
+    news.vector = news_vector
     news.save()
     return news
 
@@ -458,15 +492,9 @@ def categories_list(reference: Reference = None, vector: bool = False):
             cats_list = BASE_DICT.get_item(cats_key)
             if cats_list is None:
                 cats = Category.objects.all()
-                vector_len = Word.objects.last()
-                vector_len = vector_len.pk
                 cats_list = {}
                 for cat in cats:
-                    vector = [0] * (vector_len + 1)
-                    cat_statistical = StatisticalWordCategory.objects.filter(category=cat).all()
-                    for cs in cat_statistical:
-                        vector[int(cs.word.pk)] = cs.docs_frequency_mean
-                    cats_list[cat.pk] = vector
+                    cats_list[cat.pk] = cat.vector
                 BASE_DICT.set_item(cats_key, cats_list)
         return cats_list
     else:
@@ -486,14 +514,8 @@ def categories_list(reference: Reference = None, vector: bool = False):
             cats_list = BASE_DICT.get_item(cats_key)
             if cats_list is None:
                 cats = Category.objects.filter(reference=reference).all()
-                vector_len = Word.objects.last()
-                vector_len = vector_len.pk
                 cats_list = {}
                 for cat in cats:
-                    vector = [0] * (vector_len + 1)
-                    cat_statistical = StatisticalWordCategory.objects.filter(category=cat).all()
-                    for cs in cat_statistical:
-                        vector[int(cs.word.pk)] = cs.docs_frequency_mean
-                    cats_list[cat.pk] = vector
+                    cats_list[cat.pk] = cat.vector
                 BASE_DICT.set_item(cats_key, cats_list)
         return cats_list
