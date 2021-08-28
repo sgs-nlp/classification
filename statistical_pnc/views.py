@@ -5,16 +5,17 @@ import redis
 import pickle
 from pathlib import Path
 
-from .controller import news_classification, prerequisites
-from .models import reference2db
+from .controller import news_classification, prerequisites, NewsClassification
+from .models import reference2db, categories_list
 from .dataset2database import add2database
 
 
 def index(request: HttpRequest):
+    categories_list_name = categories_list()
     return render(
         request,
         'ai_index.html',
-        context={},
+        context={'categories_list_name': categories_list_name},
     )
 
 
@@ -43,26 +44,33 @@ def sample(request: HttpRequest):
 
 def classification(request: HttpRequest):
     response = {}
-    # content = request.POST['content_text_for_classify']
-    # titr = request.POST['titr_text_for_classify']
-    #
-    # if content is None or len(content) == 0:
-    #     response['TEXT'] = False
-    #     response['ERROR_MESSAGE'] = 'Please enter the news you want to categorize in this section.'
-    #     return JsonResponse(response)
-    #
-    # response['TEXT'] = True
-    # reference = reference2db('HamshahriData.xlsx')
+    content = request.POST['content_text_for_classify']
+    titr = request.POST['titr_text_for_classify']
+
+    if content is None or len(content) == 0:
+        response['TEXT'] = False
+        response['ERROR_MESSAGE'] = 'Please enter the news you want to categorize in this section.'
+        return JsonResponse(response)
+
+    response['TEXT'] = True
+    cn = NewsClassification()
+    category = cn.classification(content, titr)
     # category = news_classification(reference=reference, content=content, titr=titr)
-    # response['CATEGORY_TITLE'] = category.title
+    response['CATEGORY_TITLE'] = category.title
+    response['CATEGORY_PK'] = category.pk
+    response['NEWS_PK'] = cn.news_for_classification.pk
     return JsonResponse(response)
+
+
+def feedback(request: HttpRequest):
+    print(request.POST['category_radios'])
+    return JsonResponse({})
 
 
 def preprocessing(request: HttpRequest):
     prerequisites()
     from .controller import NewsClassification
     nc = NewsClassification()
-    nc.print_d()
     response = {
         'RESULT': True,
         'word2vec_word_embeding__svm__precision_score': 1,
