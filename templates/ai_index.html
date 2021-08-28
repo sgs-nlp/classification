@@ -422,6 +422,52 @@
                                 <button type="submit" class="btn btn-primary">Classification</button>
                             </div>
                         </form>
+                        <div class="col-md-4">
+                            <!-- Modal Content -->
+                            <div class="modal fade" id="modal-default" tabindex="-1" role="dialog"
+                                 aria-labelledby="modal-default" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h2 class="h6 modal-title mb-0" id="modal-title-default">Feedback</h2>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            If the category provided is incorrect, you can select the category
+                                            you want to help better train the system. Thank you in advance for
+                                            your cooperation.
+                                            <form class="" method="post"
+                                                  id="news_for_test_feedback_form">
+                                                <fieldset>
+                                                    {% for cat_key, cat_val in categories_list_name.items %}
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio"
+                                                                   name="category_radios"
+                                                                   id="category_radios{{ cat_key }}"
+                                                                   value="{{ cat_key }}">
+                                                            <label class="form-check-label"
+                                                                   for="category_radios{{ cat_key }}">
+                                                                {{ cat_val }}
+                                                            </label>
+                                                        </div>
+                                                    {% endfor %}
+                                                    <!-- End of Radio -->
+                                                </fieldset>
+                                                <hr>
+                                                <button type="submit" class="btn btn-primary">Send
+                                                </button>
+                                                <button type="button" class="btn btn-primary text-danger ml-auto"
+                                                        data-dismiss="modal" style="float: right">Close
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End of Modal Content -->
+                        </div>
                     </div>
                     <!-- End of Contact Card -->
                 </div>
