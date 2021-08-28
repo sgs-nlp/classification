@@ -56,20 +56,24 @@ def news2vector(news: News) -> list:
 
 class NewsClassification:
     def __init__(self):
-        data_len = News.objects.last()
-        data_len = data_len.pk
+        data = News.objects.filter(category__isnull=False).all()
+        data_len = len(data) - 1
         data_test_len = round(data_len / 6)
         test_ary_list = sample(range(1, data_len), data_test_len)
-        data = News.objects.filter(category__isnull=False).all()
         _data = []
         for i in test_ary_list:
-            _data.append(data.get(pk=i))
+            _data.append(data[i])
         self.data_for_test = _data
+        self.categories_list = None
+        self.categories_list_pk = None
+
+    def _clist(self):
         self.categories_list = categories_list(vector=True)
         self.categories_list_pk = self.categories_list.keys()
 
     def _classification(self, news):
-        news_vector = news2vector(news)
+        news_vector = news.vector
+        self._clist()
         cats_list = self.categories_list
         minimum_value = 100
         minimum_index = ''
@@ -79,13 +83,18 @@ class NewsClassification:
                 minimum_value = dist
                 minimum_index = cat_key
         near_category = Category.objects.get(pk=minimum_index)
+        news.category = near_category
+        news.save()
         return near_category
+    news_for_classification = None
+
 
     def classification(self, content: str, titr: str = None) -> Category:
         news = news2db(
             content_string=content,
             titr_string=titr,
         )
+        self.news_for_classification = news
         return self._classification(news)
 
     def performance(self):
@@ -101,6 +110,9 @@ class NewsClassification:
         _recall = recall(false_negative, true_positive)
         _accuracy = accuracy(false_negative, true_positive, true_negative, false_positive)
         return _precision, _recall, _accuracy
+
+    def feedback(self):
+        pass
 
     def print_d(self):
         print(self.performance())
