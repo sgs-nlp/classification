@@ -386,9 +386,8 @@
             </div>
             <div class="row align-items-center justify-content-center">
                 <div class="col-md-12 col-lg-12 mb-5">
-
                     <!-- Contact Card -->
-                    <div class="card bg-primary shadow-soft border-light p-2 p-md-3 p-lg-5">
+                    <div class="card bg-primary shadow-soft border-light p-2 p-md-3 p-lg-5" id="uncategorized_category">
                         <div class="card-header pb-0 text-center">
                             <h2 class="h1 mb-3">Uncategorized text category.</h2>
                             <p class="mb-5 lead">
@@ -702,13 +701,35 @@
                             $('#category_title').remove()
                             $('#news_for_test_performance_error_message').remove()
                             $('#category_title_empty').remove()
-                            $('#content_news_for_test_performance_textarea').after('<div class="alert alert-info" id="category_title"> Category title:  ' + response.CATEGORY_TITLE + '</div>')
+                            $('#content_news_for_test_performance_textarea').after('<div class="alert alert-info" id="category_title"> Category title:  ' + response.CATEGORY_TITLE + '<div class="alert-warning">Click on <a  data-toggle="modal" data-target="#modal-default"><u>this link</u></a> if the category is incorrect.</div></div>')
+                            $('#category_radios' + response.CATEGORY_PK).prop('checked', true);
                         } else {
                             $('#category_title').remove()
                             $('#news_for_test_performance_error_message').remove()
                             $('#category_title_empty').remove()
                             $('#content_news_for_test_performance_textarea').after('<div class="alert alert-danger" id = "news_for_test_performance_error_message">' + response.ERROR_MESSAGE + '</div>')
                         }
+                    },
+                    // on error
+                    error: function (response) {
+                        // alert the error if any error occured
+                        alert(response.responseJSON.errors);
+                        console.log(response.responseJSON.errors)
+                    }
+                });
+                return false;
+            });
+            $('#news_for_test_feedback_form').submit(function () {
+                // create an AJAX call
+                $.ajax({
+                    data: $(this).serialize(), // get the form data
+                    type: $(this).attr('method'), // GET or POST
+                    url: "{% url 'statistical_pnc:feedback' %}",
+                    // on success
+                    success: function (response) {
+                        $('#uncategorized_category').after('<div class="alert alert-info" id="category_title_empty">Thank you for your cooperation.</div>');
+                        $('#modal-default').removeClass('show');
+                         $('.modal-backdrop.fade.show').removeClass('show');
                     },
                     // on error
                     error: function (response) {
