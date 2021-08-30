@@ -453,8 +453,8 @@
                                                         </div>
                                                     {% endfor %}
                                                     <!-- End of Radio -->
-                                                </fieldset>
-                                                <hr>
+                                                </fieldset >
+                                                <hr id="for_asign_news_pk">
                                                 <button type="submit" class="btn btn-primary">Send
                                                 </button>
                                                 <button type="button" class="btn btn-primary text-danger ml-auto"
@@ -703,6 +703,7 @@
                             $('#category_title_empty').remove()
                             $('#content_news_for_test_performance_textarea').after('<div class="alert alert-info" id="category_title"> Category title:  ' + response.CATEGORY_TITLE + '<div class="alert-warning">Click on <a  data-toggle="modal" data-target="#modal-default"><u>this link</u></a> if the category is incorrect.</div></div>')
                             $('#category_radios' + response.CATEGORY_PK).prop('checked', true);
+                            $('#for_asign_news_pk').after('<input type="text" name="news_pk" value="'+response.NEWS_PK+'" hidden>')
                         } else {
                             $('#category_title').remove()
                             $('#news_for_test_performance_error_message').remove()
