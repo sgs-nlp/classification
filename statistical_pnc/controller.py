@@ -13,8 +13,8 @@ def prerequisites():
     logging.info('Started storing dataset in the database.')
     from extra_settings.models import File
     file_name = 'HamshahriData.xlsx'
-    from_which_row = 1
-    up_to_which_row = 50
+    # from_which_row = 1
+    # up_to_which_row = 50
     file = File(file_name)
     if not file.is_complate(from_which_row, up_to_which_row):
         file.save(file_path=Path('staticfiles', file_name))
