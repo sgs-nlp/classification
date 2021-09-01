@@ -15,7 +15,7 @@ def prerequisites():
     from extra_settings.models import File
     file_name = 'HamshahriData.xlsx'
     from_which_row = 1
-    up_to_which_row = 3768
+    up_to_which_row = 3700
     file = File(file_name)
     if not file.is_complate(from_which_row, up_to_which_row):
         file.save(file_path=Path('staticfiles', file_name))
@@ -24,6 +24,7 @@ def prerequisites():
         add2database(file_name=file_name, part_of_data=res, part_of_data_header=header)
         file.save(complate=True, from_which_row=from_which_row, up_to_which_row=up_to_which_row)
     logging.info('Data storage in the database is complete.')
+
 
 class NewsClassification:
     def __init__(self, minimum_number_of_sample_repetitions=0.3):
