@@ -304,6 +304,8 @@ def symbol2db(reference: Reference, word: Word) -> Symbol:
 
 class StopWord(models.Model):
     reference = models.ForeignKey(
+        null=True,
+        blank=True,
         to='Reference',
         on_delete=models.CASCADE,
     )
@@ -316,7 +318,7 @@ class StopWord(models.Model):
         return str(self.word)
 
 
-def stopword2db(reference: Reference, word: Word) -> StopWord:
+def stopword2db(word: Word, reference: Reference = None) -> StopWord:
     stpwrd_key = {'type': 'StopWord', 'reference': reference, 'word': word}
     stopword = BASE_DICT.get_item(stpwrd_key)
     if stopword is None:
@@ -465,7 +467,14 @@ def keyword2db(news: News, word: Word, frequency: float) -> Keyword:
 
 def news2db(content_string: str, titr_string: str = None, category: Category = None,
             reference: Reference = None) -> News:
-    string = NORMILIZER(titr_string + content_string)
+    if titr_string is not None and content_string is not None:
+        string = NORMILIZER(str(titr_string) + str(content_string))
+    elif titr_string is None and content_string is not None:
+        string = NORMILIZER(str(content_string))
+    elif titr_string is not None and content_string is None:
+        string = NORMILIZER(str(titr_string))
+    else:
+        string = NORMILIZER('Empty String')
     nws_key = {'type': 'News', 'string': string}
     nws = BASE_DICT.get_item(nws_key)
     if nws is None:
@@ -558,6 +567,12 @@ def categories_list(reference: Reference = None, vector: bool = False):
                 for cat in cats:
                     cats_list[cat.pk] = cat.title
                 BASE_DICT.set_item(cats_key, cats_list)
+            elif len(cats_list) == 0:
+                cats = Category.objects.all()
+                cats_list = {}
+                for cat in cats:
+                    cats_list[cat.pk] = cat.title
+                BASE_DICT.set_item(cats_key, cats_list)
         else:
             vector_len = Word.objects.last()
             vector_len = int(vector_len.pk)
@@ -569,6 +584,12 @@ def categories_list(reference: Reference = None, vector: bool = False):
                 for cat in cats:
                     cats_list[cat.pk] = cat.vector
                 BASE_DICT.set_item(cats_key, cats_list)
+            elif len(cats_list) == 0:
+                cats = Category.objects.all()
+                cats_list = {}
+                for cat in cats:
+                    cats_list[cat.pk] = cat.title
+                BASE_DICT.set_item(cats_key, cats_list)
         return cats_list
     else:
         if vector is False:
@@ -576,6 +597,12 @@ def categories_list(reference: Reference = None, vector: bool = False):
             cats_list = BASE_DICT.get_item(cats_key)
             if cats_list is None:
                 cats = Category.objects.filter(reference=reference).all()
+                cats_list = {}
+                for cat in cats:
+                    cats_list[cat.pk] = cat.title
+                BASE_DICT.set_item(cats_key, cats_list)
+            elif len(cats_list) == 0:
+                cats = Category.objects.all()
                 cats_list = {}
                 for cat in cats:
                     cats_list[cat.pk] = cat.title
@@ -590,5 +617,11 @@ def categories_list(reference: Reference = None, vector: bool = False):
                 cats_list = {}
                 for cat in cats:
                     cats_list[cat.pk] = cat.vector
+                BASE_DICT.set_item(cats_key, cats_list)
+            elif len(cats_list) == 0:
+                cats = Category.objects.all()
+                cats_list = {}
+                for cat in cats:
+                    cats_list[cat.pk] = cat.title
                 BASE_DICT.set_item(cats_key, cats_list)
         return cats_list

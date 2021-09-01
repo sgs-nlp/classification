@@ -20,7 +20,7 @@ class FileInfo(models.Model):
         choices=FILE_TYPE_CHOICES,
     )
     fname = models.CharField(
-        max_length=128,
+        max_length=512,
         null=False,
         blank=False,
     )

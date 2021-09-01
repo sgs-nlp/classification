@@ -52,7 +52,7 @@ def add2database(corpus_file_path: str = None, file_name: str = None, symbols_li
         logging.info('Started storing Persian stopwords in the database.')
         for string in stopwords_list:
             stpwrd_wrd = word2db(string=string)
-            stopword2db(reference=reference, word=stpwrd_wrd)
+            stopword2db(word=stpwrd_wrd, reference=reference)
         reference.load_stopwords_list = True
         reference.save()
         logging.info('Persian stopwords storage in the database is complete.')
@@ -114,4 +114,18 @@ def add2database(corpus_file_path: str = None, file_name: str = None, symbols_li
                 )
                 logging.info(f'The number {row_number} news item storage in the database is complete.')
             reference.save()
+
+    len_duplicate_words = len(News.words.through.objects.all())
+    words = Word.objects.all()
+    for wrd in words:
+        num_wrd = len(duplicate_words.filter(word_id=wrd.pk).all())
+        wrd._number_of_repetitions = num_wrd
+        wrd.save()
+    words = Word.objects.all().order_by('_number_of_repetitions')
+    for wrd in words:
+        if wrd.number_of_repetitions < 10:
+            continue
+        threshold = wrd.number_of_repetitions / len_duplicate_words
+        if 0.0009 < threshold:
+            stopword2db(wrd)
     return reference

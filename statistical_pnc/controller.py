@@ -6,15 +6,16 @@ from random import sample
 from nvd.converter import bag_of_word2one_hot
 
 from .dataset2database import add2database
-from .models import Category, news2db, News, Word, Keyword, categories_list, Reference, StatisticalWordCategory
+from .models import Category, news2db, News, Word, Keyword, categories_list, Reference, StatisticalWordCategory, \
+    stopword2db
 
 
 def prerequisites():
     logging.info('Started storing dataset in the database.')
     from extra_settings.models import File
     file_name = 'HamshahriData.xlsx'
-    # from_which_row = 1
-    # up_to_which_row = 50
+    from_which_row = 1
+    up_to_which_row = 3768
     file = File(file_name)
     if not file.is_complate(from_which_row, up_to_which_row):
         file.save(file_path=Path('staticfiles', file_name))
@@ -24,10 +25,9 @@ def prerequisites():
         file.save(complate=True, from_which_row=from_which_row, up_to_which_row=up_to_which_row)
     logging.info('Data storage in the database is complete.')
 
-
 class NewsClassification:
-    def __init__(self):
-        pass
+    def __init__(self, minimum_number_of_sample_repetitions=0.3):
+        self.minimum_number_of_sample_repetitions = minimum_number_of_sample_repetitions
 
     categories_list = None
     categories_list_pk = None
@@ -76,17 +76,25 @@ class NewsClassification:
         top_cat = None
         for cat in categories:
             c_swcs = sswcs.filter(docs_frequency_stdev__gt=0).filter(category=cat).all()
+
+            # minimum_number_of_sample_repetitions_per_category
+            m_per_c = self.minimum_number_of_sample_repetitions * len(News.objects.filter(category=cat).all())
+
             cat_score = 0
             w_c = 1
             for swc in c_swcs:
-                if swc.word_id <= len_news:
-                    w_c += 1
-                    dist = self._dist(
-                        swc.docs_frequency_mean,
-                        news[swc.word_id],
-                        swc.docs_frequency_stdev
-                    )
-                    cat_score += dist
+                m_per_c_swc = len(swc.all_docs_frequency)
+                if m_per_c_swc >= m_per_c:
+                    print(m_per_c_swc, m_per_c)
+                    if swc.word_id <= len_news:
+                        w_c += 1
+                        dist = self._dist(
+                            swc.docs_frequency_mean,
+                            news[swc.word_id],
+                            swc.docs_frequency_stdev
+                        )
+                        print(cat.title, swc.word, dist)
+                        cat_score += dist
             if cat_score > maximum:
                 maximum = cat_score
                 top_cat = cat
