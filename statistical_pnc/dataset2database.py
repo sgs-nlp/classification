@@ -3,7 +3,7 @@ import logging
 import os
 import openpyxl
 
-from .models import news2db, reference2db, symbol2db, stopword2db, categories_list, word2db, category2db
+from .models import news2db, reference2db, symbol2db, stopword2db, categories_list, word2db, category2db, News,Word
 
 
 def add2database(corpus_file_path: str = None, file_name: str = None, symbols_list_file_path: str = None,
@@ -115,13 +115,16 @@ def add2database(corpus_file_path: str = None, file_name: str = None, symbols_li
                 logging.info(f'The number {row_number} news item storage in the database is complete.')
             reference.save()
 
-    len_duplicate_words = len(News.words.through.objects.all())
+    duplicate_words = News.words.through.objects.all()
+    len_duplicate_words = len(duplicate_words)
     words = Word.objects.all()
+    print('$$$$$$$$$$$$$$$$$$$$$$$$')
     for wrd in words:
         num_wrd = len(duplicate_words.filter(word_id=wrd.pk).all())
         wrd._number_of_repetitions = num_wrd
         wrd.save()
     words = Word.objects.all().order_by('_number_of_repetitions')
+    print('RRRRRRRRRRRRRRRR')
     for wrd in words:
         if wrd.number_of_repetitions < 10:
             continue

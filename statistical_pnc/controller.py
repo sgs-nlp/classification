@@ -6,16 +6,16 @@ from random import sample
 from nvd.converter import bag_of_word2one_hot
 
 from .dataset2database import add2database
-from .models import Category, news2db, News, Word, Keyword, categories_list, Reference, StatisticalWordCategory, \
-    stopword2db
+from .models import *
+from django.conf import settings
 
 
 def prerequisites():
     logging.info('Started storing dataset in the database.')
     from extra_settings.models import File
     file_name = 'HamshahriData.xlsx'
-    from_which_row = 1
-    up_to_which_row = 3700
+    from_which_row = 3704
+    up_to_which_row = 5000
     file = File(file_name)
     if not file.is_complate(from_which_row, up_to_which_row):
         file.save(file_path=Path('staticfiles', file_name))
@@ -69,6 +69,7 @@ class NewsClassification:
         if self.news_for_classification.category is not None:
             return self.news_for_classification.category
         news = self.news_for_classification.vector
+        news_word = self.news_for_classification.words
         len_news = len(news)
         sswcs = StatisticalWordCategory.objects.all()
         categories = Category.objects.all()
@@ -83,19 +84,34 @@ class NewsClassification:
 
             cat_score = 0
             w_c = 1
+            kwords = []
             for swc in c_swcs:
-                m_per_c_swc = len(swc.all_docs_frequency)
-                if m_per_c_swc >= m_per_c:
-                    print(m_per_c_swc, m_per_c)
-                    if swc.word_id <= len_news:
-                        w_c += 1
-                        dist = self._dist(
-                            swc.docs_frequency_mean,
-                            news[swc.word_id],
-                            swc.docs_frequency_stdev
-                        )
-                        print(cat.title, swc.word, dist)
-                        cat_score += dist
+                true_word = news_word.filter(pk=swc.word_id).first()
+                if true_word is not None:
+                    if true_word.string == 'گروه' or true_word.string == 'شرایط' or true_word.string == 'آغاز':
+                        stopword2db(word=true_word)
+                    stp = StopWord.objects.filter(word_id=swc.word_id).first()
+                    if stp is None:
+                        tag = settings.TAGGER.tag([true_word.string])
+                        if tag[0][1] == 'V' or tag[0][1] == 'ADV' or tag[0][1] == 'PR' or tag[0][1] == 'PRO' \
+                                or tag[0][1] == 'AJ' or tag[0][1] == 'NUM' or tag[0][1] == 'AJe' or tag[0][1] == 'RES':
+                            continue
+
+                        m_per_c_swc = len(swc.all_docs_frequency)
+                        if m_per_c_swc >= m_per_c:
+                            # print(m_per_c_swc, m_per_c)
+                            if swc.word_id <= len_news:
+                                w_c += 1
+                                dist = self._dist(
+                                    swc.docs_frequency_mean,
+                                    news[swc.word_id],
+                                    swc.docs_frequency_stdev
+                                )
+                                if dist == 1:
+                                    kwords.append(tag)
+                                # print(cat.title, swc.word, dist)
+                                cat_score += dist
+            print(cat_score, cat, kwords)
             if cat_score > maximum:
                 maximum = cat_score
                 top_cat = cat

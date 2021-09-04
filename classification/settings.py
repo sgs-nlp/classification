@@ -6,6 +6,7 @@ from pathlib import Path
 import os
 import logging
 from nvd.base_dict import BaseDict
+from hazm import POSTagger
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -155,3 +156,7 @@ BASE_DICT = BaseDict()
 # caches
 # REDIS_HOST = 'localhost'
 # REDIS_PORT = 6379
+
+# hazm tagger
+
+TAGGER = POSTagger(model='/home/ya_hasan_mojtaba/my_projects/resources/hazm/resources-0.5/postagger.model')
