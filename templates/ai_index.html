@@ -1,705 +1,459 @@
 <!--
-
 =========================================================
 * Neumorphism UI - v1.0.0
 * Manipulated by nvd
 =========================================================
-
 -->
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <!-- Primary Meta Tags -->
-    <title>PersianNLP</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!--  Social tags -->
-    <meta name="keywords"
-          content="Persian Language, Persian Pre-Processing, Persian Text, Persian NaturalLanguageProcessing, NLP, Neural Networks, Deep Learning">
-
-    <!-- Open Graph data -->
-    <meta property="fb:app_id" content="214738555737136">
-    <meta property="og:title" content="Neumorphism UI by Themesberg"/>
-    <meta property="og:type" content="article"/>
-    <meta property="og:url" content="https://demo.themesberg.com/neumorphism-ui/"/>
-    <meta property="og:image"
-          content="https://themesberg.s3.us-east-2.amazonaws.com/public/products/neumorphism-ui/neumorphism-thumbnail.jpg"/>
-    <meta property="og:description"
-          content="Start developing neumorphic web applications and pages using Neumorphism UI. It features over 100 individual components and 5 example pages."/>
-    <meta property="og:site_name" content="Themesberg"/>
-
-    <!-- Favicon -->
-    {#    <link rel="apple-touch-icon" sizes="120x120" href="{% static './assets/img/favicon/apple-touch-icon.png' %}">#}
-    <link rel="apple-touch-icon" sizes="120x120" href="{% static './assets/img/favicon/nvd.png' %}">
-    {#    <link rel="icon" type="image/png" sizes="32x32" href="{% static './assets/img/favicon/favicon-32x32.png' %}">#}
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static './assets/img/favicon/nvd.png' %}">
-    {#    <link rel="icon" type="image/png" sizes="16x16" href="{% static './assets/img/favicon/favicon-16x16.png' %}">#}
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static './assets/img/favicon/nvd.png' %}">
-    {#    <link rel="manifest" href="{% static './assets/img/favicon/site.webmanifest' %}">#}
-    <link rel="manifest" href="{% static './assets/img/favicon/site.webmanifest' %}">
-    {#    <link rel="mask-icon" href="{% static './assets/img/favicon/safari-pinned-tab.svg' %}" color="#ffffff">#}
-    <link rel="mask-icon" href="{% static './assets/img/favicon/safari-pinned-tab.svg' %}" color="#ffffff">
-    {#    <meta name="msapplication-TileColor" content="#ffffff">#}
-    <meta name="msapplication-TileColor" content="#ffffff">
-    {#    <meta name="theme-color" content="#ffffff">#}
-    <meta name="theme-color" content="#ffffff">
-
-
-    <!-- Fontawesome -->
-    <link type="text/css" href="{% static './vendor/@fortawesome/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
-
-    <!-- Pixel CSS -->
-    <link type="text/css" href="{% static './css/neumorphism.css' %}" rel="stylesheet">
-
-    <!-- NOTICE: You can use the _analytics.html partial to include production code specific code & trackers -->
-
-</head>
-
-<body>
-<header class="header-global">
-    <nav id="navbar-main" aria-label="Primary navigation"
-         class="navbar navbar-main navbar-expand-lg navbar-theme-primary headroom navbar-light navbar-transparent navbar-theme-primary">
-        <div class="container position-relative">
-            <div class="navbar-collapse collapse" id="navbar_global">
-                <div class="navbar-collapse-header">
-                </div>
-                <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
-                    <li><a class="dropdown-item" href="#Performance">Performance</a></li>
-                    <li><a class="dropdown-item" href="#Test">Test</a></li>
-                    <li><a class="dropdown-item" href="#">API</a></li>
-                    <li><a class="dropdown-item" href="#">About me</a></li>
-                    <li><a class="dropdown-item" href="#ContactMe">Contact me</a></li>
-                </ul>
+{% extends 'base.html' %}
+{% block title %}|Classification{% endblock %}
+{% block header_for_application %}
+    <li><a class="dropdown-item" href="#Performance">Performance</a></li>
+    <li><a class="dropdown-item" href="#Test">Test</a></li>
+    <li><a class="dropdown-item" href="#">API</a></li>
+{% endblock %}
+{% block application_title %}Classification Of Persian Documents{% endblock %}
+{% block application_content %}In this research, we try to classification Persian documents using machine learning tools
+    - artificial neural networks.{% endblock %}
+{% block application_download_href %}#{% endblock %}
+{% block performance_body %}
+    <div class="row justify-content-center">
+        <div class="col-lg-12">
+            <!-- precesion -->
+            <div class="mb-4">
+                <span class="h5">Check system performance based on precision-score</span>
             </div>
+            <div class="mb-5">
+                <table class="table shadow-soft rounded">
+                    <tr>
+                        <th class="border-0" scope="col" id="classifier">Classifier/Embedding</th>
+                        <th class="border-0" scope="col" id="tfidf">one_hot</th>
+                        <th class="border-0" scope="col" id="doc2vec">doc2vec</th>
+                    </tr>
+                    <tr>
+                        <th scope="row" id="lr">Logistic Regression</th>
+                        <th scope="row" id="one_hot_word_embeding__lr__precision_score_th"
+                            headers="lr tfidf">
+                            <button class="btn btn-primary" type="button"
+                                    id="one_hot_word_embeding__lr__precision_score_loading_btn"
+                                    disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            </button>
+                            {#                                    {{ one_hot_word_embeding__lr__precision_score }}%#}
+                        </th>
+                        <th scope="row" id="word2vec_word_embeding__lr__precision_score_th"
+                            headers="lr doc2vec">
+                            <button class="btn btn-primary" type="button"
+                                    id="word2vec_word_embeding__lr__precision_score_loading_btn" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            </button>
+                            {#                                    {{ word2vec_word_embeding__lr__precision_score }}%#}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th scope="row" id="lr">Multi Layer Perseptron</th>
+                        <th scope="row" id="one_hot_word_embeding__mlp__precision_score_th"
+                            headers="lr tfidf">
+                            <button class="btn btn-primary" type="button"
+                                    id="one_hot_word_embeding__mlp__precision_score_loading_btn"
+                                    disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            </button>
+                            {#                                    {{ one_hot_word_embeding__mlp__precision_score }}%#}
+                        </th>
+                        <th scope="row" id="word2vec_word_embeding__mlp__precision_score_th"
+                            headers="lr doc2vec">
+                            <button class="btn btn-primary" type="button"
+                                    id="word2vec_word_embeding__mlp__precision_score_loading_btn" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            </button>
+                            {#                                    {{ word2vec_word_embeding__mlp__precision_score }}%#}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th scope="row" id="lr">Support Vector Machine</th>
+                        <th scope="row" id="one_hot_word_embeding__svm__precision_score_th"
+                            headers="lr tfidf">
+                            <button class="btn btn-primary" type="button"
+                                    id="one_hot_word_embeding__svm__precision_score_loading_btn"
+                                    disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            </button>
+                            {#                                    {{ one_hot_word_embeding__svm__precision_score }}%#}
+                        </th>
+                        <th scope="row" id="word2vec_word_embeding__svm__precision_score_th"
+                            headers="lr doc2vec">
+                            <button class="btn btn-primary" type="button"
+                                    id="word2vec_word_embeding__svm__precision_score_loading_btn" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            </button>
+                            {#                                    {{ word2vec_word_embeding__svm__precision_score }}%#}
+                        </th>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- recall -->
+            <div class="mb-4">
+                <span class="h5">Check system performance based on recall-score</span>
+            </div>
+            <div class="mb-5">
+                <table class="table shadow-soft rounded">
+                    <tr>
+                        <th class="border-0" scope="col" id="classifier">Classifier/Embedding</th>
+                        <th class="border-0" scope="col" id="tfidf">one_hot</th>
+                        <th class="border-0" scope="col" id="doc2vec">doc2vec</th>
+                    </tr>
+                    <tr>
+                        <th scope="row" id="lr">Logistic Regression</th>
+                        <th scope="row" id="one_hot_word_embeding__lr__recall_score_th"
+                            headers="lr tfidf">
+                            <button class="btn btn-primary" type="button"
+                                    id="one_hot_word_embeding__lr__recall_score_loading_btn" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            </button>
+                            {#                                    {{ one_hot_word_embeding__lr__recall_score }}%#}
+                        </th>
+                        <th scope="row" id="word2vec_word_embeding__lr__recall_score_th"
+                            headers="lr doc2vec">
+                            <button class="btn btn-primary" type="button"
+                                    id="word2vec_word_embeding__lr__recall_score_loading_btn" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            </button>
+                            {#                                    {{ word2vec_word_embeding__lr__recall_score }}%#}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th scope="row" id="lr">Multi Layer Perseptron</th>
+                        <th scope="row" id="one_hot_word_embeding__mlp__recall_score_th"
+                            headers="lr tfidf">
+                            <button class="btn btn-primary" type="button"
+                                    id="one_hot_word_embeding__mlp__recall_score_loading_btn" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            </button>
+                            {#                                    {{ one_hot_word_embeding__mlp__recall_score }}%#}
+                        </th>
+                        <th scope="row" id="word2vec_word_embeding__mlp__recall_score_th"
+                            headers="lr doc2vec">
+                            <button class="btn btn-primary" type="button"
+                                    id="word2vec_word_embeding__mlp__recall_score_loading_btn" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            </button>
+                            {#                                    {{ word2vec_word_embeding__mlp__recall_score }}%#}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th scope="row" id="lr">Support Vector Machine</th>
+                        <th scope="row" id="one_hot_word_embeding__svm__recall_score_th"
+                            headers="lr tfidf">
+                            <button class="btn btn-primary" type="button"
+                                    id="one_hot_word_embeding__svm__recall_score_loading_btn" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            </button>
+                            {#                                    {{ one_hot_word_embeding__svm__recall_score }}%#}
+                        </th>
+                        <th scope="row" id="word2vec_word_embeding__svm__recall_score_th"
+                            headers="lr doc2vec">
+                            <button class="btn btn-primary" type="button"
+                                    id="word2vec_word_embeding__svm__recall_score_loading_btn" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            </button>
+                            {#                                    {{ word2vec_word_embeding__svm__recall_score }}%#}
+                        </th>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- f1 -->
+            <div class="mb-4">
+                <span class="h5">Check system performance based on f1-score</span>
+            </div>
+            <div class="mb-5">
+                <table class="table shadow-soft rounded">
+                    <tr>
+                        <th class="border-0" scope="col" id="classifier">Classifier/Embedding</th>
+                        <th class="border-0" scope="col" id="tfidf">one_hot</th>
+                        <th class="border-0" scope="col" id="doc2vec">doc2vec</th>
+                    </tr>
+                    <tr>
+                        <th scope="row" id="lr">Logistic Regression</th>
+                        <th scope="row" id="one_hot_word_embeding__lr__f1_score_th"
+                            headers="lr tfidf">
+                            <button class="btn btn-primary" type="button"
+                                    id="one_hot_word_embeding__lr__f1_score_loading_btn"
+                                    disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            </button>
+                            {#                                    {{ one_hot_word_embeding__lr__f1_score }}%#}
+                        </th>
+                        <th scope="row" id="word2vec_word_embeding__lr__f1_score_th"
+                            headers="lr doc2vec">
+                            <button class="btn btn-primary" type="button"
+                                    id="word2vec_word_embeding__lr__f1_score_loading_btn" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            </button>
+                            {#                                    {{ word2vec_word_embeding__lr__f1_score }}%#}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th scope="row" id="lr">Multi Layer Perseptron</th>
+                        <th scope="row" id="one_hot_word_embeding__mlp__f1_score_th"
+                            headers="lr tfidf">
+                            <button class="btn btn-primary" type="button"
+                                    id="one_hot_word_embeding__mlp__f1_score_loading_btn"
+                                    disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            </button>
+                            {#                                    {{ one_hot_word_embeding__mlp__f1_score }}%#}
+                        </th>
+                        <th scope="row" id="word2vec_word_embeding__mlp__f1_score_th"
+                            headers="lr doc2vec">
+                            <button class="btn btn-primary" type="button"
+                                    id="word2vec_word_embeding__mlp__f1_score_loading_btn" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            </button>
+                            {#                                    {{ word2vec_word_embeding__mlp__f1_score }}%#}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th scope="row" id="lr">Support Vector Machine</th>
+                        <th scope="row" id="one_hot_word_embeding__svm__f1_score_th"
+                            headers="lr tfidf">
+                            <button class="btn btn-primary" type="button"
+                                    id="one_hot_word_embeding__svm__f1_score_loading_btn"
+                                    disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            </button>
+                            {#                                    {{ one_hot_word_embeding__svm__f1_score }}%#}
+                        </th>
+                        <th scope="row" id="word2vec_word_embeding__svm__f1_score_th"
+                            headers="lr doc2vec">
+                            <button class="btn btn-primary" type="button"
+                                    id="word2vec_word_embeding__svm__f1_score_loading_btn" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            </button>
+                            {#                                    {{ word2vec_word_embeding__svm__f1_score }}%#}
+                        </th>
+                    </tr>
+                </table>
+            </div>
+
+
+            <!-- accuracy -->
+            <div class="mb-4">
+                <span class="h5">Check system performance based on accuracy-score</span>
+            </div>
+            <div class="mb-5">
+                <table class="table shadow-soft rounded">
+                    <tr>
+                        <th class="border-0" scope="col" id="classifier">Classifier/Embedding</th>
+                        <th class="border-0" scope="col" id="tfidf">one_hot</th>
+                        <th class="border-0" scope="col" id="doc2vec">doc2vec</th>
+                    </tr>
+                    <tr>
+                        <th scope="row" id="lr">Logistic Regression</th>
+                        <th scope="row" id="one_hot_word_embeding__lr__accuracy_score_th"
+                            headers="lr tfidf">
+                            <button class="btn btn-primary" type="button"
+                                    id="one_hot_word_embeding__lr__accuracy_score_loading_btn"
+                                    disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            </button>
+                            {#                                    {{ one_hot_word_embeding__lr__accuracy_score }}%#}
+                        </th>
+                        <th scope="row" id="word2vec_word_embeding__lr__accuracy_score_th"
+                            headers="lr doc2vec">
+                            <button class="btn btn-primary" type="button"
+                                    id="word2vec_word_embeding__lr__accuracy_score_loading_btn" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            </button>
+                            {#                                    {{ word2vec_word_embeding__lr__accuracy_score }}%#}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th scope="row" id="lr">Multi Layer Perseptron</th>
+                        <th scope="row" id="one_hot_word_embeding__mlp__accuracy_score_th"
+                            headers="lr tfidf">
+                            <button class="btn btn-primary" type="button"
+                                    id="one_hot_word_embeding__mlp__accuracy_score_loading_btn"
+                                    disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            </button>
+                            {#                                    {{ one_hot_word_embeding__mlp__accuracy_score }}%#}
+                        </th>
+                        <th scope="row" id="word2vec_word_embeding__mlp__accuracy_score_th"
+                            headers="lr doc2vec">
+                            <button class="btn btn-primary" type="button"
+                                    id="word2vec_word_embeding__mlp__accuracy_score_loading_btn" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            </button>
+                            {#                                    {{ word2vec_word_embeding__mlp__accuracy_score }}%#}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th scope="row" id="lr">Support Vector Machine</th>
+                        <th scope="row" id="one_hot_word_embeding__svm__accuracy_score_th"
+                            headers="lr tfidf">
+                            <button class="btn btn-primary" type="button"
+                                    id="one_hot_word_embeding__svm__accuracy_score_loading_btn"
+                                    disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            </button>
+                            {#                                    {{ one_hot_word_embeding__svm__accuracy_score }}%#}
+                        </th>
+                        <th scope="row" id="word2vec_word_embeding__svm__accuracy_score_th"
+                            headers="lr doc2vec">
+                            <button class="btn btn-primary" type="button"
+                                    id="word2vec_word_embeding__svm__accuracy_score_loading_btn" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            </button>
+                            {#                                    {{ word2vec_word_embeding__svm__accuracy_score }}%#}
+                        </th>
+                    </tr>
+                </table>
+            </div>
+
+
         </div>
-    </nav>
-</header>
-<main>
-
-    <!-- Section Info -->
-    <section class="section bg-primary pb-0 section-lg">
-        <div class="container z-2">
-            <div class="row justify-content-center text-center pt-6">
-                <div class="col-lg-8 col-xl-8">
-                    <h1 class="display-2 mb-3">Classification Of Persian Documents</h1>
-                    <p class="lead px-md-6 mb-5">In this research, we try to classification Persian documents using
-                        machine learning tools - artificial neural networks.</p>
-                    <div class="d-flex flex-column flex-wrap flex-md-row justify-content-md-center mb-5">
-                        <a href="#" target="_blank"
-                           class="btn btn-primary mb-3 mb-lg-0 mr-3"><i class="fas fa-cloud-download-alt mr-2"></i>
-                            Download </a>
-
+    </div>
+{% endblock %}
+{% block test_body %}
+    <div class="row align-items-center justify-content-center">
+        <div class="col-md-12 col-lg-12 mb-5">
+            <!-- Contact Card -->
+            <div class="card bg-primary shadow-soft border-light p-2 p-md-3 p-lg-5" id="uncategorized_category">
+                <div class="card-header pb-0 text-center">
+                    <h2 class="h1 mb-3">Uncategorized text category.</h2>
+                    <p class="mb-5 lead">
+                        You can enter a news in the text box below so that we can categorize your news.
+                    </p>
+                </div>
+                <form class="col-12 col-md-8 mx-auto" method="post" id="news_for_test_performance_form">
+                    <!-- Form -->
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea2">Titr</label>
+                        <textarea class="form-control" name="titr_text_for_classify"
+                                  id="titr_news_for_test_performance_textarea"
+                                  placeholder="Enter your text..."
+                                  rows="1"></textarea>
+                        <label for="exampleFormControlTextarea2">Content</label>
+                        <textarea class="form-control" name="content_text_for_classify"
+                                  id="content_news_for_test_performance_textarea"
+                                  placeholder="Enter your text..."
+                                  rows="10"></textarea>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- End of Info -->
-
-
-    <!-- Section Performance -->
-    <section class="section bg-primary pt-0 section-lg" id="Performance">
-        <div class="container">
-            <div class="row">
+                    <!-- End of Form -->
+                    <div class="alert alert-info" id="category_title_empty"> Category title:
+                        <button class="btn btn-primary" type="button"
+                                id="classification_submited_loading" disabled style="visibility:hidden;">
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                            <span class="sr-only">Loading...</span>
+                        </button>
+                    </div>
+                    <div class="px-0 mx-auto" style="margin-top: 10px">
+                        <button type="submit" class="btn btn-primary">Classification</button>
+                    </div>
+                </form>
                 <div class="col-md-4">
-                    <div class="mb-5">
-                        <span class="font-weight-bold">Performance</span>
+                    <!-- Modal Content -->
+                    <div class="modal fade" id="modal-default" tabindex="-1" role="dialog"
+                         aria-labelledby="modal-default" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h2 class="h6 modal-title mb-0" id="modal-title-default">Feedback</h2>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    If the category provided is incorrect, you can select the category
+                                    you want to help better train the system. Thank you in advance for
+                                    your cooperation.
+                                    <form class="" method="post"
+                                          id="news_for_test_feedback_form">
+                                        <div id="field_set_categories_list_name"></div>
+                                        {% for cat_key, cat_val in categories_list_name.items %}
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio"
+                                                       name="category_radios"
+                                                       id="category_radios{{ cat_key }}"
+                                                       value="{{ cat_key }}">
+                                                <label class="form-check-label"
+                                                       for="category_radios{{ cat_key }}">
+                                                    {{ cat_val }}
+                                                </label>
+                                            </div>
+                                        {% endfor %}
+                                        <!-- End of Radio -->
+                                        </fieldset >
+                                        <hr id="for_asign_news_pk">
+                                        <button type="submit" class="btn btn-primary">Send
+                                        </button>
+                                        <button type="button" class="btn btn-primary text-danger ml-auto"
+                                                data-dismiss="modal" style="float: right">Close
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    <!-- End of Modal Content -->
                 </div>
             </div>
-            <div class="row justify-content-center">
-                <div class="col-lg-12">
-                    <!-- precesion -->
-                    <div class="mb-4">
-                        <span class="h5">Check system performance based on precision-score</span>
-                    </div>
-                    <div class="mb-5">
-                        <table class="table shadow-soft rounded">
-                            <tr>
-                                <th class="border-0" scope="col" id="classifier">Classifier/Embedding</th>
-                                <th class="border-0" scope="col" id="tfidf">one_hot</th>
-                                <th class="border-0" scope="col" id="doc2vec">doc2vec</th>
-                            </tr>
-                            <tr>
-                                <th scope="row" id="lr">Logistic Regression</th>
-                                <th scope="row" id="one_hot_word_embeding__lr__precision_score_th"
-                                    headers="lr tfidf">
-                                    <button class="btn btn-primary" type="button"
-                                            id="one_hot_word_embeding__lr__precision_score_loading_btn"
-                                            disabled>
-                                        <span class="spinner-border spinner-border-sm" role="status"
-                                              aria-hidden="true"></span>
-                                        <span class="sr-only">Loading...</span>
-                                    </button>
-                                    {#                                    {{ one_hot_word_embeding__lr__precision_score }}%#}
-                                </th>
-                                <th scope="row" id="word2vec_word_embeding__lr__precision_score_th"
-                                    headers="lr doc2vec">
-                                    <button class="btn btn-primary" type="button"
-                                            id="word2vec_word_embeding__lr__precision_score_loading_btn" disabled>
-                                        <span class="spinner-border spinner-border-sm" role="status"
-                                              aria-hidden="true"></span>
-                                        <span class="sr-only">Loading...</span>
-                                    </button>
-                                    {#                                    {{ word2vec_word_embeding__lr__precision_score }}%#}
-                                </th>
-                            </tr>
-                            <tr>
-                                <th scope="row" id="lr">Multi Layer Perseptron</th>
-                                <th scope="row" id="one_hot_word_embeding__mlp__precision_score_th"
-                                    headers="lr tfidf">
-                                    <button class="btn btn-primary" type="button"
-                                            id="one_hot_word_embeding__mlp__precision_score_loading_btn"
-                                            disabled>
-                                        <span class="spinner-border spinner-border-sm" role="status"
-                                              aria-hidden="true"></span>
-                                        <span class="sr-only">Loading...</span>
-                                    </button>
-                                    {#                                    {{ one_hot_word_embeding__mlp__precision_score }}%#}
-                                </th>
-                                <th scope="row" id="word2vec_word_embeding__mlp__precision_score_th"
-                                    headers="lr doc2vec">
-                                    <button class="btn btn-primary" type="button"
-                                            id="word2vec_word_embeding__mlp__precision_score_loading_btn" disabled>
-                                        <span class="spinner-border spinner-border-sm" role="status"
-                                              aria-hidden="true"></span>
-                                        <span class="sr-only">Loading...</span>
-                                    </button>
-                                    {#                                    {{ word2vec_word_embeding__mlp__precision_score }}%#}
-                                </th>
-                            </tr>
-                            <tr>
-                                <th scope="row" id="lr">Support Vector Machine</th>
-                                <th scope="row" id="one_hot_word_embeding__svm__precision_score_th"
-                                    headers="lr tfidf">
-                                    <button class="btn btn-primary" type="button"
-                                            id="one_hot_word_embeding__svm__precision_score_loading_btn"
-                                            disabled>
-                                        <span class="spinner-border spinner-border-sm" role="status"
-                                              aria-hidden="true"></span>
-                                        <span class="sr-only">Loading...</span>
-                                    </button>
-                                    {#                                    {{ one_hot_word_embeding__svm__precision_score }}%#}
-                                </th>
-                                <th scope="row" id="word2vec_word_embeding__svm__precision_score_th"
-                                    headers="lr doc2vec">
-                                    <button class="btn btn-primary" type="button"
-                                            id="word2vec_word_embeding__svm__precision_score_loading_btn" disabled>
-                                        <span class="spinner-border spinner-border-sm" role="status"
-                                              aria-hidden="true"></span>
-                                        <span class="sr-only">Loading...</span>
-                                    </button>
-                                    {#                                    {{ word2vec_word_embeding__svm__precision_score }}%#}
-                                </th>
-                            </tr>
-                        </table>
-                    </div>
-
-                    <!-- recall -->
-                    <div class="mb-4">
-                        <span class="h5">Check system performance based on recall-score</span>
-                    </div>
-                    <div class="mb-5">
-                        <table class="table shadow-soft rounded">
-                            <tr>
-                                <th class="border-0" scope="col" id="classifier">Classifier/Embedding</th>
-                                <th class="border-0" scope="col" id="tfidf">one_hot</th>
-                                <th class="border-0" scope="col" id="doc2vec">doc2vec</th>
-                            </tr>
-                            <tr>
-                                <th scope="row" id="lr">Logistic Regression</th>
-                                <th scope="row" id="one_hot_word_embeding__lr__recall_score_th"
-                                    headers="lr tfidf">
-                                    <button class="btn btn-primary" type="button"
-                                            id="one_hot_word_embeding__lr__recall_score_loading_btn" disabled>
-                                        <span class="spinner-border spinner-border-sm" role="status"
-                                              aria-hidden="true"></span>
-                                        <span class="sr-only">Loading...</span>
-                                    </button>
-                                    {#                                    {{ one_hot_word_embeding__lr__recall_score }}%#}
-                                </th>
-                                <th scope="row" id="word2vec_word_embeding__lr__recall_score_th"
-                                    headers="lr doc2vec">
-                                    <button class="btn btn-primary" type="button"
-                                            id="word2vec_word_embeding__lr__recall_score_loading_btn" disabled>
-                                        <span class="spinner-border spinner-border-sm" role="status"
-                                              aria-hidden="true"></span>
-                                        <span class="sr-only">Loading...</span>
-                                    </button>
-                                    {#                                    {{ word2vec_word_embeding__lr__recall_score }}%#}
-                                </th>
-                            </tr>
-                            <tr>
-                                <th scope="row" id="lr">Multi Layer Perseptron</th>
-                                <th scope="row" id="one_hot_word_embeding__mlp__recall_score_th"
-                                    headers="lr tfidf">
-                                    <button class="btn btn-primary" type="button"
-                                            id="one_hot_word_embeding__mlp__recall_score_loading_btn" disabled>
-                                        <span class="spinner-border spinner-border-sm" role="status"
-                                              aria-hidden="true"></span>
-                                        <span class="sr-only">Loading...</span>
-                                    </button>
-                                    {#                                    {{ one_hot_word_embeding__mlp__recall_score }}%#}
-                                </th>
-                                <th scope="row" id="word2vec_word_embeding__mlp__recall_score_th"
-                                    headers="lr doc2vec">
-                                    <button class="btn btn-primary" type="button"
-                                            id="word2vec_word_embeding__mlp__recall_score_loading_btn" disabled>
-                                        <span class="spinner-border spinner-border-sm" role="status"
-                                              aria-hidden="true"></span>
-                                        <span class="sr-only">Loading...</span>
-                                    </button>
-                                    {#                                    {{ word2vec_word_embeding__mlp__recall_score }}%#}
-                                </th>
-                            </tr>
-                            <tr>
-                                <th scope="row" id="lr">Support Vector Machine</th>
-                                <th scope="row" id="one_hot_word_embeding__svm__recall_score_th"
-                                    headers="lr tfidf">
-                                    <button class="btn btn-primary" type="button"
-                                            id="one_hot_word_embeding__svm__recall_score_loading_btn" disabled>
-                                        <span class="spinner-border spinner-border-sm" role="status"
-                                              aria-hidden="true"></span>
-                                        <span class="sr-only">Loading...</span>
-                                    </button>
-                                    {#                                    {{ one_hot_word_embeding__svm__recall_score }}%#}
-                                </th>
-                                <th scope="row" id="word2vec_word_embeding__svm__recall_score_th"
-                                    headers="lr doc2vec">
-                                    <button class="btn btn-primary" type="button"
-                                            id="word2vec_word_embeding__svm__recall_score_loading_btn" disabled>
-                                        <span class="spinner-border spinner-border-sm" role="status"
-                                              aria-hidden="true"></span>
-                                        <span class="sr-only">Loading...</span>
-                                    </button>
-                                    {#                                    {{ word2vec_word_embeding__svm__recall_score }}%#}
-                                </th>
-                            </tr>
-                        </table>
-                    </div>
-
-                    <!-- accuracy -->
-                    <div class="mb-4">
-                        <span class="h5">Check system performance based on accuracy-score</span>
-                    </div>
-                    <div class="mb-5">
-                        <table class="table shadow-soft rounded">
-                            <tr>
-                                <th class="border-0" scope="col" id="classifier">Classifier/Embedding</th>
-                                <th class="border-0" scope="col" id="tfidf">one_hot</th>
-                                <th class="border-0" scope="col" id="doc2vec">doc2vec</th>
-                            </tr>
-                            <tr>
-                                <th scope="row" id="lr">Logistic Regression</th>
-                                <th scope="row" id="one_hot_word_embeding__lr__accuracy_score_th"
-                                    headers="lr tfidf">
-                                    <button class="btn btn-primary" type="button"
-                                            id="one_hot_word_embeding__lr__accuracy_score_loading_btn"
-                                            disabled>
-                                        <span class="spinner-border spinner-border-sm" role="status"
-                                              aria-hidden="true"></span>
-                                        <span class="sr-only">Loading...</span>
-                                    </button>
-                                    {#                                    {{ one_hot_word_embeding__lr__accuracy_score }}%#}
-                                </th>
-                                <th scope="row" id="word2vec_word_embeding__lr__accuracy_score_th"
-                                    headers="lr doc2vec">
-                                    <button class="btn btn-primary" type="button"
-                                            id="word2vec_word_embeding__lr__accuracy_score_loading_btn" disabled>
-                                        <span class="spinner-border spinner-border-sm" role="status"
-                                              aria-hidden="true"></span>
-                                        <span class="sr-only">Loading...</span>
-                                    </button>
-                                    {#                                    {{ word2vec_word_embeding__lr__accuracy_score }}%#}
-                                </th>
-                            </tr>
-                            <tr>
-                                <th scope="row" id="lr">Multi Layer Perseptron</th>
-                                <th scope="row" id="one_hot_word_embeding__mlp__accuracy_score_th"
-                                    headers="lr tfidf">
-                                    <button class="btn btn-primary" type="button"
-                                            id="one_hot_word_embeding__mlp__accuracy_score_loading_btn"
-                                            disabled>
-                                        <span class="spinner-border spinner-border-sm" role="status"
-                                              aria-hidden="true"></span>
-                                        <span class="sr-only">Loading...</span>
-                                    </button>
-                                    {#                                    {{ one_hot_word_embeding__mlp__accuracy_score }}%#}
-                                </th>
-                                <th scope="row" id="word2vec_word_embeding__mlp__accuracy_score_th"
-                                    headers="lr doc2vec">
-                                    <button class="btn btn-primary" type="button"
-                                            id="word2vec_word_embeding__mlp__accuracy_score_loading_btn" disabled>
-                                        <span class="spinner-border spinner-border-sm" role="status"
-                                              aria-hidden="true"></span>
-                                        <span class="sr-only">Loading...</span>
-                                    </button>
-                                    {#                                    {{ word2vec_word_embeding__mlp__accuracy_score }}%#}
-                                </th>
-                            </tr>
-                            <tr>
-                                <th scope="row" id="lr">Support Vector Machine</th>
-                                <th scope="row" id="one_hot_word_embeding__svm__accuracy_score_th"
-                                    headers="lr tfidf">
-                                    <button class="btn btn-primary" type="button"
-                                            id="one_hot_word_embeding__svm__accuracy_score_loading_btn"
-                                            disabled>
-                                        <span class="spinner-border spinner-border-sm" role="status"
-                                              aria-hidden="true"></span>
-                                        <span class="sr-only">Loading...</span>
-                                    </button>
-                                    {#                                    {{ one_hot_word_embeding__svm__accuracy_score }}%#}
-                                </th>
-                                <th scope="row" id="word2vec_word_embeding__svm__accuracy_score_th"
-                                    headers="lr doc2vec">
-                                    <button class="btn btn-primary" type="button"
-                                            id="word2vec_word_embeding__svm__accuracy_score_loading_btn" disabled>
-                                        <span class="spinner-border spinner-border-sm" role="status"
-                                              aria-hidden="true"></span>
-                                        <span class="sr-only">Loading...</span>
-                                    </button>
-                                    {#                                    {{ word2vec_word_embeding__svm__accuracy_score }}%#}
-                                </th>
-                            </tr>
-                        </table>
-                    </div>
-
-                    <!-- f1 -->
-                    <div class="mb-4">
-                        <span class="h5">Check system performance based on f1-score</span>
-                    </div>
-                    <div class="mb-5">
-                        <table class="table shadow-soft rounded">
-                            <tr>
-                                <th class="border-0" scope="col" id="classifier">Classifier/Embedding</th>
-                                <th class="border-0" scope="col" id="tfidf">one_hot</th>
-                                <th class="border-0" scope="col" id="doc2vec">doc2vec</th>
-                            </tr>
-                            <tr>
-                                <th scope="row" id="lr">Logistic Regression</th>
-                                <th scope="row" id="one_hot_word_embeding__lr__f1_score_th"
-                                    headers="lr tfidf">
-                                    <button class="btn btn-primary" type="button"
-                                            id="one_hot_word_embeding__lr__f1_score_loading_btn"
-                                            disabled>
-                                        <span class="spinner-border spinner-border-sm" role="status"
-                                              aria-hidden="true"></span>
-                                        <span class="sr-only">Loading...</span>
-                                    </button>
-                                    {#                                    {{ one_hot_word_embeding__lr__f1_score }}%#}
-                                </th>
-                                <th scope="row" id="word2vec_word_embeding__lr__f1_score_th"
-                                    headers="lr doc2vec">
-                                    <button class="btn btn-primary" type="button"
-                                            id="word2vec_word_embeding__lr__f1_score_loading_btn" disabled>
-                                        <span class="spinner-border spinner-border-sm" role="status"
-                                              aria-hidden="true"></span>
-                                        <span class="sr-only">Loading...</span>
-                                    </button>
-                                    {#                                    {{ word2vec_word_embeding__lr__f1_score }}%#}
-                                </th>
-                            </tr>
-                            <tr>
-                                <th scope="row" id="lr">Multi Layer Perseptron</th>
-                                <th scope="row" id="one_hot_word_embeding__mlp__f1_score_th"
-                                    headers="lr tfidf">
-                                    <button class="btn btn-primary" type="button"
-                                            id="one_hot_word_embeding__mlp__f1_score_loading_btn"
-                                            disabled>
-                                        <span class="spinner-border spinner-border-sm" role="status"
-                                              aria-hidden="true"></span>
-                                        <span class="sr-only">Loading...</span>
-                                    </button>
-                                    {#                                    {{ one_hot_word_embeding__mlp__f1_score }}%#}
-                                </th>
-                                <th scope="row" id="word2vec_word_embeding__mlp__f1_score_th"
-                                    headers="lr doc2vec">
-                                    <button class="btn btn-primary" type="button"
-                                            id="word2vec_word_embeding__mlp__f1_score_loading_btn" disabled>
-                                        <span class="spinner-border spinner-border-sm" role="status"
-                                              aria-hidden="true"></span>
-                                        <span class="sr-only">Loading...</span>
-                                    </button>
-                                    {#                                    {{ word2vec_word_embeding__mlp__f1_score }}%#}
-                                </th>
-                            </tr>
-                            <tr>
-                                <th scope="row" id="lr">Support Vector Machine</th>
-                                <th scope="row" id="one_hot_word_embeding__svm__f1_score_th"
-                                    headers="lr tfidf">
-                                    <button class="btn btn-primary" type="button"
-                                            id="one_hot_word_embeding__svm__f1_score_loading_btn"
-                                            disabled>
-                                        <span class="spinner-border spinner-border-sm" role="status"
-                                              aria-hidden="true"></span>
-                                        <span class="sr-only">Loading...</span>
-                                    </button>
-                                    {#                                    {{ one_hot_word_embeding__svm__f1_score }}%#}
-                                </th>
-                                <th scope="row" id="word2vec_word_embeding__svm__f1_score_th"
-                                    headers="lr doc2vec">
-                                    <button class="btn btn-primary" type="button"
-                                            id="word2vec_word_embeding__svm__f1_score_loading_btn" disabled>
-                                        <span class="spinner-border spinner-border-sm" role="status"
-                                              aria-hidden="true"></span>
-                                        <span class="sr-only">Loading...</span>
-                                    </button>
-                                    {#                                    {{ word2vec_word_embeding__svm__f1_score }}%#}
-                                </th>
-                            </tr>
-                        </table>
-                    </div>
-
-                </div>
-            </div>
+            <!-- End of Contact Card -->
         </div>
-    </section>
-    <!-- End of Performance -->
-
-    <!-- Section Test -->
-    <section class="section bg-primary pt-0 section-lg" id="Test">
-        <div class="container">
-            <!-- Title -->
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="mb-5">
-                        <span class="font-weight-bold">Test</span>
-                    </div>
-                </div>
-            </div>
-            <div class="row align-items-center justify-content-center">
-                <div class="col-md-12 col-lg-12 mb-5">
-                    <!-- Contact Card -->
-                    <div class="card bg-primary shadow-soft border-light p-2 p-md-3 p-lg-5" id="uncategorized_category">
-                        <div class="card-header pb-0 text-center">
-                            <h2 class="h1 mb-3">Uncategorized text category.</h2>
-                            <p class="mb-5 lead">
-                                You can enter a news in the text box below so that we can categorize your news.
-                            </p>
-                        </div>
-                        <form class="col-12 col-md-8 mx-auto" method="post" id="news_for_test_performance_form">
-                            <!-- Form -->
-                            <div class="form-group">
-                                <label for="exampleFormControlTextarea2">Titr</label>
-                                <textarea class="form-control" name="titr_text_for_classify"
-                                          id="titr_news_for_test_performance_textarea"
-                                          placeholder="Enter your text..."
-                                          rows="1"></textarea>
-                                <label for="exampleFormControlTextarea2">Content</label>
-                                <textarea class="form-control" name="content_text_for_classify"
-                                          id="content_news_for_test_performance_textarea"
-                                          placeholder="Enter your text..."
-                                          rows="10"></textarea>
-                            </div>
-                            <!-- End of Form -->
-                            <div class="alert alert-info" id="category_title_empty"> Category title:
-                                <button class="btn btn-primary" type="button"
-                                        id="classification_submited_loading" disabled style="visibility:hidden;">
-                                        <span class="spinner-border spinner-border-sm" role="status"
-                                              aria-hidden="true"></span>
-                                    <span class="sr-only">Loading...</span>
-                                </button>
-                            </div>
-                            <div class="px-0 mx-auto" style="margin-top: 10px">
-                                <button type="submit" class="btn btn-primary">Classification</button>
-                            </div>
-                        </form>
-                        <div class="col-md-4">
-                            <!-- Modal Content -->
-                            <div class="modal fade" id="modal-default" tabindex="-1" role="dialog"
-                                 aria-labelledby="modal-default" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h2 class="h6 modal-title mb-0" id="modal-title-default">Feedback</h2>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">×</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            If the category provided is incorrect, you can select the category
-                                            you want to help better train the system. Thank you in advance for
-                                            your cooperation.
-                                            <form class="" method="post"
-                                                  id="news_for_test_feedback_form">
-                                                <div id="field_set_categories_list_name"></div>
-                                                    {% for cat_key, cat_val in categories_list_name.items %}
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio"
-                                                                   name="category_radios"
-                                                                   id="category_radios{{ cat_key }}"
-                                                                   value="{{ cat_key }}">
-                                                            <label class="form-check-label"
-                                                                   for="category_radios{{ cat_key }}">
-                                                                {{ cat_val }}
-                                                            </label>
-                                                        </div>
-                                                    {% endfor %}
-                                                    <!-- End of Radio -->
-                                                </fieldset >
-                                                <hr id="for_asign_news_pk">
-                                                <button type="submit" class="btn btn-primary">Send
-                                                </button>
-                                                <button type="button" class="btn btn-primary text-danger ml-auto"
-                                                        data-dismiss="modal" style="float: right">Close
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End of Modal Content -->
-                        </div>
-                    </div>
-                    <!-- End of Contact Card -->
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- End of Test -->
-
-    <!-- Section Contact Me -->
-    <section class="section bg-primary pt-0 section-lg" id="ContactMe">
-        <div class="container">
-            <!-- Title -->
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="mb-5">
-                        <span class="font-weight-bold">Contact me</span>
-                    </div>
-                </div>
-            </div>
-            <div class="row align-items-center justify-content-center">
-                <div class="col-md-12 col-lg-12 mb-5">
-                    <!-- Contact Card -->
-                    <div class="card bg-primary shadow-soft border-light p-2 p-md-3 p-lg-5">
-                        <div class="card-header">
-                            <div class="row justify-content-center">
-                                <div class="col-12">
-                                    <div class="shadow-inset p-4 mb-5 rounded">
-                                        <iframe class="map rounded" id="gmap_canvas"
-                                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3239.3317688921843!2d51.50100731533433!3d35.71805833555854!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzXCsDQzJzA1LjAiTiA1McKwMzAnMTEuNSJF!5e0!3m2!1snl!2snl!4v1627990368706!5m2!1snl!2snl"></iframe>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-8 text-center mb-5">
-                                    <h1 class="display-2 mb-3">Call me now.</h1>
-                                    <p class="lead">If you have any criticisms or suggestions, let us know.</p>
-                                </div>
-                            </div>
-                            <div class="row mb-5">
-                                <div class="col-md-4 col-lg-4 text-center">
-                                    <!-- Visit Box -->
-                                    <div class="icon-box mb-4">
-                                        <div class="icon icon-shape shadow-soft border-light rounded-circle mb-4">
-                                            <span class="fas fa-map-marker-alt"></span>
-                                        </div>
-                                        <h2 class="h5 icon-box-title">Visit us</h2>
-                                        <span>
-                                                Tehran Pars, Onsori, 18
-                                                <br>
-                                                Iran, Tehran
-                                            </span>
-                                    </div>
-                                    <!-- End of Visit Box -->
-                                </div>
-                                <div class="col-md-4 col-lg-4 text-center">
-                                    <!-- Call Box -->
-                                    <div class="icon-box mb-4">
-                                        <div class="icon icon-shape shadow-soft border-light rounded-circle mb-4">
-                                            <span class="fas fa-headphones-alt"></span>
-                                        </div>
-                                        <h2 class="h5 icon-box-title">Call</h2>
-                                        <span>+98 919 740 2215</span>
-                                        <div class="text-small text-gray">
-                                            Mon - Fri, 8am - 4pm
-                                        </div>
-                                    </div>
-                                    <!-- End of Call Box -->
-                                </div>
-                                <div class="col-md-4 col-lg-4 text-center">
-                                    <!-- Email Box -->
-                                    <div class="icon-box mb-4">
-                                        <div class="icon icon-shape shadow-soft border-light rounded-circle mb-4">
-                                            <span class="far fa-paper-plane"></span>
-                                        </div>
-                                        <h2 class="h5 icon-box-title">Email</h2>
-                                        <a href="#">h.p7402215@gmail.com</a>
-                                        <br><a href="#">sgs@gmail.com</a>
-                                    </div>
-                                    <!-- End of Email Box -->
-                                </div>
-                            </div>
-                        </div>
-                        <form class="col-12 col-md-8 mx-auto">
-                            <!-- Form -->
-                            <div class="form-group">
-                                <label for="nameInputIcon2">Your Name</label>
-                                <div class="input-group mb-4">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><span class="far fa-user-circle"></span></span>
-                                    </div>
-                                    <input class="form-control" id="nameInputIcon2" placeholder="Hamid Parsa"
-                                           type="text" aria-label="contact name input">
-                                </div>
-                            </div>
-                            <!-- Form -->
-                            <div class="form-group">
-                                <label for="emailInputIcon2">Your Email</label>
-                                <div class="input-group mb-4">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><span class="far fa-envelope"></span></span>
-                                    </div>
-                                    <input class="form-control" id="emailInputIcon2" placeholder="example@company.com"
-                                           type="email" aria-label="contact email input">
-                                </div>
-                            </div>
-                            <!-- Form -->
-                            <div class="form-group">
-                                <label for="exampleFormControlTextarea2">Your Email</label>
-                                <textarea class="form-control" placeholder="Enter your message..."
-                                          id="exampleFormControlTextarea2" rows="4"></textarea>
-                            </div>
-                            <!-- End of Form -->
-                        </form>
-                        <div class="card-footer px-0 mx-auto">
-                            <button type="submit" class="btn btn-primary">Send message</button>
-                        </div>
-                    </div>
-                    <!-- End of Contact Card -->
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- End of Contact Me -->
-
-</main>
-
-
-<!-- Core -->
-<script src="{% static './vendor/jquery/dist/jquery.min.js' %}"></script>
-<script src="{% static './vendor/popper.js/dist/umd/popper.min.js' %}"></script>
-<script src="{% static './vendor/bootstrap/dist/js/bootstrap.min.js' %}"></script>
-<script src="{% static './vendor/headroom.js/dist/headroom.min.js' %}"></script>
-
-<!-- Vendor JS -->
-<script src="{% static './vendor/onscreen/dist/on-screen.umd.min.js' %}"></script>
-<script src="{% static './vendor/nouislider/distribute/nouislider.min.js' %}"></script>
-<script src="{% static './vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
-<script src="{% static './vendor/waypoints/lib/jquery.waypoints.min.js' %}"></script>
-<script src="{% static './vendor/jarallax/dist/jarallax.min.js' %}"></script>
-<script src="{% static './vendor/jquery.counterup/jquery.counterup.min.js' %}"></script>
-<script src="{% static './vendor/jquery-countdown/dist/jquery.countdown.min.js' %}"></script>
-<script src="{% static './vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js' %}"></script>
-<script src="{% static './vendor/prismjs/prism.js' %}"></script>
-
-<script async defer src="https://buttons.github.io/buttons.js"></script>
-
-<!-- Neumorphism JS -->
+    </div>
+{% endblock %}
 {% block javascript %}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         $(document).ready(function () {
             $.ajax({
@@ -807,7 +561,7 @@
                             $('#category_title_empty').remove()
                             $('#content_news_for_test_performance_textarea').after('<div class="alert alert-info" id="category_title"> Category title:  ' + response.CATEGORY_TITLE + '<div class="alert-warning">Click on <a  data-toggle="modal" data-target="#modal-default"><u>this link</u></a> if the category is incorrect.</div></div>')
                             $('#category_radios' + response.CATEGORY_PK).prop('checked', true);
-                            $('#for_asign_news_pk').after('<input type="text" name="news_pk" value="'+response.NEWS_PK+'" hidden>')
+                            $('#for_asign_news_pk').after('<input type="text" name="news_pk" value="' + response.NEWS_PK + '" hidden>')
                         } else {
                             $('#category_title').remove()
                             $('#news_for_test_performance_error_message').remove()
@@ -834,7 +588,7 @@
                     success: function (response) {
                         $('#uncategorized_category').after('<div class="alert alert-info" id="category_title_empty">Thank you for your cooperation.</div>');
                         $('#modal-default').removeClass('show');
-                         $('.modal-backdrop.fade.show').removeClass('show');
+                        $('.modal-backdrop.fade.show').removeClass('show');
                     },
                     // on error
                     error: function (response) {
@@ -848,7 +602,3 @@
         })
     </script>
 {% endblock javascript %}
-<script src="{% static './assets/js/neumorphism.js' %}"></script>
-</body>
-
-</html>
