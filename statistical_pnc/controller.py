@@ -27,8 +27,80 @@ def prerequisites():
 
 
 class NewsClassification:
-    def __init__(self, minimum_number_of_sample_repetitions=0.3):
-        self.minimum_number_of_sample_repetitions = minimum_number_of_sample_repetitions
+    def __init__(self, number_of_train_data=0.85, dm=1, vector_size=300, negative=5, hs=0, min_count=2, sample=0,
+                 workers=None, alpha=0.025, min_alpha=0.001, epochs=30):
+        # 0 < number_of_train_data < 1
+        self.number_of_train_data = number_of_train_data
+        # 0 < number_of_test_data < 1
+        self.number_of_test_data = 1 - number_of_train_data
+        self.dm = dm
+        self.vector_size = vector_size
+        self.negative = negative
+        self.hs = hs
+        self.min_count = min_count
+        self.sample = sample
+        self.workers = workers if workers is not None else multiprocessing.cpu_count()
+        self.alpha = alpha
+        self.min_alpha = min_alpha
+        self.epochs = epochs
+
+    def _data_preparation(self):
+        from gensim.models.doc2vec import TaggedDocument
+        from .models import News
+
+        news = News.objects.all()
+        documents = []
+        categories = {}
+        for n in news:
+            _words = n.words_tokenize.all()
+            words = []
+            for wrd in _words:
+                words.append(str(wrd.pk))
+            if n.category is None:
+                tag = '-1'
+                categories['-1'] = '-1'
+            else:
+                tag = str(n.category_id)
+                categories[n.category.title] = n.category_id
+            documents.append(TaggedDocument(words, [tag]))
+        self._tagged_documents = documents
+        self._categories = categories
+
+    _tagged_documents = None
+
+    @property
+    def tagged_documents(self):
+        if self._tagged_documents is None:
+            self._data_preparation()
+        return self._tagged_documents
+
+    _x_data = None
+
+    @property
+    def x_data(self):
+        if self._x_data is None:
+            documents = utils.shuffle(self.tagged_documents)
+            self._y_data, self._x_data = \
+                zip(*[(doc.tags[0], self.gmodel.infer_vector(doc.words, steps=20)) for doc in documents])
+        return self._x_data
+
+    _y_data = None
+
+    @property
+    def y_data(self):
+        if self._y_data is None:
+            documents = utils.shuffle(self.tagged_documents)
+            self._y_data, self._x_data = \
+                zip(*[(doc.tags[0], self.gmodel.infer_vector(doc.words, steps=20)) for doc in documents])
+        return self._y_data
+
+    _categories = None
+
+    @property
+    def categories(self):
+        if self._categories is None:
+            self._data_preparation()
+        return self._categories
 
     categories_list = None
     categories_list_pk = None
