@@ -79,7 +79,7 @@ class Classification:
     def mlp(self):
         if self._mlp is not None:
             return self._mlp
-        self._mlp = SVM(self.x_train, self.x_test, self.y_train, self.y_test, self.categories_list)
+        self._mlp = MLP(self.x_train, self.x_test, self.y_train, self.y_test, self.categories_list)
         return self._mlp
 
     _mnb = None
