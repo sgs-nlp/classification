@@ -91,6 +91,40 @@ class Classification:
         self._mnb = MNB(self.x_train, self.x_test, self.y_train, self.y_test, self.categories_list)
         return self._mnb
 
+    _lr = None
+
+    @property
+    def lr(self):
+        if self._lr is not None:
+            return self._lr
+        self._lr = LogisticRegression(self.x_train, self.x_test, self.y_train, self.y_test, self.categories_list)
+        return self._lr
+
+    def create_all(self):
+        if self._x_train is None:
+            tmp = self.x_train
+
+        if self._x_test is None:
+            tmp = self.x_test
+
+        if self._y_train is None:
+            tmp = self.y_train
+
+        if self._y_test is None:
+            tmp = self.y_test
+
+        if self._svm is None:
+            tmp = self.svm
+
+        if self._mlp is None:
+            tmp = self.mlp
+
+        if self._mnb is None:
+            tmp = self.mnb
+
+        if self._lr is None:
+            tmp = self.lr
+
 
 class SVM:
     def __init__(self, x_train, x_test, y_train, y_test, categories_list):
