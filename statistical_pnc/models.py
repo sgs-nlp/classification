@@ -520,6 +520,27 @@ def news2db(content_string: str, titr_string: str = None, category: Category = N
     return nws
 
 
+def news_update(news_id: int, content_string: str = None, titr_string: str = None, category_id: int = None,
+                reference_id: int = None) -> News:
+    news = News.objects.filter(pk=news_id).first()
+    if news is None:
+        return None
+    if content_string is not None:
+        news.content_string = content_string
+    if titr_string is not None:
+        news.titr_string = titr_string
+    if category_id is not None:
+        category = Category.objects.filter(pk=category_id).first()
+        if category is not None:
+            news.category = category
+    if reference_id is not None:
+        reference = Reference.objects.filter(pk=reference_id).first()
+        if reference is not None:
+            news.reference = reference
+    news.save()
+    return news
+
+
 def get_all_news() -> list:
     _objs = News.objects.all()
     news = []
