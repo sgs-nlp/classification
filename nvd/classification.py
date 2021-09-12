@@ -148,10 +148,6 @@ class SVM:
         self._model.fit(self.x_train, self.y_train)
         return self._model
 
-    _fns = None
-    _tps = None
-    _tns = None
-    _fps = None
     _predicted = None
 
     @property
@@ -161,50 +157,20 @@ class SVM:
         self._predicted = self.model.predict(self.x_test)
         return self._predicted
 
-    @property
-    def fns(self):
-        if self._fns is not None:
-            return self._fns
-        self._fns, self._tps, self._tns, self._fps = true_or_false(self.predicted, self.y_test, self.categories_list)
-        return self._fns
-
-    @property
-    def tps(self):
-        if self._tps is not None:
-            return self._tps
-        self._fns, self._tps, self._tns, self._fps = true_or_false(self.predicted, self.y_test, self.categories_list)
-        return self._tps
-
-    @property
-    def tns(self):
-        if self._tns is not None:
-            return self._tns
-        self._fns, self._tps, self._tns, self._fps = true_or_false(self.predicted, self.y_test, self.categories_list)
-        return self._tns
-
-    @property
-    def fps(self):
-        if self._fps is not None:
-            return self._fps
-        self._fns, self._tps, self._tns, self._fps = true_or_false(self.predicted, self.y_test, self.categories_list)
-        return self._fps
-
     _precision_score = None
 
     @property
     def precision_score(self):
-        if self._precision_score is not None:
-            return self._precision_score
-        self._precision_score = precision(true_positives=self.tps, false_positives=self.fps)
+        if self._precision_score is None:
+            self._precision_score = sk_learn_precision_score(self.y_test, self.predicted, average='weighted')
         return self._precision_score
 
     _recall_score = None
 
     @property
     def recall_score(self):
-        if self._recall_score is not None:
-            return self._recall_score
-        self._recall_score = recall(false_negatives=self.fns, true_positives=self.tps)
+        if self._recall_score is None:
+            self._recall_score = sk_learn_recall_score(self.y_test, self.predicted, average='weighted')
         return self._recall_score
 
     _accuracy_score = None
@@ -250,10 +216,6 @@ class MLP:
         self._model.fit(self.x_train, self.y_train)
         return self._model
 
-    _fns = None
-    _tps = None
-    _tns = None
-    _fps = None
     _predicted = None
 
     @property
@@ -263,61 +225,41 @@ class MLP:
         self._predicted = self.model.predict(self.x_test)
         return self._predicted
 
-    @property
-    def fns(self):
-        if self._fns is not None:
-            return self._fns
-        self._fns, self._tps, self._tns, self._fps = true_or_false(self.predicted, self.y_test, self.categories_list)
-        return self._fns
-
-    @property
-    def tps(self):
-        if self._tps is not None:
-            return self._tps
-        self._fns, self._tps, self._tns, self._fps = true_or_false(self.predicted, self.y_test, self.categories_list)
-        return self._tps
-
-    @property
-    def tns(self):
-        if self._tns is not None:
-            return self._tns
-        self._fns, self._tps, self._tns, self._fps = true_or_false(self.predicted, self.y_test, self.categories_list)
-        return self._tns
-
-    @property
-    def fps(self):
-        if self._fps is not None:
-            return self._fps
-        self._fns, self._tps, self._tns, self._fps = true_or_false(self.predicted, self.y_test, self.categories_list)
-        return self._fps
-
     _precision_score = None
 
     @property
     def precision_score(self):
-        if self._precision_score is not None:
-            return self._precision_score
-        self._precision_score = precision(true_positives=self.tps, false_positives=self.fps)
+        if self._precision_score is None:
+            self._precision_score = sk_learn_precision_score(self.y_test, self.predicted, average='weighted')
         return self._precision_score
 
     _recall_score = None
 
     @property
     def recall_score(self):
-        if self._recall_score is not None:
-            return self._recall_score
-        self._recall_score = recall(false_negatives=self.fns, true_positives=self.tps)
+        if self._recall_score is None:
+            self._recall_score = sk_learn_recall_score(self.y_test, self.predicted, average='weighted')
         return self._recall_score
 
     _accuracy_score = None
 
     @property
     def accuracy_score(self):
-        if self._accuracy_score is not None:
-            return self._accuracy_score
-        self._accuracy_score = accuracy(false_negatives=self.fns, true_positives=self.tps, true_negatives=self.tns,
-                                        false_positives=self.fps)
+        if self._accuracy_score is None:
+            self._accuracy_score = sk_learn_accuracy_score(self.y_test, self.predicted)
         return self._accuracy_score
+
+    _f1_score = None
+
+    @property
+    def f1_score(self):
+        if self._f1_score is None:
+            self._f1_score = sk_learn_f1_score(self.y_test, self.predicted, average='weighted')
+        return self._f1_score
+
+    def document_category(self, document):
+        category_id = self.model.predict([document])
+        return int(category_id)
 
 
 class MNB:
@@ -342,10 +284,6 @@ class MNB:
         self._model.fit(self.x_train, self.y_train)
         return self._model
 
-    _fns = None
-    _tps = None
-    _tns = None
-    _fps = None
     _predicted = None
 
     @property
@@ -355,58 +293,106 @@ class MNB:
         self._predicted = self.model.predict(self.x_test)
         return self._predicted
 
-    @property
-    def fns(self):
-        if self._fns is not None:
-            return self._fns
-        self._fns, self._tps, self._tns, self._fps = true_or_false(self.predicted, self.y_test, self.categories_list)
-        return self._fns
-
-    @property
-    def tps(self):
-        if self._tps is not None:
-            return self._tps
-        self._fns, self._tps, self._tns, self._fps = true_or_false(self.predicted, self.y_test, self.categories_list)
-        return self._tps
-
-    @property
-    def tns(self):
-        if self._tns is not None:
-            return self._tns
-        self._fns, self._tps, self._tns, self._fps = true_or_false(self.predicted, self.y_test, self.categories_list)
-        return self._tns
-
-    @property
-    def fps(self):
-        if self._fps is not None:
-            return self._fps
-        self._fns, self._tps, self._tns, self._fps = true_or_false(self.predicted, self.y_test, self.categories_list)
-        return self._fps
-
     _precision_score = None
 
     @property
     def precision_score(self):
-        if self._precision_score is not None:
-            return self._precision_score
-        self._precision_score = precision(true_positives=self.tps, false_positives=self.fps)
+        if self._precision_score is None:
+            self._precision_score = sk_learn_precision_score(self.y_test, self.predicted, average='weighted')
         return self._precision_score
 
     _recall_score = None
 
     @property
     def recall_score(self):
-        if self._recall_score is not None:
-            return self._recall_score
-        self._recall_score = recall(false_negatives=self.fns, true_positives=self.tps)
+        if self._recall_score is None:
+            self._recall_score = sk_learn_recall_score(self.y_test, self.predicted, average='weighted')
         return self._recall_score
 
     _accuracy_score = None
 
     @property
     def accuracy_score(self):
-        if self._accuracy_score is not None:
-            return self._accuracy_score
-        self._accuracy_score = accuracy(false_negatives=self.fns, true_positives=self.tps, true_negatives=self.tns,
-                                        false_positives=self.fps)
+        if self._accuracy_score is None:
+            self._accuracy_score = sk_learn_accuracy_score(self.y_test, self.predicted)
         return self._accuracy_score
+
+    _f1_score = None
+
+    @property
+    def f1_score(self):
+        if self._f1_score is None:
+            self._f1_score = sk_learn_f1_score(self.y_test, self.predicted, average='weighted')
+        return self._f1_score
+
+    def document_category(self, document):
+        category_id = self.model.predict([document])
+        return int(category_id)
+
+
+class LogisticRegression:
+    def __init__(self, x_train, x_test, y_train, y_test, categories_list):
+        self.x_train = x_train
+        self.x_test = x_test
+        self.y_train = y_train
+        self.y_test = y_test
+        self.categories_list = categories_list
+
+    @property
+    def name(self):
+        return 'Logistic Regression'
+
+    _model = None
+
+    @property
+    def model(self):
+        if self._model is not None:
+            return self._model
+        self._model = sklearn_lr(n_jobs=1, C=1e5)
+        self._model.fit(self.x_train, self.y_train)
+        return self._model
+
+    _predicted = None
+
+    @property
+    def predicted(self):
+        if self._predicted is not None:
+            return self._predicted
+        self._predicted = self.model.predict(self.x_test)
+        return self._predicted
+
+    _precision_score = None
+
+    @property
+    def precision_score(self):
+        if self._precision_score is None:
+            self._precision_score = sk_learn_precision_score(self.y_test, self.predicted, average='weighted')
+        return self._precision_score
+
+    _recall_score = None
+
+    @property
+    def recall_score(self):
+        if self._recall_score is None:
+            self._recall_score = sk_learn_recall_score(self.y_test, self.predicted, average='weighted')
+        return self._recall_score
+
+    _accuracy_score = None
+
+    @property
+    def accuracy_score(self):
+        if self._accuracy_score is None:
+            self._accuracy_score = sk_learn_accuracy_score(self.y_test, self.predicted)
+        return self._accuracy_score
+
+    _f1_score = None
+
+    @property
+    def f1_score(self):
+        if self._f1_score is None:
+            self._f1_score = sk_learn_f1_score(self.y_test, self.predicted, average='weighted')
+        return self._f1_score
+
+    def document_category(self, document):
+        category_id = self.model.predict([document])
+        return int(category_id)
