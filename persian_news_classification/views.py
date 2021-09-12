@@ -52,4 +52,4 @@ def prerequisites(request: HttpRequest):
 
 
 def index(request: HttpRequest):
-    return render(request, 'index.html', context={})
+    return render(request, 'sample.html', context={})
