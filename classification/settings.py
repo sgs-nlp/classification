@@ -160,3 +160,5 @@ BASE_DICT = BaseDict()
 # hazm tagger
 
 TAGGER = POSTagger(model='/home/ya_hasan_mojtaba/my_projects/resources/hazm/resources-0.5/postagger.model')
+
+NEWS_CLASSIFICATION_FILE_ROOT = os.path.join(MEDIA_ROOT, 'news_calassification_file.pkl')
