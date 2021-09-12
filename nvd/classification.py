@@ -88,7 +88,7 @@ class Classification:
     def mnb(self):
         if self._mnb is not None:
             return self._mnb
-        self._mnb = SVM(self.x_train, self.x_test, self.y_train, self.y_test, self.categories_list)
+        self._mnb = MNB(self.x_train, self.x_test, self.y_train, self.y_test, self.categories_list)
         return self._mnb
 
 
