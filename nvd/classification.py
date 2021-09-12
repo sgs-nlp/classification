@@ -211,11 +211,21 @@ class SVM:
 
     @property
     def accuracy_score(self):
-        if self._accuracy_score is not None:
-            return self._accuracy_score
-        self._accuracy_score = accuracy(false_negatives=self.fns, true_positives=self.tps, true_negatives=self.tns,
-                                        false_positives=self.fps)
+        if self._accuracy_score is None:
+            self._accuracy_score = sk_learn_accuracy_score(self.y_test, self.predicted)
         return self._accuracy_score
+
+    _f1_score = None
+
+    @property
+    def f1_score(self):
+        if self._f1_score is None:
+            self._f1_score = sk_learn_f1_score(self.y_test, self.predicted, average='weighted')
+        return self._f1_score
+
+    def document_category(self, document):
+        category_id = self.model.predict([document])
+        return int(category_id)
 
 
 class MLP:
