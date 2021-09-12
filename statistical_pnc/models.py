@@ -136,7 +136,7 @@ class Category(models.Model):
         null=False,
         blank=False,
     )
-    _number_of_subcategories = models.PositiveIntegerField(
+    number_of_subcategories = models.PositiveIntegerField(
         default=0,
     )
 
@@ -149,10 +149,6 @@ class Category(models.Model):
         for swc in swcs:
             vector[swc.word.pk] = swc.docs_frequency_mean
         return vector
-
-    @property
-    def number_of_subcategories(self):
-        return self._number_of_subcategories
 
     @property
     def code(self):
@@ -465,8 +461,11 @@ def keyword2db(news: News, word: Word, frequency: float) -> Keyword:
     return kywrd
 
 
-def news2db(content_string: str, titr_string: str = None, category: Category = None,
+def news2db(content_string: str, titr_string: str = None, category_id: int = None,
             reference: Reference = None) -> News:
+    category = None
+    if category_id is not None:
+        category = Category.objects.filter(pk=category_id).first()
     if titr_string is not None and content_string is not None:
         string = NORMILIZER(str(titr_string) + str(content_string))
     elif titr_string is None and content_string is not None:
@@ -490,7 +489,7 @@ def news2db(content_string: str, titr_string: str = None, category: Category = N
             else:
                 nws.string = f'{nws.content.string}'
             if category is not None:
-                category._number_of_subcategories += 1
+                category.number_of_subcategories += 1
                 category.save()
                 nws.category = category
             nws.hash_code
