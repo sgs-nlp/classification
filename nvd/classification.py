@@ -2,13 +2,19 @@ import pickle
 import pandas
 import glob
 import numpy as np
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.feature_extraction.text import TfidfTransformer
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.neural_network import MLPClassifier
 from sklearn import svm as support_vector_machine
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
+from sklearn.linear_model import LogisticRegression as sklearn_lr
+from sklearn.metrics import (
+    accuracy_score as sk_learn_accuracy_score,
+    f1_score as sk_learn_f1_score,
+    precision_score as sk_learn_precision_score,
+    recall_score as sk_learn_recall_score,
+)
 
 from nvd.normalizer import matrix_scale_matrix
 from nvd.embedding import GDoc2Vec, BOWDoc2vec, OneHotDoc2vec
