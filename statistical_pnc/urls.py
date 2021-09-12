@@ -1,11 +1,11 @@
-from .views import index, sample, classification, preprocessing, feedback
 from django.urls import path, include
+
+from .views import *
 
 app_name = 'statistical_pnc'
 urlpatterns = [
-    path('', index, name='index'),
-    path('sample', sample, name='sample'),
-    path('classification', classification, name='classification'),
-    path('feedback', feedback, name='feedback'),
-    path('preprocessing', preprocessing, name='preprocessing'),
+    path('', index_view, name='index'),
+    path('classification', classification_view, name='classification'),
+    path('classification/feedback', classification_feedback_view, name='classification_feedback'),
+    path('preprocessing', preprocessing_view, name='preprocessing'),
 ]
