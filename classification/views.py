@@ -8,3 +8,11 @@ def home_page_view(request: HttpRequest):
         'index.html',
         context={},
     )
+
+
+def sample_page_view(request: HttpRequest):
+    return render(
+        request,
+        'sample.html',
+        context={},
+    )
