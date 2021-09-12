@@ -123,9 +123,11 @@ class File:
                     header = row
                     first = False
                     continue
-                if i < from_which_row:
-                    continue
-                _data.append(row)
+                if row[2] == 'آموزشي' or row[2] == 'ورزشي' or row[2] == 'مذهبي' or row[2] == 'سياسي':
+                    print(row[2])
+                    if i < from_which_row:
+                        continue
+                    _data.append(row)
             file.close()
             os.remove(file_path)
             return _data, header
