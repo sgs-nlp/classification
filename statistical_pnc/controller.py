@@ -11,7 +11,7 @@ from django.conf import settings
 # import nltk
 # from nltk.corpus import stopwords
 from scipy.spatial.distance import cosine
-from gensim.models.doc2vec import Doc2Vec
+from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 # from gensim.test.utils import common_texts
 from sklearn.metrics import accuracy_score, f1_score
 from sklearn.linear_model import LogisticRegression
@@ -21,6 +21,7 @@ from sklearn import utils
 from nvd.converter import bag_of_word2one_hot
 from nvd.pre_processing import tokenizer
 from nvd.extractor import Keywords
+from nvd.classification import Classification
 
 from extra_settings.models import File as my_file_models
 from .models import *
@@ -33,6 +34,10 @@ def index_default_data() -> dict:
 
 
 def prerequisites() -> dict:
+    performance_result_key = {'type': 'performance_result'}
+    performance_result_value = BASE_DICT.get_item(performance_result_key)
+    if performance_result_value is not None:
+        return performance_result_value
     logging.info('Started storing dataset in the database.')
     file_name = 'HamshahriData.xlsx'
     from_which_row = 1
@@ -46,45 +51,51 @@ def prerequisites() -> dict:
         file.save(complate=True, from_which_row=from_which_row, up_to_which_row=up_to_which_row)
     logging.info('Data storage in the database is complete.')
 
-    save_news_classification_obj()
-
+    save_news_classification_by_gensim_obj()
+    save_news_classification_by_statistical_obj()
     return performance_result()
 
 
 def performance_result() -> dict:
-    nc = load_news_classification_obj()
+    performance_result_key = {'type': 'performance_result'}
+    performance_result_value = BASE_DICT.get_item(performance_result_key)
+    if performance_result_value is not None:
+        return performance_result_value
+    nc_by_g = load_news_classification_by_gensim_obj()
+    nc_by_s = load_news_classification_by_statistical_obj()
     response = {
         'RESULT': True,
-        'word2vec_word_embeding__svm__precision_score': round(nc.classify.svm.precision_score * 10000) / 100,
-        'word2vec_word_embeding__svm__recall_score': round(nc.classify.svm.recall_score * 10000) / 100,
-        'word2vec_word_embeding__svm__accuracy_score': round(nc.classify.svm.accuracy_score * 10000) / 100,
-        'word2vec_word_embeding__svm__f1_score': round(nc.classify.svm.f1_score * 10000) / 100,
+        'word2vec_word_embeding__svm__precision_score': round(nc_by_g.classify.svm.precision_score * 10000) / 100,
+        'word2vec_word_embeding__svm__recall_score': round(nc_by_g.classify.svm.recall_score * 10000) / 100,
+        'word2vec_word_embeding__svm__accuracy_score': round(nc_by_g.classify.svm.accuracy_score * 10000) / 100,
+        'word2vec_word_embeding__svm__f1_score': round(nc_by_g.classify.svm.f1_score * 10000) / 100,
 
-        'word2vec_word_embeding__mlp__precision_score': round(nc.classify.mlp.precision_score * 10000) / 100,
-        'word2vec_word_embeding__mlp__recall_score': round(nc.classify.mlp.recall_score * 10000) / 100,
-        'word2vec_word_embeding__mlp__accuracy_score': round(nc.classify.mlp.accuracy_score * 10000) / 100,
-        'word2vec_word_embeding__mlp__f1_score': round(nc.classify.mlp.f1_score * 10000) / 100,
+        'word2vec_word_embeding__mlp__precision_score': round(nc_by_g.classify.mlp.precision_score * 10000) / 100,
+        'word2vec_word_embeding__mlp__recall_score': round(nc_by_g.classify.mlp.recall_score * 10000) / 100,
+        'word2vec_word_embeding__mlp__accuracy_score': round(nc_by_g.classify.mlp.accuracy_score * 10000) / 100,
+        'word2vec_word_embeding__mlp__f1_score': round(nc_by_g.classify.mlp.f1_score * 10000) / 100,
 
-        'word2vec_word_embeding__lr__precision_score': round(nc.classify.lr.precision_score * 10000) / 100,
-        'word2vec_word_embeding__lr__recall_score': round(nc.classify.lr.recall_score * 10000) / 100,
-        'word2vec_word_embeding__lr__accuracy_score': round(nc.classify.lr.accuracy_score * 10000) / 100,
-        'word2vec_word_embeding__lr__f1_score': round(nc.classify.lr.f1_score * 10000) / 100,
+        'word2vec_word_embeding__lr__precision_score': round(nc_by_g.classify.lr.precision_score * 10000) / 100,
+        'word2vec_word_embeding__lr__recall_score': round(nc_by_g.classify.lr.recall_score * 10000) / 100,
+        'word2vec_word_embeding__lr__accuracy_score': round(nc_by_g.classify.lr.accuracy_score * 10000) / 100,
+        'word2vec_word_embeding__lr__f1_score': round(nc_by_g.classify.lr.f1_score * 10000) / 100,
 
-        'one_hot_word_embeding__svm__precision_score': round(10 * 10000) / 100,
-        'one_hot_word_embeding__svm__recall_score': round(11 * 10000) / 100,
-        'one_hot_word_embeding__svm__accuracy_score': round(12 * 10000) / 100,
-        'one_hot_word_embeding__svm__f1_score': round(13 * 10000) / 100,
+        'one_hot_word_embeding__svm__precision_score': round(nc_by_s.classify.svm.precision_score * 10000) / 100,
+        'one_hot_word_embeding__svm__recall_score': round(nc_by_s.classify.svm.recall_score * 10000) / 100,
+        'one_hot_word_embeding__svm__accuracy_score': round(nc_by_s.classify.svm.accuracy_score * 10000) / 100,
+        'one_hot_word_embeding__svm__f1_score': round(nc_by_s.classify.svm.f1_score * 10000) / 100,
 
-        'one_hot_word_embeding__mlp__precision_score': round(14 * 10000) / 100,
-        'one_hot_word_embeding__mlp__recall_score': round(15 * 10000) / 100,
-        'one_hot_word_embeding__mlp__accuracy_score': round(16 * 10000) / 100,
-        'one_hot_word_embeding__mlp__f1_score': round(17 * 10000) / 100,
+        'one_hot_word_embeding__mlp__precision_score': round(nc_by_s.classify.mlp.precision_score * 10000) / 100,
+        'one_hot_word_embeding__mlp__recall_score': round(nc_by_s.classify.mlp.recall_score * 10000) / 100,
+        'one_hot_word_embeding__mlp__accuracy_score': round(nc_by_s.classify.mlp.accuracy_score * 10000) / 100,
+        'one_hot_word_embeding__mlp__f1_score': round(nc_by_s.classify.mlp.f1_score * 10000) / 100,
 
-        'one_hot_word_embeding__lr__precision_score': round(18 * 10000) / 100,
-        'one_hot_word_embeding__lr__recall_score': round(19 * 10000) / 100,
-        'one_hot_word_embeding__lr__accuracy_score': round(20 * 10000) / 100,
-        'one_hot_word_embeding__lr__f1_score': round(21 * 10000) / 100,
+        'one_hot_word_embeding__lr__precision_score': round(nc_by_s.classify.lr.precision_score * 10000) / 100,
+        'one_hot_word_embeding__lr__recall_score': round(nc_by_s.classify.lr.recall_score * 10000) / 100,
+        'one_hot_word_embeding__lr__accuracy_score': round(nc_by_s.classify.lr.accuracy_score * 10000) / 100,
+        'one_hot_word_embeding__lr__f1_score': round(nc_by_s.classify.lr.f1_score * 10000) / 100,
     }
+    BASE_DICT.set_item(performance_result_key, response)
     return response
 
 
@@ -95,7 +106,7 @@ def classification_result(content: str, titr: str) -> dict:
         response['ERROR_MESSAGE'] = 'Please enter the news you want to categorize in this section.'
         return response
 
-    news_c = load_news_classification_obj()
+    news_c = load_news_classification_by_gensim_obj()
 
     news = news2db(
         content_string=content,
@@ -106,17 +117,21 @@ def classification_result(content: str, titr: str) -> dict:
         news_words.append(str(n.pk))
     news_vector = news_c.gmodel.infer_vector(news_words, steps=20)
 
-    category_id = news_c.classify.lr.document_category(news_vector)
-    category = Category.objects.filter(pk=category_id).first()
+    svm_category_id = news_c.classify.svm.document_category(news_vector)
 
-    response['CATEGORY_TITLE'] = category.title
-    response['CATEGORY_PK'] = category.pk
+    category = Category.objects.filter(pk=svm_category_id).first()
+    if category is None:
+        response['CATEGORY_TITLE'] = 'None'
+        response['CATEGORY_PK'] = 1
+    else:
+        response['CATEGORY_TITLE'] = category.title
+        response['CATEGORY_PK'] = category.pk
     response['NEWS_PK'] = news.pk
     response['CATEGORIES_LIST_NAME'] = categories_list()
     return response
 
 
-class NewsClassification:
+class NewsClassificationByGensim:
     def __init__(self, number_of_train_data=0.85, dm=1, vector_size=300, negative=5, hs=0, min_count=2, sample=0,
                  workers=None, alpha=0.025, min_alpha=0.001, epochs=30):
         # 0 < number_of_train_data < 1
@@ -135,9 +150,6 @@ class NewsClassification:
         self.epochs = epochs
 
     def _data_preparation(self):
-        from gensim.models.doc2vec import TaggedDocument
-        from .models import News
-
         news = News.objects.all()
         documents = []
         categories = {}
@@ -254,29 +266,10 @@ class NewsClassification:
     @property
     def classify(self):
         if self._classify is None:
-            from nvd.classification import Classification
             self._classify = Classification(x_data=self.x_data, y_data=self.y_data, categories_list=self.categories)
         return self._classify
 
-    # news_for_classify = None
-    #
-    # def document_to_vector(self, content: str, titr: str = None):
-    #
-    #     news = news2db(
-    #         content_string=content,
-    #         titr_string=titr,
-    #     )
-    #     self.news_for_classify = news
-    #     news_words = []
-    #     for n in news.words_tokenize.all():
-    #         news_words.append(str(n.pk))
-    #     return self.gmodel.infer_vector(news_words, steps=20)
-    #
-    # def feedback(self, category_id: int) -> News:
-    #     news = self.news_for_classify
-    #     news = news_update(news.pk, category_id=category_id)
-    #     self.news_for_classify = news
-    #     return news
+    _one_hot_vectors = None
 
     def create_all(self):
         if self._tagged_documents is None:
@@ -304,24 +297,24 @@ class NewsClassification:
             self.classify.create_all()
 
 
-def save_news_classification_obj() -> None:
-    nc_key = {'type': 'NewsClassification'}
+def save_news_classification_by_gensim_obj() -> None:
+    nc_key = {'type': 'NewsClassificationByGensim'}
     news_c = BASE_DICT.get_item(nc_key)
     if news_c is None:
-        pkl_file_name = settings.NEWS_CLASSIFICATION_FILE_ROOT
+        pkl_file_name = settings.NEWS_CLASSIFICATION_BY_GENSIM_FILE_ROOT
         if not os.path.exists(pkl_file_name):
-            news_c = NewsClassification()
+            news_c = NewsClassificationByGensim()
             news_c.create_all()
             with open(pkl_file_name, 'wb') as pkl_file:
                 pickle.dump(news_c, pkl_file)
-            BASE_DICT.set_item({'type': 'NewsClassification'}, news_c)
+            BASE_DICT.set_item(nc_key, news_c)
 
 
-def load_news_classification_obj() -> NewsClassification:
-    nc_key = {'type': 'NewsClassification'}
+def load_news_classification_by_gensim_obj() -> NewsClassificationByGensim:
+    nc_key = {'type': 'NewsClassificationByGensim'}
     nc = BASE_DICT.get_item(nc_key)
     if nc is None:
-        pkl_file_name = settings.NEWS_CLASSIFICATION_FILE_ROOT
+        pkl_file_name = settings.NEWS_CLASSIFICATION_BY_GENSIM_FILE_ROOT
         with open(pkl_file_name, 'rb') as pkl_file:
             nc = pickle.load(pkl_file)
     return nc
@@ -436,3 +429,118 @@ def load_news_classification_obj() -> NewsClassification:
 def classification_feedback(news_id: int, category_id: int) -> News:
     news = news_update(news_id, category_id=category_id)
     return news
+
+
+# def db2one_hot_vectors():
+#     corpus = News.objects.all()
+#     vector_len = Word.objects.last().pk
+#     documents = []
+#     for doc in corpus:
+#         _doc_vector = [0] * (vector_len + 1)
+#         for wrd in doc.words_tokenize.all():
+#             _doc_vector[wrd.pk] += 1
+#         documents.append(TaggedDocument(_doc_vector, [str(doc.category.pk)]))
+#     return documents
+
+
+class NewsClassificationByStatistical:
+    def __init__(self):
+        self.one_hot_vector_len = Word.objects.last().pk + 1
+
+    def _data_preparation(self):
+        corpus = News.objects.all()
+        documents = []
+        categories = []
+        for doc in corpus:
+            _doc_vector = [0] * self.one_hot_vector_len
+            for wrd in doc.words_tokenize.all():
+                _doc_vector[wrd.pk] += 1
+            tag = str(doc.category.pk if doc.category is not None else -1)
+            documents.append(TaggedDocument(_doc_vector, [tag]))
+            categories.append(tag)
+
+        self._tagged_documents = documents
+        self._categories = categories
+
+    _tagged_documents = None
+
+    @property
+    def tagged_documents(self):
+        if self._tagged_documents is None:
+            self._data_preparation()
+        return self._tagged_documents
+
+    _x_data = None
+
+    @property
+    def x_data(self):
+        if self._x_data is None:
+            documents = utils.shuffle(self.tagged_documents)
+            self._y_data, self._x_data = \
+                zip(*[(doc.tags[0], doc.words) for doc in documents])
+        return self._x_data
+
+    _y_data = None
+
+    @property
+    def y_data(self):
+        if self._y_data is None:
+            documents = utils.shuffle(self.tagged_documents)
+            self._y_data, self._x_data = \
+                zip(*[(doc.tags[0], doc.words) for doc in documents])
+        return self._y_data
+
+    _categories = None
+
+    @property
+    def categories(self):
+        if self._categories is None:
+            self._data_preparation()
+        return self._categories
+
+    _classify = None
+
+    @property
+    def classify(self):
+        if self._classify is None:
+            self._classify = Classification(x_data=self.x_data, y_data=self.y_data, categories_list=self.categories)
+        return self._classify
+
+    def create_all(self):
+        if self._tagged_documents is None:
+            tmp = self.tagged_documents
+        if self._x_data is None:
+            tmp = self.x_data
+
+        if self._y_data is None:
+            tmp = self.y_data
+
+        if self._categories is None:
+            tmp = self.categories
+
+        if self._classify is None:
+            tmp = self.classify
+            self.classify.create_all()
+
+
+def save_news_classification_by_statistical_obj() -> None:
+    nc_key = {'type': 'NewsClassificationByStatistical'}
+    news_c = BASE_DICT.get_item(nc_key)
+    if news_c is None:
+        pkl_file_name = settings.NEWS_CLASSIFICATION_BY_STATISTICAL_FILE_ROOT
+        if not os.path.exists(pkl_file_name):
+            news_c = NewsClassificationByStatistical()
+            news_c.create_all()
+            with open(pkl_file_name, 'wb') as pkl_file:
+                pickle.dump(news_c, pkl_file)
+            BASE_DICT.set_item(nc_key, news_c)
+
+
+def load_news_classification_by_statistical_obj() -> NewsClassificationByStatistical:
+    nc_key = {'type': 'NewsClassificationByStatistical'}
+    nc = BASE_DICT.get_item(nc_key)
+    if nc is None:
+        pkl_file_name = settings.NEWS_CLASSIFICATION_BY_STATISTICAL_FILE_ROOT
+        with open(pkl_file_name, 'rb') as pkl_file:
+            nc = pickle.load(pkl_file)
+    return nc
