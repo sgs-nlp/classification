@@ -5,9 +5,13 @@
 =========================================================
 -->
 {% extends 'base.html' %}
+{% load static %}
 
 {% block application_title %}
     Persian Language Processing
+{% endblock %}
+{% block header_for_application %}
+    <li><a class="dropdown-item" href="#API">APIs</a></li>
 {% endblock %}
 {% block application_content %}
     In this series, we have done applications related to text mining and word processing.
@@ -18,4 +22,41 @@
 {% block apllication_download_master %}
 {% endblock %}
 {% block main_body %}
+    <!-- Section api -->
+    <section class="section bg-primary pt-0 section-lg" id="API">
+        <div class="container">
+            <!-- Title -->
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="mb-5">
+                        <span class="font-weight-bold">APIs</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <!--Accordion-->
+                    <div class="accordion shadow-soft rounded" id="accordionExample1">
+                        <div class="card card-sm card-body bg-primary border-light mb-0">
+                            <a href="#panel-1" data-target="#panel-1" class="accordion-panel-header"
+                               data-toggle="collapse"
+                               role="button" aria-expanded="false" aria-controls="panel-1">
+                                <span class="h6 mb-0 font-weight-bold">Add Data Set</span>
+                                <span class="icon"><span class="fas fa-plus"></span></span>
+                            </a>
+                            <div class="collapse" id="panel-1">
+                                <div class="pt-3">
+                                    <p class="mb-0">
+                                        This section is under development.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--End of Accordion-->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End of api -->
 {% endblock %}
