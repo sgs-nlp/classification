@@ -151,6 +151,7 @@ logging.basicConfig(
 )
 
 # chashing
+CASH_DICTIONARY = {}
 BASE_DICT = BaseDict()
 
 # caches
