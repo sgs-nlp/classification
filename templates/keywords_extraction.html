@@ -1,0 +1,170 @@
+<!--
+=========================================================
+* Neumorphism UI - v1.0.0
+* Manipulated by nvd
+=========================================================
+-->
+{% extends 'base.html' %}
+{% block title %}|Keywords Extraction{% endblock %}
+{% block header_for_application %}
+    <li><a class="dropdown-item" href="#Test">Test</a></li>
+    <li><a class="dropdown-item" href="#API">APIs</a></li>
+{% endblock %}
+{% block application_title %}Extract Keywords from Persian Documents{% endblock %}
+{% block application_content %}In this research, we calculate keywords from Persian texts based on statistical methods
+    and machine learning tools.{% endblock %}
+{% block application_download_href %}#{% endblock %}
+{% block main_body %}
+    <!-- Section Test -->
+    <section class="section bg-primary pt-0 section-lg" id="Test">
+        <div class="container">
+            <!-- Title -->
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="mb-5">
+                        <span class="font-weight-bold">Test</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row align-items-center justify-content-center">
+                <div class="col-md-12 col-lg-12 mb-5">
+                    <!-- Contact Card -->
+                    <div class="card bg-primary shadow-soft border-light p-2 p-md-3 p-lg-5" id="uncategorized_category">
+                        <div class="card-header pb-0 text-center">
+                            <h2 class="h1 mb-3">Keywords Extraction.</h2>
+                            <p class="mb-5 lead">
+                                Extract keywords related to your document by typing your document in the following
+                                window.
+                            </p>
+                        </div>
+                        <form class="col-12 col-md-8 mx-auto" method="post" id="news_for_test_performance_form">
+                            <!-- Form -->
+                            <div class="form-group">
+                                <label for="exampleFormControlTextarea2">Document</label>
+                                <textarea class="form-control" name="content_text_for_classify"
+                                          id="content_news_for_test_performance_textarea"
+                                          placeholder="Enter your document..."
+                                          rows="10"></textarea>
+                            </div>
+                            <!-- End of Form -->
+                            <div class="alert alert-info" id="category_title_empty"> Keywords:
+                                <button class="btn btn-primary" type="button"
+                                        id="classification_submited_loading" disabled style="visibility:hidden;">
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                              aria-hidden="true"></span>
+                                    <span class="sr-only">Loading...</span>
+                                </button>
+                            </div>
+                            <div class="px-0 mx-auto" style="margin-top: 10px">
+                                <button type="submit" class="btn btn-primary">Extraction</button>
+                            </div>
+                        </form>
+                        <div class="col-md-4">
+                            <!-- Modal Content -->
+                            <div class="modal fade" id="modal-default" tabindex="-1" role="dialog"
+                                 aria-labelledby="modal-default" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h2 class="h6 modal-title mb-0" id="modal-title-default">Feedback</h2>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            If the category provided is incorrect, you can select the category
+                                            you want to help better train the system. Thank you in advance for
+                                            your cooperation.
+                                            <form class="" method="post"
+                                                  id="news_for_test_feedback_form">
+                                                <div id="field_set_categories_list_name"></div>
+                                                {% for cat_key, cat_val in categories_list_name.items %}
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio"
+                                                               name="category_radios"
+                                                               id="category_radios{{ cat_key }}"
+                                                               value="{{ cat_key }}">
+                                                        <label class="form-check-label"
+                                                               for="category_radios{{ cat_key }}">
+                                                            {{ cat_val }}
+                                                        </label>
+                                                    </div>
+                                                {% endfor %}
+                                                <!-- End of Radio -->
+                                                </fieldset >
+                                                <hr id="for_asign_news_pk">
+                                                <button type="submit" class="btn btn-primary">Send
+                                                </button>
+                                                <button type="button" class="btn btn-primary text-danger ml-auto"
+                                                        data-dismiss="modal" style="float: right">Close
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End of Modal Content -->
+                        </div>
+                    </div>
+                    <!-- End of Contact Card -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End of Test -->
+    <!-- Section api -->
+    <section class="section bg-primary pt-0 section-lg" id="API">
+        <div class="container">
+            <!-- Title -->
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="mb-5">
+                        <span class="font-weight-bold">APIs</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <!--Accordion-->
+                    <div class="accordion shadow-soft rounded" id="accordionExample1">
+                        <div class="card card-sm card-body bg-primary border-light mb-0">
+                            <a href="#panel-1" data-target="#panel-1" class="accordion-panel-header"
+                               data-toggle="collapse"
+                               role="button" aria-expanded="false" aria-controls="panel-1">
+                                <span class="h6 mb-0 font-weight-bold">Keywords Extraction</span>
+                                <span class="icon"><span class="fas fa-plus"></span></span>
+                            </a>
+                            <div class="collapse" id="panel-1">
+                                <div class="pt-3">
+                                    <p class="mb-0">
+                                        This section is under development.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card card-sm card-body bg-primary border-light mb-0">
+                            <a href="#panel-2" data-target="#panel-2" class="accordion-panel-header"
+                               data-toggle="collapse"
+                               role="button" aria-expanded="false" aria-controls="panel-1">
+                                <span class="h6 mb-0 font-weight-bold">Feedback</span>
+                                <span class="icon"><span class="fas fa-plus"></span></span>
+                            </a>
+                            <div class="collapse" id="panel-2">
+                                <div class="pt-3">
+                                    <p class="mb-0">
+                                        This section is under development. </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--End of Accordion-->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End of api -->
+{% endblock %}
+
+{% block javascript %}
+{% endblock javascript %}
+
