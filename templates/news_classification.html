@@ -5,11 +5,11 @@
 =========================================================
 -->
 {% extends 'base.html' %}
-{% block title %}|Classification{% endblock %}
+{% block title %}|Text Classification{% endblock %}
 {% block header_for_application %}
     <li><a class="dropdown-item" href="#Performance">Performance</a></li>
     <li><a class="dropdown-item" href="#Test">Test</a></li>
-    <li><a class="dropdown-item" href="#">API</a></li>
+    <li><a class="dropdown-item" href="#API">APIs</a></li>
 {% endblock %}
 {% block application_title %}Classification Of Persian Documents{% endblock %}
 {% block application_content %}In this research, we try to classification Persian documents using machine learning tools
@@ -453,13 +453,53 @@
         </div>
     </div>
 {% endblock %}
+
+{% block api_body %}
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-12 col-lg-12">
+            <!--Accordion-->
+            <div class="accordion shadow-soft rounded" id="accordionExample1">
+                <div class="card card-sm card-body bg-primary border-light mb-0">
+                    <a href="#panel-1" data-target="#panel-1" class="accordion-panel-header" data-toggle="collapse"
+                       role="button" aria-expanded="false" aria-controls="panel-1">
+                        <span class="h6 mb-0 font-weight-bold">News Classification</span>
+                        <span class="icon"><span class="fas fa-plus"></span></span>
+                    </a>
+                    <div class="collapse" id="panel-1">
+                        <div class="pt-3">
+                            <p class="mb-0">
+                                This section is under development.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card card-sm card-body bg-primary border-light mb-0">
+                    <a href="#panel-2" data-target="#panel-2" class="accordion-panel-header" data-toggle="collapse"
+                       role="button" aria-expanded="false" aria-controls="panel-1">
+                        <span class="h6 mb-0 font-weight-bold">Feedback</span>
+                        <span class="icon"><span class="fas fa-plus"></span></span>
+                    </a>
+                    <div class="collapse" id="panel-2">
+                        <div class="pt-3">
+                            <p class="mb-0">
+                                This section is under development.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--End of Accordion-->
+        </div>
+    </div>
+{% endblock %}
+
 {% block javascript %}
     <script>
         $(document).ready(function () {
             $.ajax({
                 data: $(this).serialize(), // get the form data
                 type: $(this).attr('method'), // GET or POST
-                url: "{% url 'statistical_pnc:preprocessing' %}",
+                url: "{% url 'statistical_pnc:news_classification_preprocessing' %}",
                 // on success
                 success: function (response) {
                     if (response.RESULT == true) {
@@ -552,7 +592,7 @@
                 $.ajax({
                     data: $(this).serialize(), // get the form data
                     type: $(this).attr('method'), // GET or POST
-                    url: "{% url 'statistical_pnc:classification' %}",
+                    url: "{% url 'statistical_pnc:news_classification_classification' %}",
                     // on success
                     success: function (response) {
                         if (response.TEXT == true) {
@@ -583,7 +623,7 @@
                 $.ajax({
                     data: $(this).serialize(), // get the form data
                     type: $(this).attr('method'), // GET or POST
-                    url: "{% url 'statistical_pnc:classification_feedback' %}",
+                    url: "{% url 'statistical_pnc:news_classification_feedback' %}",
                     // on success
                     success: function (response) {
                         $('#uncategorized_category').after('<div class="alert alert-info" id="category_title_empty">Thank you for your cooperation.</div>');
