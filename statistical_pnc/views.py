@@ -4,16 +4,16 @@ from django.shortcuts import render
 from .controller import *
 
 
-def index_view(request: HttpRequest):
+def classification_index_view(request: HttpRequest):
     res = index_default_data()
     return render(
         request,
-        'ai_index.html',
+        'news_classification.html',
         context=res,
     )
 
 
-def preprocessing_view(request: HttpRequest):
+def classification_preprocessing_view(request: HttpRequest):
     res = prerequisites()
     return JsonResponse(res)
 
