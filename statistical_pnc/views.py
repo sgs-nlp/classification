@@ -28,3 +28,19 @@ def classification_view(request: HttpRequest):
 def classification_feedback_view(request: HttpRequest):
     classification_feedback_view(news_id=request.POST['news_pk'], category_id=request.POST['category_radios'])
     return JsonResponse({})
+
+
+def keywords_extraction_view(request: HttpRequest):
+    return render(
+        request,
+        'keywords_extraction.html',
+        context={},
+    )
+
+
+def text_similarity_view(request: HttpRequest):
+    return render(
+        request,
+        'text_similarity.html',
+        context={},
+    )
