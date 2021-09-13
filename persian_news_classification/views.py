@@ -46,7 +46,7 @@ def prerequisites(request: HttpRequest):
     s = news2db(titr_string=titr_string, context_string=context_string, category_title=category_title)
     return render(
         request,
-        'ai_index.html',
+        'news_classification.html',
         context={},  # clss,
     )
 
