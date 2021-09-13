@@ -81,10 +81,12 @@
                             <span class="fas fa-angle-down nav-link-arrow ml-2"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{% url 'statistical_pnc:index' %}">News
+                            <li><a class="dropdown-item" href="{% url 'statistical_pnc:news_classification_index' %}">News
                                 Classification</a></li>
-                            <li><a class="dropdown-item" href="#">Keywords Extraction</a></li>
-                            <li><a class="dropdown-item" href="#">Text Similarity</a></li>
+                            <li><a class="dropdown-item" href="{% url 'statistical_pnc:keywords_extraction_index' %}">Keywords
+                                Extraction</a></li>
+                            <li><a class="dropdown-item" href="{% url 'statistical_pnc:text_similarity_index' %}">Text
+                                Similarity</a></li>
                         </ul>
                     </li>
                     {% block header_for_application %}
@@ -94,6 +96,8 @@
                 </ul>
             </div>
             <div class="d-flex align-items-center">
+                {% block resume_file %}
+                {% endblock %}
                 <button class="navbar-toggler ml-2" type="button" data-toggle="collapse" data-target="#navbar_global"
                         aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -157,6 +161,21 @@
             </div>
         </section>
         <!-- End of Test -->
+        <!-- Section api -->
+        <section class="section bg-primary pt-0 section-lg" id="API">
+            <div class="container">
+                <!-- Title -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="mb-5">
+                            <span class="font-weight-bold">APIs</span>
+                        </div>
+                    </div>
+                </div>
+                {% block api_body %}{% endblock %}
+            </div>
+        </section>
+        <!-- End of api -->
     {% endblock %}
 </main>
 
