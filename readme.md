@@ -1,5 +1,3 @@
-{% if False %}
-
 # Introduction
 
 In this project, we intend to create smart tools that can be used as an intelligent assistant in language problems in
