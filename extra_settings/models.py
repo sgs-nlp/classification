@@ -118,41 +118,13 @@ class File:
             _data = []
             first = True
             header = []
-            counter_educational = 0
-            counter_sport = 0
-            counter_religious = 0
-            counter_Political = 0
             for i, row in enumerate(afile.iter_rows(values_only=True, max_row=up_to_which_row)):
-                if counter_educational >= 200 and\
-                        counter_sport >= 200 and\
-                        counter_religious >= 200 and\
-                        counter_Political >= 200:
-                    break
                 if first:
                     header = row
                     first = False
                     continue
-                if row[2] == 'آموزشي' or\
-                        row[2] == 'ورزشي' or\
-                        row[2] == 'مذهبي' or\
-                        row[2] == 'سياسي':
-                    if row[2] == 'آموزشي':
-                        if counter_educational >= 200:
-                            continue
-                        counter_educational += 1
-                    if row[2] == 'ورزشي':
-                        if counter_sport >= 200:
-                            continue
-                        counter_sport += 1
-                    if row[2] == 'مذهبي':
-                        if counter_religious >= 200:
-                            continue
-                        counter_religious += 1
-                    if row[2] == 'سياسي':
-                        if counter_Political >= 200:
-                            continue
-                        counter_Political += 1
-
+                if row[2] == 'آموزشي' or row[2] == 'ورزشي' or row[2] == 'مذهبي' or row[2] == 'سياسي':
+                    print(row[2])
                     if i < from_which_row:
                         continue
                     _data.append(row)
